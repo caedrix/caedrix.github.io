@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#D3DFE1;
+  --paper:#D3DFE9;
   --raised:#E8F0F0;
   --ink:#152029;
   --soft:#4C6067;
@@ -26,10 +26,10 @@ body{
   color:var(--ink);
   font-family:Spectral,Georgia,'Times New Roman',serif;
   font-size:1.22rem;
-  line-height:1.58;
+  line-height:1.5;
   font-weight:400;
 }
-.wrap{max-width:64rem;margin:0 auto;padding:0 1.5rem}
+.wrap{max-width:80rem;margin:0 auto;padding:0 0rem}
 .col{max-width:var(--measure)}
 p{margin:0 0 1.1rem}
 a{color:var(--phase);text-decoration:none;border-bottom:1px solid rgba(91,52,150,.34)}
@@ -68,7 +68,7 @@ header{padding:5.5rem 0 3.25rem}
 .tag{
   font-family:Spectral,Georgia,serif;
   font-size:1.28rem;
-  font-style:italic;
+  font-weight:600;
   line-height:1.4;
   margin:0 0 1.15rem;
   color:var(--ink);
@@ -99,12 +99,14 @@ pre .cm{color:var(--soft);font-style:italic}
 /* ---------- sections ---------- */
 section{padding:3.25rem 0;border-top:1px solid var(--rule)}
 h2{
-  font-size:1.28rem;font-weight:600;letter-spacing:-.012em;
+  font-family:Spectral,Georgia,serif;
+  font-size:1.28rem;font-weight:600;
+  letter-spacing:-.012em;
   margin:0 0 1.5rem;
 }
 h3{
   font-family:Spectral,Georgia,serif;
-  font-size:1.28rem;font-weight:600;color:var(--ink);
+  font-size:1.28rem;font-style:italic;font-weight:400;color:var(--ink);
   margin:2.2rem 0 .6rem;letter-spacing:-.008em;
 }
 h3:first-of-type{margin-top:0}
@@ -146,7 +148,7 @@ li.pending .t{color:var(--soft)}
 
 /* ---------- questions ---------- */
 .q{max-width:var(--measure);margin:0 0 1.9rem}
-.q h4{font-size:1.28rem;font-weight:600;margin:0 0 .45rem;letter-spacing:-.008em}
+.q h4{font-size:1.28rem;font-style:italic;font-weight:400;margin:0 0 .45rem;letter-spacing:-.008em}
 .q p{margin:0;font-size:1em}
 
 /* ---------- cite ---------- */
@@ -186,15 +188,15 @@ footer{
   and makes error correction first class.</p>
 
   <div class="pair">
-    <p class="tag">Rise above qubits.</p>
+    <p class="tag">Rise above qubits</p>
 <pre><span class="prompt">*&gt;</span> def grover(d, marked):
 <span class="cont">...</span>     $alg = qudit(d)
 <span class="cont">...</span>     def reflect(P): return I - 2*P
 <span class="cont">...</span>     G = reflect(proj(Z, marked)) * (-reflect(proj(X, 0)))
 <span class="cont">...</span>     r = int((pi/4)*sqrt(d)) + 1
 <span class="cont">...</span>     return measure(Z, (G**r) <span class="glyph">&laquo;</span> char(X, 0))()[1]</pre>
-    <p class="gloss">Grover search, entire, on a qudit sized to the problem rather
-    than to the machine. The same six lines run at d = 2 and d = 500.</p>
+    <p class="gloss">Code for Grover search over a database of d items. The same six
+    lines work for d = 2 and d = 500.</p>
   </div>
 </header>
 
@@ -231,9 +233,9 @@ python3 program.py</pre>
     build the canonical quantum algorithms. It is being written in the open;
     chapters go up as they are finished.</p>
     <p><a href="https://arxiv.org/abs/2509.04527">Part I: Foundations</a> gives a
-    deeper, self-contained account of the operator algebraic background, but it is
-    not required reading — chapters 1–3 here build everything the language needs. A
-    first course in quantum computing is assumed; no functional analysis is.</p>
+    deeper, self-contained account of the operator algebra theory which informs
+    yaw. It is not required reading, however, and chapters 1–3 here build the
+    language from the ground up.</p>
   </div>
 
   <p class="part">from one to three</p>
