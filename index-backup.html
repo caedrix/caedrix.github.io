@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>yaw — a quantum programming language</title>
+<title>yaw: algebraic quantum programming</title>
 <!-- 2026-09-06 Sun 20:53 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
@@ -198,8 +198,8 @@ Checking Knill-Laflamme for the five-qubit code:
 </p>
 <pre class="example">
 *&gt; stabs = [cycle(k, X[0, 3]*Z[1, 2]) for k in range(4)]
-*&gt; P = prod((I + S)/2 for S in stabs)
-*&gt; errs = [E[k] for k in range(5) for E in (X, Y, Z)]
+*&gt; P = prod((Is + S)/2 for S in stabs)
+*&gt; errs = [E[k] for k in range(5) for E in (X, Z)]
 *&gt; def kl(A, B): return scalar(P * A.d * B * P, P)
 *&gt; all(kl(A, B) is not None for A in errs for B in errs)
 True
@@ -225,7 +225,7 @@ Read on for more examples.
 <div class="outline-text-2" id="text-2">
 <hr  />
 <p>
-Install the repo (requires <code>Python 3.10</code> or later):
+Install the <a href="http://github.com/torsor-io/yaw">repo</a> (requires <code>Python 3.10</code> or later):
 </p>
 <pre class="example">
 git clone https://github.com/torsor-io/yaw.git
@@ -451,7 +451,7 @@ A. It is a self-conjugating recursive acronym for <b>Yaw Algebraic Way</b>.
 </p>
 
 <p>
-Q. <i>Where are the solutions to exercise?</i> <br  />
+Q. <i>Where are the solutions to exercises?</i> <br  />
 A. Coming to the appendix soon!
 </p>
 </div>
@@ -462,7 +462,11 @@ A. Coming to the appendix soon!
 <hr  />
 <p>
 D. Wakeham, <i>Structure and Interpretation of Quantum Programs II:
-The Way of Yaw</i>. Torsor Labs, 2026. <a href="https://yawlang.dev">https://yawlang.dev</a>
+The Way of Yaw</i>. Torsor Labs, 2026. <a
+  href="https://yawlang.dev">https://yawlang.dev</a> <br><br>
+
+D. Wakeham, <i>Structure and Interpretation of Quantum Programs I:
+Foundations</i>. Torsor Labs, 2025. <a href="https://arxiv.org/abs/2509.04527">arXiv:2509.04527</a>.
 </p>
 </div>
 </div>
