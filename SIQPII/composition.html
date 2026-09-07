@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>1.3. Laws of composition </title>
+<!-- 2026-09-07 Mon 16:34 -->
+<meta  charset="utf-8">
+<meta  name="generator" content="Org-mode">
+<meta  name="author" content="David Wakeham">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+<script src="contents.js"></script>
+<script type="text/javascript" src="sidebar_darkmode.js"></script>
+<style>.smallcaps{font-variant:small-caps;letter-spacing:.04em}</style>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],tags:'ams',processEscapes:true}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+<script src="contents.js"></script>
+<script type="text/javascript" src="sidebar_darkmode.js"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>pre { padding-top: 25px !important; }</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/javascript" src="http://orgmode.org/mathjax/MathJax.js"></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
+
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">1.3. Laws of composition </h1>
+<p>
+In this section, we'll begin combining the basic elements&#x2014;operators
+and states&#x2014;covered in previous sections. As discussed in the
+introduction, our methods of combination correspond to <i>space</i>, <i>time</i>,
+and <i>function</i>, in ways we are about to make precise. Roughly speaking,
+tensor products compose systems in spatial parallel; conjugation uses an
+operator to evolve an observable or state; and finally, channels
+generalize both conjugation and measurement, randomly evolving states
+and observables with a well-behaved set of operators.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Conjugation</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Conjugation is familiar from Heisenberg evolution of operators and
+change of basis in linear algebra. For a time evolution operator \(U\), an
+observable \(A\) evolves as
+\[
+  A \mapsto U^* A U = U \triangleright A.
+\]
+Thinking of the functional \(\pi(\cdot)\) as the expectation
+\(\langle \pi | \cdot |\pi\rangle\), the Heisenberg evolution corresponds
+to Schrödinger evolution
+\[
+  \langle \pi | A |\pi\rangle \mapsto \langle \pi | U^* A U|\pi\rangle
+  = \pi(U \triangleright A) = [U \triangleleft \pi](A).
+\]
+The infix operators \(\triangleright, \triangleleft\) are a little slicker
+than conventional alternatives,<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">The &ldquo;adjoint action&rdquo; notation \(\text{Ad}_U\) and its pullback \(\text{Ad}_U^*\).</span>
+and in <code>yaw</code>, they are implemented by <code>»</code>, <code>«</code>.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">On macOS, <code>»</code> = <kbd>Option</kbd> + <code>\</code> and <code>«</code> = <kbd>Shift</kbd> + <kbd>Option</kbd> + <code>\</code>. You can also simply type <code>&gt;&gt;</code> and <code>&lt;&lt;</code>.</span>
+For instance, conjugating \(X\) by the Hadamard gate
+\(H = (X + Z)/\sqrt{2}\) yields \(Z\), and vice-versa, and simply adds a
+phase to \(Y\):
+</p>
+
+<pre class="example">
+*&gt; H = (X + Z)/sqrt(2)
+*&gt; H » X
+Z
+*&gt; H » Z
+X
+*&gt; H » Y
+-1j*X*Z
+</pre>
+
+<p>
+Similarly, state conjugation swaps eigenfunctionals of \(X\) and \(Z\):
+</p>
+
+<pre class="example">
+*&gt; Z | H « char(X,0)
+1
+*&gt; X | H « char(Z,0)
+1
+</pre>
+
+<p>
+In the usual <i>Schrödinger picture</i>, we take an input state
+\(|\pi\rangle\), evolve by a unitary \(|\pi\rangle \mapsto U|\pi\rangle\),
+and measure. In our algebraic &amp;ldquo;Heisenberg picture&amp;rdquo;, we take
+an input state \(\pi\), conjugate by a unitary
+\(\pi \mapsto U \triangleleft \pi\), and measure. (We explain the
+measurement step below.) The result of two circuits,
+\(|\pi\rangle \mapsto U_2 (U_1 |\pi\rangle)\) becomes
+\(\pi \mapsto U_2 \triangleleft (U_1 \triangleleft \pi)\). This is
+different from
+\[
+  \pi \mapsto (U_2 \triangleright U_1) \triangleleft \pi = (U_2^* U_1
+  U_2) \triangleleft \pi,
+\]
+which is an important design pattern in quantum algorithms. Many quantum
+algorithms take the form<label for="mn-1" class="margin-toggle">&#8853;</label><input type="checkbox" id="mn-1" class="margin-toggle"/><span class="marginnote"><img src="./img/double.png" alt="The QFT is a change of perspective" style="width:95%"/><br/><em>The QFT is a change of perspective.</em></span>
+\[
+  \pi \mapsto (\text{QFT} \triangleright U) \triangleleft \pi
+\]
+for the <i>quantum Fourier transform</i> \(\text{QFT}\) which, generalizing the
+Hadamard \(H\), exchanges \(Z\) for the \(X\) operator (and the \(X\) operator
+for \(Z^{d-1}\)) in the generalized Clifford algebra \(\mathcal{A}_d\). This
+is invoked via <code>qft(X, Z)</code>, though you can formally exchange other
+operators as well:
+</p>
+
+<pre class="example">
+*&gt; $alg = qudit(d)
+*&gt; W1 = qft(X, Z)
+*&gt; W1 » Z
+X
+*&gt; W1 » X
+X**(d-1)
+*&gt; W2 = qft(X, Y)
+*&gt; W2 » Y
+X
+</pre>
+
+<p>
+The initial \(\text{QFT} \triangleleft \pi\) step in the
+\((\text{QFT} \triangleright U) \triangleleft \pi\) pattern often just
+changes an eigenfunctional \(\pi^{(Z)}_0\) for an eigenfunctional
+\(\pi^{(X)}_0\). Sometimes, it's simpler to start in the right place.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Tensor products</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+When you have two systems governed by algebras \(\mathcal{A}_1\) and
+\(\mathcal{A}_2\), the joint system is described by a tensor product
+\(\mathcal{A}_1\otimes \mathcal{A}_2\). Operators on the joint system take
+the form of (limits of) terms of the form
+\[
+  \sum_{i=1}^N c_i A_{1,i} \otimes A_{2,i}, \quad \text{for} \,
+  A_{1,i} \in \mathcal{A}_1, A_{2,i} \in \mathcal{A}_2.
+\]
+We can build states on the tensor product from tensor products of
+states, with
+\[
+  S(\mathcal{A}_1)\otimes S(\mathcal{A}_2) \subseteq
+  S(\mathcal{A}_1\otimes \mathcal{A}_2)
+\]
+since we can define
+\[
+  (\pi_1\otimes\pi_2)(A_1 \otimes A_2) = \pi_1(A_1)\pi_2(A_2).
+\]
+However, entanglement means that not every state has this form. For
+instance, we will construct the <i>EPR state</i> below, with
+\[
+  \label{eq:epr}
+  \pi(A) = \frac{1}{2}(\langle 00| + \langle 11|) A (|00\rangle + |11\rangle).
+\]
+There is no way to factorize this, as you can show in Exercise 3.2.
+</p>
+
+<p>
+In <code>yaw</code>, working with tensor products is simple. First, we can
+automatically build tensor products from the global algebra using the
+<code>@</code> infix and tensor powers using the <code>(@n)</code> prefix:
+</p>
+
+<pre class="example">
+*&gt; $alg = qubit()
+*&gt; XXX = X @ X @ X
+*&gt; ZZZ = (@3) Z
+*&gt; XXX*ZZZ
+X*Z @ X*Z @ X*Z
+*&gt; psi3 = (@3) char(Z, 0)
+*&gt; ZZZ | psi3
+1
+</pre>
+
+<p>
+You can also refer to different algebras, and operators therein, using
+the <code>alg.op</code> notation, and explicitly build the QFT over different
+algebras with <code>tensor_qft</code>:
+</p>
+
+<pre class="example">
+*&gt; alg1 = qudit(3)
+*&gt; alg2 = qudit(5)
+*&gt; qft1 = qft(alg1.X, alg1.Z)
+*&gt; qft2 = qft(alg2.X, alg2.Z)
+*&gt; W = tensor_qft(qft1, qft2)
+</pre>
+
+<p>
+Finally, conjugation works as expected:
+</p>
+
+<pre class="example">
+*&gt; W » alg1.Z @ alg2.Z
+alg1.X @ alg2.X
+</pre>
+
+<p>
+Note that operators in the global <code>$alg</code> are unlabelled, but otherwise
+distinguished by the algebra object they belong to.
+</p>
+
+<p>
+Let's see how this works in practice and build an entangling operator.
+The controlled-\(X\) or \(\text{CNOT}_d\) is an operator on two qudits which
+applies \(X^k\) on the second qudit when the first is in state
+\(\pi^{(Z)}_k\). Accordingly, we introduce projectors \(\Pi^{(Z)}_k\) to
+sift out the states \(\pi^{(Z)}_k\) on the first qudit, with \(X^k\) on the
+second:
+\[
+  \label{eq:8}
+  \text{CNOT}_d = \sum_{k=0}^{d-1}\Pi^{(Z)}_k \otimes X^k.
+\]
+Let's implement it in full generality:
+</p>
+
+<pre class="example">
+*&gt; $alg = qudit(d)
+*&gt; CNOT = sum(proj(Z,k) @ X**k for k in range(d))
+</pre>
+
+<p>
+The ordinary \(\text{CNOT}\) is the special case of \(d=2\). We can check it
+behaves as intended by acting on the functional
+\(\pi^{(X)}_0\otimes \pi^{(Z)}_0\), which corresponds to a vector
+\[  |+\rangle |0\rangle = \frac{1}{\sqrt{2}} (|00\rangle + |10\rangle)
+  \overset{\text{CNOT}}{\longmapsto} \frac{1}{\sqrt{2}} (|00\rangle + |11\rangle),
+\]
+where the latter is called the EPR state:
+</p>
+
+<pre class="example">
+*&gt; init = char(X, 0) @ char(Z, 0)
+*&gt; EPR = CNOT « init
+</pre>
+
+<p>
+This state is characterized by the fact that, when we restrict to the
+first or the second qubit, the state is <i>completely mixed</i>, meaning its
+expectations for \(X\), \(Y\) and \(Z\) are the same as if we averaged over
+all states. By symmetry, this means they vanish.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote">The fact that \(\text{spec}(X) = \{\pm1\}\) implies the symmetry \(X \mapsto -X\), and so on.</span>
+Let's check:
+</p>
+
+<pre class="example">
+*&gt; [op | EPR for op in [X @ I, Y @ I, Z @ I]]
+[0.0, 0.0, 0.0]
+*&gt; [op | EPR for op in [I @ X, I @ Y, I @ Z]]
+[0.0, 0.0, 0.0]
+</pre>
+
+<p>
+Note that <code>X @ I</code> is a partial measurement of \(X\) on the first qubit,
+and so forth. You can explore the qudit version in Exercise 3.2. On the
+other hand, joint measurements of the same operator are always perfectly
+correlated:
+</p>
+
+<pre class="example">
+*&gt; [op | EPR for op in [X @ X, Y @ Y, Z @ Z]]
+[1, -1, 1]
+</pre>
+
+<p>
+To check this <i>spooky</i> correlation more explicitly, we need
+to introduce the machinery of measurement and channels.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Channels and measurement</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+A <i>channel</i> is a sum of conjugators that maps the identity to itself:
+\[
+  \label{eq:9-op}
+  \mathcal{C}_{\mathfrak{L}} = \sum_{\lambda\in \mathfrak{L}}
+  K_\lambda\, \triangleright, \quad \mathcal{C}_{\mathfrak{L}}[I] =
+  \sum_{\lambda\in \mathfrak{L}} K_\lambda^*  K_\lambda = I.
+\]
+The operators \(K_\lambda\) are called <i>Kraus operators</i>. The dual <i>state
+channel</i> is the corresponding sum of state conjugators, and dual to the
+property of preserving the identity (called <i>unitality</i>) is
+the property of preserved <i>trace</i>:<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote">In the situations where this is defined, e.g. density matrices on a finite-dimensional GNS space. The proof here uses linearity and cyclicity of the trace, \(\mbox{tr}[AB]=\mbox{tr}[BA]\).</span>
+\[
+  \label{eq:9-state}
+  \mathcal{C}^{\mathfrak{L}} = \sum_{\lambda\in \mathfrak{L}}
+  K_\lambda\, \triangleleft, \quad
+  \mbox{tr}\,\mathcal{C}^{\mathfrak{L}}[\pi] = \sum_{\lambda\in
+  \mathfrak{L}} \mbox{tr}\big[ K_\lambda\pi  K_\lambda^* \big] =
+  \mbox{tr}[\pi].
+\]
+The channel can simply be applied, as in the case of errors. The
+<i>depolarizing channel</i> \(\Delta_\alpha\), usually written in the state
+form, mixes a qubit state with the maximally mixed state \(I/2\):<label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote">Again, this is in the setting of density matrices on a finite-dimensional GNS space.</span>
+\[
+  \Delta_\alpha[\pi] = (1-\alpha)\pi + \frac{\alpha}{2} I.
+\]
+As you can show in Exercise 3.3, this has Kraus operators
+\[
+  K_0 = \sqrt{1 - \frac{3\alpha}{4}} I, \quad K_i =
+  \sqrt{\frac{\alpha}{4}}\sigma_i,
+\]
+where we recall that \(\sigma_1 = X\), \(\sigma_2 = Y\) and \(\sigma_3 = Z\).
+We can define the state channel easily in <code>yaw</code> using <code>stChannel</code>:
+</p>
+
+<pre class="example">
+*&gt; $alg = qubit()
+*&gt; sigma = [X, 1j*X*Z, Z]
+*&gt; def stDpl(alpha):
+...    K0 = sqrt(1-3*alpha/4)*I
+...    Ks = [sqrt(alpha/4)*sigma[i] for i in range(3)]
+...    return stChannel([K0]+Ks)
+*&gt; dplZ = stDpl(0.2)(char(Z,0))
+*&gt; Z | dplZ
+0.8
+</pre>
+
+<p>
+We can also compute the effect of the channel on operators directly with
+<code>opChannel</code>:
+</p>
+
+<pre class="example">
+*&gt; def opDpl(alpha):
+...    K0 = sqrt(1-3*alpha/4)*I
+...    Ks = [sqrt(alpha/4)*sigma[i] for i in range(3)]
+...    return opChannel([K0]+Ks)
+*&gt; opDpl(0.2)(Z)
+0.8*Z
+</pre>
+
+<p>
+By analogy with <code>Unix</code>, pipe syntax allows us to push operators through
+a chain of channels, and optionally, to evaluate in a state at the end:
+</p>
+
+<pre class="example">
+*&gt; Z | opDpl(0.2) | opDpl(0.8) | stDpl(0.4)(char(Z, 0))
+0.096
+</pre>
+
+<p>
+The final state evaluation is in fact another form of operator channel,<label for="sn-6" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-6" class="margin-toggle"/><span class="sidenote">Albeit one that sends operators to complex numbers.</span>
+so our notation is consistent.
+</p>
+
+<p>
+So far, we've treated channels as black boxes that process inputs
+undisturbed. But we can open up and look inside! This is the act of
+measurement, and it effectively chooses a Kraus operator at random
+\[
+  \label{eq:opMeasure}\tag{1.3.1}
+  A \overset{\text{evolve}}{\longmapsto}
+  \mathcal{C}_{\mathfrak{L}}[A] = \sum_{\lambda\in \mathfrak{L}}
+  K_\lambda^*A K_\lambda \overset{\text{observe}}{\longmapsto}
+  \frac{1}{C_\lambda} K_\lambda^*A K_\lambda,
+\]
+according to the <i>Lüders rule</i>. Similarly:
+\[
+  \label{eq:stMeasure}\tag{1.3.2}
+  \pi \overset{\text{evolve}}{\longmapsto}
+  \mathcal{C}^{\mathfrak{L}}[\pi] = \sum_{\lambda\in \mathfrak{L}}
+  K_\lambda \triangleleft \pi \overset{\text{observe}}{\longmapsto}
+  \frac{1}{C_\lambda} (K_\lambda \triangleleft \pi).
+\]
+Here, \(C_\lambda\) is a normalization constant that depends on the state
+\(\pi\) we observe in; to ensure the output state remains normalized, we have<label for="sn-7" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-7" class="margin-toggle"/><span class="sidenote">This follows from \[C_\lambda^{-1} (K_\lambda \triangleleft \pi)(I) = C_\lambda^{-1} \pi (K_\lambda^* K_\lambda) = 1.\]</span>
+\[
+  \label{eq:10}
+  C_\lambda = \pi (K_\lambda^* K_\lambda).
+\]
+The fact that the operator channel is unital, i.e. maps \(I\) to itself,
+means that the constants sum to unity:<label for="mn-2" class="margin-toggle">&#8853;</label><input type="checkbox" id="mn-2" class="margin-toggle"/><span class="marginnote"><img src="./img/lambda.png" alt="Observing a channel is a roll of the Kraus" style="width:95%"/><br/><em>Observing a channel is a roll of the Kraus.</em></span>
+\[
+  \sum_{\lambda\in\mathfrak{L}} C_\lambda = \pi
+  \left(\sum_{\lambda\in\mathfrak{L}} K_\lambda^* K_\lambda\right) =
+  \pi(I) = 1,
+\]
+with positivity implying that each \(C_\lambda \geq 0\). This looks a lot
+like probability, and indeed, <i>Born's rule</i> tells us that \(C_\lambda\) is
+the probability of observing Kraus operator \(\lambda\).
+</p>
+
+<p>
+In <code>yaw</code>, measurement can either be performed with respect to operators
+\(\eqref{eq:opMeasure}\) via <code>opMeasure</code>, or states \(\eqref{eq:stMeasure}\)
+via <code>stMeasure</code>. We can illustrate with the \(Z\)-measurement of a qubit
+in the \(\pi^{(X)}_0\) state:
+</p>
+
+<pre class="example">
+*&gt; Ks = [proj(Z, 0), proj(Z, 1)]
+*&gt; psi = char(X, 0)
+*&gt; psiNew, outcome = stMeasure(Ks, psi)()
+*&gt; outcome
+1
+*&gt; Z | psiNew
+-1
+</pre>
+
+<p>
+The function <code>opMeasure</code> works in a similar way. A useful shortcut when
+the Kraus operators are projectors of some observable is given by the
+simpler <code>measure</code> function:
+</p>
+
+<pre class="example">
+*&gt; psiNew, outcome = measure(Z, psi)()
+</pre>
+
+<p>
+We can now revisit the entanglement example:
+</p>
+
+<pre class="example">
+*&gt; init = char(X, 0) @ char(Z, 0)
+*&gt; EPR = CNOT « init
+*&gt; [measure(X@X, EPR)()[1] for _ in range(10)]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+*&gt; [measure(Z@Z, EPR)()[1] for _ in range(10)]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+*&gt; [measure(X@Z, EPR)()[1] for _ in range(10)]
+[1, 1, 1, 0, 0, 1, 0, 1, 1, 1]
+</pre>
+
+<p>
+Every time we measure the same observable on both qubits, we get the
+same answer; different observables get different answers.<label for="sn-8" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-8" class="margin-toggle"/><span class="sidenote">If we get outcomes \(a, b \in \{0, 1\}\), we return the sum \(a \oplus b\) modulo \(2\).</span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-coda" class="outline-2">
+<h2 id="sec-coda"><a id="sec-4" name="sec-4"></a>Coda</h2>
+<div class="outline-text-2" id="text-sec-coda">
+
+<p>
+We've now seen three elementary ways to compose quantum algorithms:
+conjugation, tensor products, and channels. Indeed, these are the three
+basic combinators in the standard approach to quantum computing, which
+takes a fiducial initial state \(|0^n\rangle\) over multiple qubits
+(tensor product), evolves by a circuit
+\(|0^n\rangle\mapsto U |0^n\rangle\) (conjugation), and finally measures
+in a fixed basis (channels). We have given the toy example of building
+and measuring an entangled state, but although simple, it hopefully
+begins to hint at the elegance and power of the algebraic approach. To
+make those hints fully manifest, however, we need to start thinking
+about real algorithms.
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>
