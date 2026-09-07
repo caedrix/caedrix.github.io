@@ -1,0 +1,636 @@
+~yaw~ is a quantum programming language which specifies what operators do and not what
+states are. It reduces code complexity, is interoperable between
+architectures, and makes error correction first class.
+
+* Examples
+Grover search, with database size $d$ a functional parameter:
+#+BEGIN_EXAMPLE shell
+*> def grover(d, marked):
+...    $alg = qudit(d)
+...    def reflect(P): return I - 2*P
+...    G = reflect(proj(Z, marked)) * (-reflect(proj(X, 0)))
+...    r = int((pi/4)*sqrt(d)) + 1
+...    return measure(Z, (G**r) « char(X, 0))()[1]
+#+END_EXAMPLE
+Checking Knill-Laflamme for the five-qubit code:
+#+BEGIN_EXAMPLE shell
+*> stabs = [cycle(k, X[0, 3]*Z[1, 2]) for k in range(4)]
+*> P = prod((I + S)/2 for S in stabs)
+*> errs = [E[k] for k in range(5) for E in (X, Y, Z)]
+*> def kl(A, B): return scalar(P * A.d * B * P, P)
+*> all(kl(A, B) is not None for A in errs for B in errs)
+True
+#+END_EXAMPLE
+Defining the GKP state on a photonic quantum computer:
+#+BEGIN_EXAMPLE shell
+*> $alg = <X, Z | unit, braid(-1)>
+*> gkp = weylState(lambda a, b: 1 if a % 2 == 0 else 0)
+*> gkp | X**2, gkp | Z**2    
+(1, 1)
+*> gkp | X, gkp | Z          
+(0, 1)
+#+END_EXAMPLE
+Read on for more examples.
+* Installation
+Install the repo (requires ~Python 3.10~ or later):
+#+BEGIN_EXAMPLE shell
+git clone https://github.com/torsor-io/yaw.git
+cd yaw
+pip install -r requirements.txt
+#+END_EXAMPLE
+Run the REPL:
+#+BEGIN_EXAMPLE shell
+python yaw/yaw_repl.py
+#+END_EXAMPLE
+Compile a ~.yaw~ file:
+#+BEGIN_EXAMPLE shell
+python yaw/y2py.py program.yaw -o program.py
+python program.py
+#+END_EXAMPLE
+Import as package:
+#+BEGIN_EXAMPLE python
+from yaw import *
+#+END_EXAMPLE
+* SIQP II
+This site hosts /Structure and Interpretation of Quantum Programs II:
+The Way of Yaw/, a living textbook which develops the language from scratch and uses it
+to build a canonical set of quantum algorithms. Here is the live table
+of contents:
+
+#+ATTR_HTML: :style margin-left: auto; margin-right: auto;
+|     | BASICS               |          |
+|-----+----------------------+----------|
+| 1.1 | Algebras             | live     |
+| 1.2 | Operators and States | live     |
+| 1.3 | Laws of composition  | live     |
+|-----+----------------------+----------|
+|     | ALGORITHMS           |          |
+|-----+----------------------+----------|
+| 2.1 | Send                 | live     |
+| 2.2 | Search               | live     |
+| 2.3 | Sample               | live     |
+| 2.4 | Simulate             | drafting |   
+| 2.5 | Subgroup             | planned  |
+| 2.6 | Shadow               | planned  |
+| 2.7 | Signal               | planned  |
+| 2.8 | Sparsity             | planned  |
+|-----+----------------------+----------|
+|     | APPENDICES           |          |
+|-----+----------------------+----------|
+|   A | Exercises            | live     |
+|   B | Solutions            | drafting |
+|   C | Awds                 | planned  |
+|   D | Reference programs   | planned  |
+* FAQs
+Q. /Isn't this just a library with fancy syntax?/ \\
+A. No, it's a different way of thinking about quantum computing and an
+accompanying language to implement that thinking.
+
+Q. /Can I keep working with qubits?/ \\
+A. Sure, but you address them via their Pauli algebra and
+corresponding eigenvectors rather than bitstrings.
+
+Q. /Can I do continuous variable computing?/ \\
+A. Soon! This is a neat generalization of the algebra of qudits.
+
+Q. /Aren't operators just as low-level as circuits?/ \\
+A. Yes, in the same way gauge theory is equivalent to regular
+electrodynamics. The former abstracts the latter.
+
+Q. /Presentations are related to the word problem, which is
+undecidable, right?/ \\
+A. Yes, so we restrict to a decidable fragment that happens to include
+everything we care about.
+
+
+Q. /How can you actually compile any of this to hardware?/ \\
+A. Cramming one Hilbert space into another is called error correction,
+and the tools already exist for it. Implementation is a work in progress.
+
+
+Q. /Doesn't your approach throw away phase information?/ \\
+A. Global phase yes, relative phase no. Global phase is fake anyway
+(and a source of bugs) so it's no loss.
+
+
+Q. /Sounds like a lot of hard math.../ \\
+A. You can get by with high school algebra!
+
+Q. /What does "yaw" mean?/ \\
+A. It is a self-conjugating recursive acronym for *Yaw Algebraic Way*.
+
+Q. /Where are the solutions to exercise?/ \\
+A. Coming to the appendix soon!
+* Citation
+D. Wakeham, /Structure and Interpretation of Quantum Programs II:
+The Way of Yaw/. Torsor Labs, 2026. https://yawlang.dev
+* COMMENT Getting started
+-----
+There are three ways to use ~yaw~: using the ~yaw REPL~ (interpreted),
+using ~.yaw~ files and ~y2py~ (compiled), and finally as a package in ~Python~. The
+first two options use streamlined ~yaw~ syntax, but for tasks
+requiring ~Python~ integration the latter is useful. We'll focus on
+the first two in this tutorial. But first, we'll see how to install!
+** Installation
+The first step is to clone the ~yaw~ repository via ~git~:
+#+BEGIN_EXAMPLE shell
+git clone https://github.com/torsor-io/yaw.git
+cd yaw
+pip install -r requirements.txt  # Just sympy and numpy for now
+#+END_EXAMPLE
+You now have access to all the files you need!
+** REPL
+To use the REPL, navigate to the top level folder and run
+#+BEGIN_EXAMPLE shell
+python yaw/yaw_repl.py
+#+END_EXAMPLE
+This shows a banner followed by a command prompt:
+#+BEGIN_EXAMPLE shell
+           ┓    ┓     •
+┓┏┏┓┓┏┏  ┏┓┃┏┓┏┓┣┓┏┓┏┓┓┏  ┓┏┏┏┓┓┏
+┗┫┗┻┗┻┛  ┗┻┗┗┫┗ ┗┛┛ ┗┻┗┗  ┗┻┛┗┻┗┫
+ ┛           ┛                  ┛
+Yaw: Algebraic QC w/ context management
+Version 0.1.0
+Torsor Labs, 2025
+────────────────────────────────────────────────────────────
+Type 'help' or 'credits' for more information.
+yaw> $alg = qubit()
+Created algebra: <X, Z | herm, unit, anti>
+#+END_EXAMPLE
+
+Here, we've defined the algebra of a qubit, ~$alg = qubit()~. We'll
+explain the output below.
+** Compiler
+Alternatively, we can save a ~.yaw~ file containing the single line:
+#+BEGIN_EXAMPLE python
+$alg = qubit()
+#+END_EXAMPLE
+Let's call this ~qubit.yaw~. We can compile this to ~Python~ and run
+in one fell swoop using
+#+BEGIN_EXAMPLE shell
+python yaw/y2py.py qubit.yaw -o qubit.py
+python qubit.py
+#+END_EXAMPLE
+We won't get any output this time, since print statements like
+~Created algebra: <X, Z | herm, unit, anti>~ are REPL-only verbosity, and we
+haven't done anything but define a lone qubit.
+** Package
+Finally, we can use ~yaw~ as a package inside ~Python~. The syntax is
+clunkier but it can interface directly with other ~Python~ packages. 
+#+BEGIN_EXAMPLE python
+from yaw import *
+pauli = Algebra(gens=['X', 'Z'], rels=['herm', 'unit', 'anti'])
+#+END_EXAMPLE
+In this tutorial, we will largely focus on native ~yaw~ syntax;
+this is the way the language is intended to be used.
+* COMMENT Statics
+-----
+In this section, we'll define the basic objects of algebraic quantum
+programming: algebras, operators, and states, and the basic operations
+on them. Any math we need we will introduce as we go along.
+** Algebras
+An *algebra* $\mathcal{A}$ is a collection of observables. We can take
+complex linear combinations of observables, multiply them, and take
+Hermitian conjugates, aka *adjoints*. Thus, for operators $A, B \in \mathcal{A}$,
+\[
+\alpha A + \beta B, \quad A \cdot B, \quad  A^*, B^* \in \mathcal{A},
+\]
+for any $\alpha, \beta \in \mathcal{C}$. We also assume a
+*multiplicative identity* $I \in\mathcal{A}$. I won't go into the
+properties of these operations, since these are exactly what you
+expect from ordinary dealings with Hilbert space. Crucially, operators
+also have a size satisfying $\Vert A \Vert = \Vert A^* \Vert \geq 0$,
+but we won't worry about this for now. Already, the situation is a bit
+easier than when we deal with normalized states in Hilbert space; we
+can freely add without having to re-normalize anything.
+
+To define an algebra in ~yaw~, we use *generators* and
+*relations*. Generators are the symbolic alphabet we use to write down
+all operators, like $x, y, z, \ldots$ of high school algebra, while
+relations are equations these generators satisfy. The simplest example
+is the algebra of a qubit, called the *Pauli algebra*. The smallest
+generating set is just $X$ and $Z$, subject to the relations
+\[
+X^* = X, Z^* = Z, \quad X^*X = Z^*Z= I, \quad ZX = -XZ.
+\]
+Put differently, $X$ and $Z$ are Hermitian, unitary, and anticommute.
+
+The notation for generators and relations is $\mathcal{A} =
+\langle\mathcal{G}|\mathcal{R}\rangle$, where $\mathcal{G}$ is a set
+of generators and $\mathcal{R}$ relations.
+We adopt this in ~yaw~, and simply write the Pauli algebra as
+#+BEGIN_EXAMPLE python
+yaw> $alg = < X, Z | herm, unit, anti >
+Created algebra: <X, Z | herm, unit, anti>
+#+END_EXAMPLE
+where ~herm~ and ~unit~ means all generators are respectively
+Hermitian and unitary, and ~anti~ means they anticommute.
+Note that being Hermitian and unitary also implies $A^2 = A^*A = I$,
+i.e. operators square to the identity, which is expressed by the relation ~pow(2)~.
+This is automatically inferred.
+Finally, the notation ~$alg~ is meant to evoke global variables in
+~UNIX~; here, the algebra is a global object.
+
+We can specify individual operator relations simply by appending
+symbols, e.g. the Pauli algebra can also be written
+#+BEGIN_EXAMPLE python
+yaw> $alg = < X, Z | herm(X, Z), unit(X, Z), anti(X, Z) >
+#+END_EXAMPLE
+Other relation builders include ~comm~ (for commuting) and ~braid~
+(for braiding relations which generalize both ~comm~ and ~anti~).
+This means we can define qudits immediately, though to save the user
+trouble, we have shortcuts
+#+BEGIN_EXAMPLE python
+yaw> $alg = qubit()
+#+END_EXAMPLE
+and more generally
+#+BEGIN_EXAMPLE python
+yaw> $alg = qudit(d)
+#+END_EXAMPLE
+We will cover the algebra of qudits, and the generalization to
+oscillators, in more detail elsewhere, but for the record, ~qudit(d)~
+stands for
+#+BEGIN_EXAMPLE python
+yaw> <X, Z | herm, unit, pow(d), braid(exp(2*pi*I/d))>
+#+END_EXAMPLE
+and ~braid(ω)~ means $XZ = \omega ZX$, with $X$ being "to the left" of
+$Z$ in the generator ordering meaning that we take the braiding in
+this direction.
+** Operators
+Once we have an algebra, we can start to build things with the basic
+operators at our disposal.
+We can recover familiar single-qubit operators, for instance
+#+BEGIN_EXAMPLE python
+yaw> Y = 1j*X*Z
+yaw> H = (X + Z)/sqrt(2)
+#+END_EXAMPLE
+We use "engineering" notation ~1j~ for the imaginary unit
+$\sqrt{-1}$.
+We can check these satisfy the usual relations, for instance @@html:<label for="mn-demo" class="margin-toggle">&#8853;</label>
+<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+<span class="marginnote">
+Currently, there are (harmless) bugs in the REPL output meaning we
+sometimes get <code>1.0</code> instead of <code>I</code>.
+</span>@@
+#+BEGIN_EXAMPLE python
+yaw> Y*Y
+1
+yaw> Y*X
+-1j*Z
+yaw> H*X == Z*H
+True
+yaw> H.d == H
+True
+#+END_EXAMPLE
+The notation ~.d~ stands for "dagger", or adjoint. Operators have a
+*spectrum* of eigenvalues; in the absence of vectors (note that we haven't defined
+these yet!) we say $\lambda \in \text{spec}(A)$ is an eigenvalue just in case
+\[
+(A - \lambda I)^{-1}
+\]
+does not exist, i.e. $A - \lambda I$ has no multiplicative inverse.
+This spectrum is obtained numerically via
+#+BEGIN_EXAMPLE python
+yaw> spec(Y)
+[1, -1]
+#+END_EXAMPLE
+A shortcut to finding eigenvalues is the *minimal polynomial*
+that $A$ is a root of:
+\[
+p_\min^{(A)}(A) = \sum_{k=0}^n c_k A^k = 0,
+\]
+which can produce using relations, e.g. $X^2 - I = 0$ for the Pauli $X$.
+The eigenvalues are the roots of $p_\min^{(A)}(x)$.
+The polynomial and its solutions are produced as follows:
+#+BEGIN_EXAMPLE python
+yaw> minimal_poly(Y)[0]
+Poly(x**2 - 1, x, domain='RR')
+#+END_EXAMPLE
+Observables correspond to self-adjoint operators, which in turn have
+a real spectrum.
+** States
+The last entry in our cast of characters is the *state*. In the
+algebraic approach, states are not defined as normalized vectors in a
+Hilbert space; we haven't even defined a Hilbert space! But the
+transition isn't radical.
+Instead of thinking about the vector $|\psi\rangle$, we think about
+the *expectation* it induces on operators:
+\[|\psi\rangle
+\in \mathcal{H} \quad \longrightarrow \quad \langle \psi |
+\cdot |\psi\rangle = \psi(\cdot) \in
+\mathcal{L}(\mathcal{A},\mathbb{C}),
+\]
+where $\mathcal{L}(\mathcal{A},\mathbb{C})$ indicates the set of
+linear functions from $\mathcal{A}$ to $\mathbb{C}$, also called
+*linear functionals* on $\mathcal{A}$. An important class is
+*eigenstates* of operators. If $|\psi\rangle$ is an eigenstate of $A \in\mathcal{A}$,
+then for any $B \in\mathcal{A}$, we have the defining property
+\[
+\langle \psi | AB|\psi\rangle = \langle \psi | A|\psi\rangle\langle
+\psi| B|\psi\rangle = \langle \psi | BA|\psi\rangle
+\]
+or $\psi(AB)=\psi(A)\psi(B)$. The expectation $\psi(A) \in
+\text{spec}(A)$, so we indicate eigenstates not by eigenvalue, but by
+the spot on the list of eigenvalues (in decreasing order). For
+instance, the eigenstate
+#+BEGIN_EXAMPLE python
+yaw> char(Z, 0)
+#+END_EXAMPLE
+has eigenvalue $1$, the largest eigenvalue of the Pauli
+$Z$; in the conventional approach this eigenstate is denoted
+$|0\rangle$, but in the algebraic approach, we label the functional by
+$\pi_0$. We can combine states, but since they are now interpreted as
+expectations, we cannot take arbitrary linear combinations; instead,
+we must respect probability and take *convex combinations*, i.e.
+\[
+\rho = p \pi + (1 - p) \pi'
+\]
+for $p \in [0, 1]$. This is nothing other than mixing states. @@html:<label for="mn-demo" class="margin-toggle">&#8853;</label>
+<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+<span class="marginnote">
+  The careless linear combination of states is a source of many bugs
+in ordinary quantum code, so we make it more or less impossible by design.
+</span>@@
+~yaw~ performs this mixture in a natural way, for example
+#+BEGIN_EXAMPLE python
+yaw> rho = 0.3*char(Z,0) + 0.7*char(Z,1)
+0.300*char(Z, 0) + 0.700*char(Z, 1)
+#+END_EXAMPLE
+We have said that a state is algebraically viewed as an
+expectation. To take expectations like $\psi(A) = \langle
+\psi|A|\rangle$, or more generally $\rho(A) = \mbox{Tr}[\rho A]$, we
+use the vertical bar ~|~ and postfix notation:
+#+BEGIN_EXAMPLE python
+yaw> Z | rho
+-0.400
+yaw> Y | rho
+0.0
+#+END_EXAMPLE
+As with generators and relations, or conditional probability, the bar
+means "given"; in this case, the value of an observable given a state
+as probabilistic context. This also recalls the pipe notation from
+~UNIX~, and indeed, we are piping the operator as an argument to a
+function. So it works on both levels!
+* COMMENT Dynamics
+-----
+We've dealt so far with the "statics" of algebraic quantum
+programming, the basic objects we define and use. Now, we turn to
+"dynamics": the art of making things change, from which algorithms
+emerge.
+** Conjugation
+One of the simplest ways to modify an operator is a change of basis,
+otherwise called *conjugation*:
+\[
+A \mapsto B^* A B = B \triangleright A.
+\]
+This satisfies various laws, most importantly
+\[
+B \triangleright (B' \triangleright A) = BB' \triangleright A.
+\]
+In quantum computing, $U$ is often a unitary. For instance, the
+standard recipe is to start with a state $|0\rangle$, describe a
+circuit $U$, and measure a fixed observable $M$ in state
+$U|0\rangle$. If $M$ is an projector-valued measurement (we explain
+more below) with projectors $\Pi_i$, then the resulting distribution
+has probabilities
+\[
+p_i = \langle 0| U^* \Pi_i U |0\rangle = \langle 0| (U\triangleright \Pi_i)|0\rangle.
+\]
+Alternatively, we can view $\langle 0| \cdot |0\rangle$
+as a functional, and define conjugation of a state via
+\[
+U \triangleleft \langle 0| \cdot |0\rangle = \langle 0|U^* \cdot U|0\rangle.
+\]
+Thus, if $\pi_0(\cdot) = \langle 0| \cdot |0\rangle$, then
+\[
+p_i = \pi_0(U \triangleright \Pi_i) = [U \triangleleft \pi_0](\Pi_i).
+\]
+This models the general situation:
+\[
+\pi(B \triangleright A) = \pi(B^* A B) = [B \triangleleft \pi](A).
+\]
+In ~yaw~, we replace $\triangleright$ and $\triangleleft$ with ~>>~ and ~<<~:
+#+BEGIN_EXAMPLE python
+yaw> H >> X
+Z
+yaw> Z | X << char(Z, 0)
+-1
+yaw> Z | X << char(Z, 0) == X >> Z | char(Z, 0)
+True
+#+END_EXAMPLE
+So, now we have a basic way to transform operators and states.
+** Tensor products
+Conjugation provides compositional structure, which is effective
+structure in time. The easiest way to add structure in
+/space/ is to make a composite systems using the *tensor product*,
+$\mathcal{A} \otimes \mathcal{A}'$. This consists of all linear
+combinations of operators
+of the form $A \otimes A'$ for $A \in\mathcal{A}, A' \in
+\mathcal{A}'$.@@html:<label for="mn-demo" class="margin-toggle">&#8853;</label>
+<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+<span class="marginnote">
+Technically, we have to fill in "holes" with respect to a norm
+function. This is quite involved, so we won't go
+into the details.
+</span>@@
+The tensor product of the set of states is exactly the set of states
+of the tensor product. More precisely,
+\[
+\mathcal{L}(\mathcal{A}\otimes \mathcal{A}',\mathbb{C}) \cong
+\mathcal{L}(\mathcal{A},\mathbb{C}) \otimes \mathcal{L}(\mathcal{A}',\mathbb{C}),
+\]
+where $\cong$ indicates these structures are isomorphic.
+Thus, we can cobble together tensor products of states and get every
+state on the tensor product.
+
+For now, we focus on multiple copies of the same algebra, written
+$\mathcal{A}^{\otimes n} = \mathcal{A} \otimes \cdots \otimes
+\mathcal{A}$. This is the situation we typically encounter with, say,
+$n$ qubits.
+In ~yaw~, tensor products are invoked with ~@~. You can add and
+multiply as usual:
+#+BEGIN_EXAMPLE python
+yaw> (X @ X)*(X @ X)
+I @ I
+yaw> 2*(X@X) - (X@X)
+X @ X
+#+END_EXAMPLE
+We can conjugate tensor products of both states and operators:
+#+BEGIN_EXAMPLE python
+yaw> (H @ H) >> (X @ X)
+Z @ Z
+yaw> (X @ X) << (char(Z, 0) @ char(Z, 0))
+char(Z, 1) @ char(Z, 1)
+#+END_EXAMPLE
+So now we have structure in both time and space!
+** Selection
+Conjugation composes operations in time, tensor products in
+space. Another important operation is /selection/. This is implemented
+by *projectors*, also called /projection operators/, satisfying
+\[
+\Pi^2 = \Pi, \quad \Pi^* = \Pi,
+\]
+i.e. /Hermitian idempotents/.
+These are the operator analogue of Boolean variables, since they have
+precisely two eigenvalues, corresponding to Boolean values:
+\[
+\Pi^2 - \Pi = 0 \quad \Longrightarrow \quad \text{spec}(\Pi) = \{0, 1\}.
+\]
+We can always decompose a well-behaved operator $N$ @@html:<label for="mn-demo" class="margin-toggle">&#8853;</label>
+<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+<span class="marginnote">
+By the spectral theorem, any normal operator (which commutes with its
+adjoint) can be so decomposed.
+</span>@@ into a sum of orthogonal projectors, each associated to a
+distinct eigenvalue $\lambda_i$:
+\[
+N = \sum_i \lambda_i \Pi_i, \quad \Pi_i \Pi_j = \delta_{ij} \Pi_i.
+\]
+In ~yaw~, we can pluck out the relevant projector $\Pi_i$ using the
+ordering of eigenvalues, in the same way we label eigenstates:
+#+BEGIN_EXAMPLE python
+yaw> proj0 = proj(Z,0)
+proj(Z, 0)
+yaw> pi0 = char(Z,0)
+char(Z, 0)
+yaw> proj0 | pi0
+1
+#+END_EXAMPLE
+/Optional./ Under the hood, we actually construct projectors from the minimal
+polynomial; if you find the details boring, feel free to skip to the next
+section. When $N$ is diagonalizable, the minimal polynomial takes the form
+\[
+p_\min^{(N)}(x) = \prod_i (x - \lambda_i)
+\]
+for distinct $\lambda_i$.
+Focusing on $\lambda_j$, we can divide out the associated linear factor:
+\[
+p_j^{(N)}(x) = \prod_{i\neq j} (x - \lambda_i).
+\]
+Note that
+\[
+p_\min^{(N)}(N) = 0 \quad \Longrightarrow \quad p_j^{(N)}(N)N =
+\lambda_j p_j^{(N)}(N).
+\]
+Thus, $p_j^{(N)}(N)$ resembles $\Pi_j$, which also acts as $\Pi_j N =
+\lambda_j\Pi_j$. To nail this identification, we need to check the
+$p_j^{(N)}(N)$ are orthogonal and idempotent. Orthogonality follows immediately since
+\[
+0 = p_\min^{(N)}(N) | p_j^{(N)}(N) p_k^{(N)}(N)
+\]
+for any $j \neq k$. For idempotence, suppose
+\[
+p_j^{(N)}(x) = \sum_{k=0}^d c_k x^k.
+\]
+Then, using $p_j^{(N)}(N)N =\lambda_j p_j^{(N)}(N)$, the square
+\[
+\left[p_j^{(N)}(N)\right]^2 = p_j^{(N)}(N) \sum_{k=0}^d c_k N^k = p_j^{(N)}(N) \sum_{k=0}^d c_k \lambda_j^k = p_j^{(N)}(N)
+p_j^{(N)}(\lambda_j).
+\]
+Thus, the idempotent variable is not $p_j^{(N)}(N)$ itself, but the
+scaled version
+\[
+\Pi_j = \frac{p_j^{(N)}(N)}{p_j^{(N)}(\lambda_j)}.
+\]
+Technically, this is just an instance of the *Lagrange interpolation
+formula*, but that's another story!
+** Control
+A naturally corollary to selection is *controlled operations*. Usually, these
+are introduced in Hilbert space, and in a basis-dependent way. Here,
+we use a completely algebraic formulation which is independent of
+basis. The idea is simple: instead of controlling on the state of a
+qubit, with $|0\rangle$ ignoring a target system and $|1\rangle$
+performing operation $U$, we can /project/ on the control system, and write a 
+combined operator
+\[
+\text{C}U = \Pi_0 \otimes I + \Pi_1 \otimes U.
+\]
+We can implement the $\text{CNOT}$ ($\text{C}X$) operation as well as
+as the Toffoli ($\text{CCNOT}$) in ~yaw~:
+#+BEGIN_EXAMPLE python
+yaw> CNOT = ctrl(Z,[I,X])
+proj(Z, 0) @ I + proj(Z, 1) @ X
+yaw> CCNOT = ctrl(Z,[I @ I,CNOT])
+proj(Z, 0) @ I @ I + proj(Z, 1) @ CNOT
+#+END_EXAMPLE
+If we want to replace a qubit with a qudit, decomposed as $N = \sum_i
+\lambda_i \Pi_i$, and $U$ with a collection $U_i$, then the
+corresponding controlled operator is
+\[
+\text{C}U = \sum_i \Pi_i \otimes U_i.
+\]
+For instance, the qutrit version of $\text{C}X$ is
+#+BEGIN_EXAMPLE python
+yaw> $alg = qudit(3)
+Created algebra: <X, Z | herm, unit, pow(3), braid(exp(2*pi*I/3))>
+yaw> CX = ctrl(Z, [I, X, X**2])
+proj(Z, 0) @ I + proj(Z, 1) @ X + proj(Z, 2) @ X**2
+#+END_EXAMPLE
+We will explore further applications of this idea in future tutorials.
+** Example: Bell states
+We finish with a simple example that combines all of the above ideas:
+generating entanglement. The famous entangled state
+\[ |\phi\rangle
+= \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)
+\]
+is actually one of a family of quadruplets, individually entangled
+but mutually orthogonal, called the *Bell states*:
+\[|\phi_{ab}\rangle
+= \frac{1}{\sqrt{2}}(|0b\rangle + (-1)^a |1\overline{b}\rangle),
+\]
+where $\overline{b} = 1 - b$.
+The way to prepare these states is to apply the usual Bell
+state-preparing circuit, but to $|ab\rangle$:
+\[|
+\phi_{ab}\rangle = \text{CNOT} (H \otimes I) |ab\rangle,
+\]
+which I leave as an exercise. In the algebraic setting, the circuit
+$U$ acting on $|0\rangle$ becomes conjugation of $\pi_0(\cdot) =
+\langle 0|\cdot|0 \rangle$ by $U$, so
+#+BEGIN_EXAMPLE python
+yaw> def phi(a, b):
+...      init = X**a @ X**b << pi0 @ pi0
+...      return CNOT*(H @ I) << init
+yaw> Z @ Z | phi(0,0)
+1
+#+END_EXAMPLE
+To emphasize the power of ~yaw~'s basic combinators, let's write
+the full (compiler) code to generate the canonical Bell state $\phi$:
+#+BEGIN_EXAMPLE python
+$alg = <X, Z | herm, unit, anti>
+H    = (X + Z)/sqrt(2)
+pi0 = char(Z, 0)
+CNOT = ctrl(Z, [I, X])
+phi  = CNOT*(H @ I) << pi0 @ pi0
+#+END_EXAMPLE
+That's it; five lines, and we've defined everything from scratch.
+Next time, we'll use these states to perform a magic trick called *teleportation*!
+* COMMENT Measurement
+* COMMENT Algorithms
+** Bell states
+** Teleportation
+** Grover
+** HSP
+* COMMENT References
+-----
+
+- [[https://www.amazon.ca/Quantum-Computation-Information-10th-Anniversary/dp/1107002176][/Quantum Computation and Quantum Information/]] (2000), Michael
+  Nielsen and Isaac Chuang. The classic introduction to the
+  quantum.
+- [[https://torsor.io/assets/siqpDRAFT.pdf][“SIQP I: Foundations”]] (2025), David Wakeham. The (much longer)
+  mathematical companion to these tutorials.
+
+* COMMENT html export
+#+TITLE:
+#+HTML_CONTAINER: div
+#+HTML_DOCTYPE: xhtml-strict
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+#+HTML_HEAD: <script type="text/javascript" src="sidebar_darkmode.js"></script>
+#+HTML_HEAD: <h1><code>*> yaw</code></h1><script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+#+HTML_LINK_UP:
+#+HTML_MATHJAX: 
+#+INFOJS_OPT:
+#+LATEX_HEADER:
+#+OPTIONS: html-postamble:nil toc:nil 
+#+HTML_HEAD_EXTRA: <style>pre { padding-top: 25px !important; }</style>

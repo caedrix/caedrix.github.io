@@ -1,356 +1,478 @@
-<!DOCTYPE html>
-<html lang="en">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>yaw — a quantum programming language built on algebras</title>
-<meta name="description" content="yaw is an open-source quantum programming language in which systems are specified as presentations of operator algebras. Home of Structure and Interpretation of Quantum Programs II.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --paper:#D3DFE9;
-  --raised:#E8F0F0;
-  --ink:#152029;
-  --soft:#4C6067;
-  --rule:#A9BEC2;
-  --phase:#5B3496;
-  --measure:34rem;
-}
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{
-  margin:0;
-  background:var(--paper);
-  color:var(--ink);
-  font-family:Spectral,Georgia,'Times New Roman',serif;
-  font-size:1.22rem;
-  line-height:1.5;
-  font-weight:400;
-}
-.wrap{max-width:80rem;margin:0 auto;padding:0 0rem}
-.col{max-width:var(--measure)}
-p{margin:0 0 1.1rem}
-a{color:var(--phase);text-decoration:none;border-bottom:1px solid rgba(91,52,150,.34)}
-a:hover{border-bottom-color:var(--phase)}
-a:focus-visible{outline:2px solid var(--phase);outline-offset:3px;border-radius:2px}
-code,pre,.mono{font-family:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace}
+<title></title>
+<!-- 2026-09-06 Sun 20:53 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="David Wakeham" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
 
-/* ---------- masthead ---------- */
-header{padding:5.5rem 0 3.25rem}
-.mark{
-  font-family:'JetBrains Mono',monospace;
-  font-size:clamp(2.9rem,9vw,5rem);
-  font-weight:700;
-  letter-spacing:-.045em;
-  line-height:1;
-  margin:0 0 1.4rem;
-}
-.mark .prompt{color:var(--phase);font-weight:400;letter-spacing:-.02em}
-.caret{
-  display:inline-block;width:.52em;height:.9em;
-  background:var(--phase);vertical-align:-.06em;margin-left:.14em;
-  animation:blink 1.15s steps(1,end) infinite;
-}
-@keyframes blink{0%,50%{opacity:1}50.01%,100%{opacity:0}}
-@media (prefers-reduced-motion:reduce){.caret{animation:none;opacity:.4}}
-.lede{font-size:1.22rem;line-height:1.5;max-width:34rem;margin:0}
-.lede em{font-style:italic}
-
-/* ---------- hero pair ---------- */
-.pair{
-  margin:3rem 0 0;
-  border-top:1px solid var(--rule);
-  padding-top:1.6rem;
-  max-width:44rem;
-}
-.tag{
-  font-family:Spectral,Georgia,serif;
-  font-size:1.28rem;
-  font-weight:600;
-  line-height:1.4;
-  margin:0 0 1.15rem;
-  color:var(--ink);
-  max-width:30rem;
-}
-.gloss{
-  font-size:1em;color:var(--soft);
-  margin:1.1rem 0 0;max-width:34rem;
-}
-
-/* ---------- code ---------- */
-pre{
-  background:var(--raised);
-  border:1px solid var(--rule);
-  padding:1.05rem 1.15rem;
-  margin:0;
-  overflow-x:auto;
-  font-size:.94rem;
-  line-height:1.72;
-  tab-size:2;
-}
-pre .prompt{color:var(--phase)}
-pre .cont{color:var(--soft)}
-pre .out{color:var(--soft)}
-pre .glyph{color:var(--phase);font-weight:500}
-pre .cm{color:var(--soft);font-style:italic}
-
-/* ---------- sections ---------- */
-section{padding:3.25rem 0;border-top:1px solid var(--rule)}
-h2{
-  font-family:Spectral,Georgia,serif;
-  font-size:1.28rem;font-weight:600;
-  letter-spacing:-.012em;
-  margin:0 0 1.5rem;
-}
-h3{
-  font-family:Spectral,Georgia,serif;
-  font-size:1.28rem;font-style:italic;font-weight:400;color:var(--ink);
-  margin:2.2rem 0 .6rem;letter-spacing:-.008em;
-}
-h3:first-of-type{margin-top:0}
-
-/* ---------- install ---------- */
-.shell{max-width:44rem}
-.shell pre{margin-bottom:.45rem}
-.note{font-size:1em;color:var(--soft);margin:0 0 1.9rem;max-width:34rem}
-
-/* ---------- contents ---------- */
-.part{
-  font-style:italic;color:var(--soft);
-  margin:2.4rem 0 .7rem;font-size:1em;
-}
-.part:first-child{margin-top:0}
-ol.toc{list-style:none;margin:0;padding:0;max-width:42rem}
-ol.toc li{
-  display:grid;
-  grid-template-columns:2.1rem 1fr auto;
-  gap:.5rem;
-  align-items:baseline;
-  padding:.4rem 0;
-  border-bottom:1px solid rgba(169,190,194,.6);
-}
-ol.toc .n{
-  font-family:'JetBrains Mono',monospace;
-  font-size:.72em;color:var(--soft);
-}
-ol.toc .t{font-size:1em}
-ol.toc .t a{border-bottom-color:transparent}
-ol.toc .t a:hover{border-bottom-color:var(--phase)}
-.state{
-  font-family:'JetBrains Mono',monospace;
-  font-size:.62em;color:var(--soft);
-  white-space:nowrap;
-}
-.state.live{color:var(--phase)}
-li.pending .t{color:var(--soft)}
-
-/* ---------- questions ---------- */
-.q{max-width:var(--measure);margin:0 0 1.9rem}
-.q h4{font-size:1.28rem;font-style:italic;font-weight:400;margin:0 0 .45rem;letter-spacing:-.008em}
-.q p{margin:0;font-size:1em}
-
-/* ---------- cite ---------- */
-.cite{
-  background:var(--raised);
-  border:1px solid var(--rule);
-  padding:1rem 1.15rem;
-  font-family:'JetBrains Mono',monospace;
-  font-size:.86rem;line-height:1.7;color:var(--ink);
-  max-width:44rem;
-}
-
-footer{
-  padding:2.75rem 0 4.5rem;
-  border-top:1px solid var(--rule);
-  font-size:.94rem;color:var(--soft);
-  display:flex;flex-wrap:wrap;gap:.4rem 1.6rem;
-}
-
-@media (max-width:640px){
-  body{font-size:1.08rem}
-  header{padding:3.5rem 0 2.25rem}
-  h2,h3,.q h4,.tag{font-size:1.16rem}
-  pre{font-size:.84rem;padding:.9rem}
-  ol.toc li{grid-template-columns:1.7rem 1fr;row-gap:0}
-  ol.toc .state{grid-column:2}
-}
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
 </style>
+<link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+<script type="text/javascript" src="sidebar_darkmode.js"></script>
+<h1><code>*> yaw</code></h1><script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>pre { padding-top: 25px !important; }</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/javascript" src="http://orgmode.org/mathjax/MathJax.js"></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
+
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
 </head>
 <body>
-<div class="wrap">
+<div id="content">
+<h1 class="title"></h1>
+<p>
+<code>yaw</code> is a quantum programming language which specifies what operators do and not what
+states are. It reduces code complexity, is interoperable between
+architectures, and makes error correction first class.
+</p>
 
-<header>
-  <h1 class="mark"><span class="prompt">*&gt;</span> yaw<span class="caret"></span></h1>
-  <p class="lede">A quantum language which specifies what operators do and not what
-  states are. Yaw reduces code complexity, is interoperable between architectures,
-  and makes error correction first class.</p>
-
-  <div class="pair">
-    <p class="tag">Rise above qubits</p>
-<pre><span class="prompt">*&gt;</span> def grover(d, marked):
-<span class="cont">...</span>     $alg = qudit(d)
-<span class="cont">...</span>     def reflect(P): return I - 2*P
-<span class="cont">...</span>     G = reflect(proj(Z, marked)) * (-reflect(proj(X, 0)))
-<span class="cont">...</span>     r = int((pi/4)*sqrt(d)) + 1
-<span class="cont">...</span>     return measure(Z, (G**r) <span class="glyph">&laquo;</span> char(X, 0))()[1]</pre>
-    <p class="gloss">Code for Grover search over a database of d items. The same six
-    lines work for d = 2 and d = 500.</p>
-  </div>
-</header>
-
-<section id="install">
-  <h2>Install</h2>
-  <div class="shell">
-    <h3>Install the repo</h3>
-<pre>git clone https://github.com/torsor-io/yaw.git
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Examples</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Grover search, with database size \(d\) a functional parameter:
+</p>
+<pre class="example">
+*&gt; def grover(d, marked):
+...    $alg = qudit(d)
+...    def reflect(P): return I - 2*P
+...    G = reflect(proj(Z, marked)) * (-reflect(proj(X, 0)))
+...    r = int((pi/4)*sqrt(d)) + 1
+...    return measure(Z, (G**r) « char(X, 0))()[1]
+</pre>
+<p>
+Checking Knill-Laflamme for the five-qubit code:
+</p>
+<pre class="example">
+*&gt; stabs = [cycle(k, X[0, 3]*Z[1, 2]) for k in range(4)]
+*&gt; P = prod((I + S)/2 for S in stabs)
+*&gt; errs = [E[k] for k in range(5) for E in (X, Y, Z)]
+*&gt; def kl(A, B): return scalar(P * A.d * B * P, P)
+*&gt; all(kl(A, B) is not None for A in errs for B in errs)
+True
+</pre>
+<p>
+Defining the GKP state on a photonic quantum computer:
+</p>
+<pre class="example">
+*&gt; $alg = &lt;X, Z | unit, braid(-1)&gt;
+*&gt; gkp = weylState(lambda a, b: 1 if a % 2 == 0 else 0)
+*&gt; gkp | X**2, gkp | Z**2    
+(1, 1)
+*&gt; gkp | X, gkp | Z          
+(0, 1)
+</pre>
+<p>
+Read on for more examples.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Installation</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Install the repo (requires <code>Python 3.10</code> or later):
+</p>
+<pre class="example">
+git clone https://github.com/torsor-io/yaw.git
 cd yaw
-pip install -r requirements.txt</pre>
-    <p class="note">Python 3.10 or later.</p>
+pip install -r requirements.txt
+</pre>
+<p>
+Run the REPL:
+</p>
+<pre class="example">
+python yaw/yaw_repl.py
+</pre>
+<p>
+Compile a <code>.yaw</code> file:
+</p>
+<pre class="example">
+python yaw/y2py.py program.yaw -o program.py
+python program.py
+</pre>
+<p>
+Import as package:
+</p>
+<pre class="example">
+from yaw import *
+</pre>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> SIQP II</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+This site hosts <i>Structure and Interpretation of Quantum Programs II:
+The Way of Yaw</i>, a living textbook which develops the language from scratch and uses it
+to build a canonical set of quantum algorithms. Here is the live table
+of contents:
+</p>
 
-    <h3>Run the REPL</h3>
-<pre>python3 yaw/yaw_repl.py</pre>
-    <p class="note">Native yaw syntax, as used throughout the book.</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" style="margin-left: auto; margin-right: auto;">
 
-    <h3>Compile a .yaw file</h3>
-<pre>python3 yaw/y2py.py program.yaw -o program.py
-python3 program.py</pre>
-    <p class="note">Transpiles to Python for scripting and batch runs.</p>
 
-    <h3>Import as a package</h3>
-<pre>from yaw import *</pre>
-    <p class="note">Pythonic syntax replacing the native operators, for use inside
-    an existing codebase or a notebook.</p>
-  </div>
-</section>
+<colgroup>
+<col  class="right" />
 
-<section id="book">
-  <h2>The book</h2>
-  <div class="col">
-    <p>This site hosts <em>Structure and Interpretation of Quantum Programs II:
-    The Way of Yaw</em>, which develops the language from scratch and uses it to
-    build the canonical quantum algorithms. It is being written in the open;
-    chapters go up as they are finished.</p>
-    <p><a href="https://arxiv.org/abs/2509.04527">Part I: Foundations</a> gives a
-    deeper, self-contained account of the operator algebra theory which informs
-    yaw. It is not required reading, however, and chapters 1–3 here build the
-    language from the ground up.</p>
-  </div>
+<col  class="left" />
 
-  <p class="part">from one to three</p>
-  <ol class="toc">
-    <li><span class="n">1</span><span class="t"><a href="/book/algebras">Algebras</a></span><span class="state live">live</span></li>
-    <li><span class="n">2</span><span class="t"><a href="/book/operators-and-states">Operators and states</a></span><span class="state live">live</span></li>
-    <li><span class="n">3</span><span class="t"><a href="/book/composition">Laws of composition</a></span><span class="state live">live</span></li>
-  </ol>
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="right">&#xa0;</th>
+<th scope="col" class="left">BASICS</th>
+<th scope="col" class="left">&#xa0;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="right">1.1</td>
+<td class="left">Algebras</td>
+<td class="left">live</td>
+</tr>
 
-  <p class="part">ten thousand things</p>
-  <ol class="toc">
-    <li><span class="n">4</span><span class="t"><a href="/book/send">Send</a></span><span class="state live">live</span></li>
-    <li><span class="n">5</span><span class="t"><a href="/book/search">Search</a></span><span class="state live">live</span></li>
-    <li><span class="n">6</span><span class="t"><a href="/book/sample">Sample</a></span><span class="state live">live</span></li>
-    <li class="pending"><span class="n">7</span><span class="t">Simulate</span><span class="state">drafting</span></li>
-    <li class="pending"><span class="n">8</span><span class="t">Salvage</span><span class="state">drafting</span></li>
-    <li class="pending"><span class="n">9</span><span class="t">Subgroups</span><span class="state">planned</span></li>
-    <li class="pending"><span class="n">10</span><span class="t">Shadows</span><span class="state">planned</span></li>
-    <li class="pending"><span class="n">11</span><span class="t">Sparsity</span><span class="state">planned</span></li>
-    <li class="pending"><span class="n">12</span><span class="t">Signals</span><span class="state">planned</span></li>
-  </ol>
+<tr>
+<td class="right">1.2</td>
+<td class="left">Operators and States</td>
+<td class="left">live</td>
+</tr>
 
-  <p class="part">appendices</p>
-  <ol class="toc">
-    <li><span class="n">A</span><span class="t"><a href="/book/exercises">Exercises</a></span><span class="state live">live</span></li>
-    <li class="pending"><span class="n">B</span><span class="t">Circuit diagrams</span><span class="state">drafting</span></li>
-    <li class="pending"><span class="n">C</span><span class="t">Representation efficiency</span><span class="state">drafting</span></li>
-    <li class="pending"><span class="n">D</span><span class="t">Compiling Pauli algebras</span><span class="state">drafting</span></li>
-  </ol>
-</section>
+<tr>
+<td class="right">1.3</td>
+<td class="left">Laws of composition</td>
+<td class="left">live</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="right">&#xa0;</td>
+<td class="left">ALGORITHMS</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="right">2.1</td>
+<td class="left">Send</td>
+<td class="left">live</td>
+</tr>
 
-<section id="questions">
-  <h2>Questions</h2>
+<tr>
+<td class="right">2.2</td>
+<td class="left">Search</td>
+<td class="left">live</td>
+</tr>
 
-  <div class="q">
-    <h4>Isn't this a library with nicer syntax?</h4>
-    <p>The algebra is the intermediate representation, not the surface syntax. A
-    program is an element of a presented algebra, so changing hardware means
-    changing the presentation rather than rewriting the program — and an error
-    correcting code is a map between presentations, the same construction that
-    moves a program between architectures.</p>
-  </div>
+<tr>
+<td class="right">2.3</td>
+<td class="left">Sample</td>
+<td class="left">live</td>
+</tr>
 
-  <div class="q">
-    <h4>Does it really reduce code complexity?</h4>
-    <p>The examples are the argument rather than a benchmark. Grover, teleportation
-    and period finding each fit in under ten lines, in full qudit generality, with
-    no gate decomposition and no basis fixed by hand. The chapters are there to be
-    compared against whatever you would otherwise write.</p>
-  </div>
+<tr>
+<td class="right">2.4</td>
+<td class="left">Simulate</td>
+<td class="left">drafting</td>
+</tr>
 
-  <div class="q">
-    <h4>Can I work with qubits?</h4>
-    <p>Yes, though you address them through their Pauli algebra rather than as
-    qubits. <code>qudit(2)</code> hands you X and Z with the usual relations, and
-    anything expressible in the circuit model is expressible here. The gain is that
-    dimension stays a parameter, so the same program runs at d = 2 and d = 5.</p>
-  </div>
+<tr>
+<td class="right">2.5</td>
+<td class="left">Subgroup</td>
+<td class="left">planned</td>
+</tr>
 
-  <div class="q">
-    <h4>Do I need to know operator algebras?</h4>
-    <p>No. Chapters 1–3 build the algebraic machinery the language needs from a
-    standard first course in quantum computing, and assume no functional analysis.
-    Part I gives a deeper account for anyone who wants one, but it isn't a
-    prerequisite.</p>
-  </div>
+<tr>
+<td class="right">2.6</td>
+<td class="left">Shadow</td>
+<td class="left">planned</td>
+</tr>
 
-  <div class="q">
-    <h4>Is the language functional?</h4>
-    <p>No, but it is declarative. You write down the algebra and how its pieces
-    compose rather than a sequence of operations on a machine, and the algorithm is
-    what that description denotes. Evaluation is inherited from Python.</p>
-  </div>
+<tr>
+<td class="right">2.7</td>
+<td class="left">Signal</td>
+<td class="left">planned</td>
+</tr>
 
-  <div class="q">
-    <h4>Does it run on hardware?</h4>
-    <p>Not yet. yaw currently evaluates symbolically and simulates, which is enough
-    for the algorithms in the book. Compilation to physical backends is active
-    research, and the qudit-to-qubit case is first in line.</p>
-  </div>
+<tr>
+<td class="right">2.8</td>
+<td class="left">Sparsity</td>
+<td class="left">planned</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="right">&#xa0;</td>
+<td class="left">APPENDICES</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="right">A</td>
+<td class="left">Exercises</td>
+<td class="left">live</td>
+</tr>
 
-  <div class="q">
-    <h4>Can I work with photonic quantum computers?</h4>
-    <p>Soon. Bosonic modes carry a clean algebraic description in the Weyl
-    relations, which generalise the finite qudit algebras in exactly the
-    generators-and-relations form yaw already uses. Getting cleanly from one to the
-    other is the research currently in progress.</p>
-  </div>
+<tr>
+<td class="right">B</td>
+<td class="left">Solutions</td>
+<td class="left">drafting</td>
+</tr>
 
-  <div class="q">
-    <h4>Where are the exercise solutions?</h4>
-    <p>Going up as they are written, in the exercises appendix and in the tutorial
-    notebooks under <code>/tutorials</code>. Solutions marked as load-bearing for
-    the text are there already.</p>
-  </div>
-</section>
+<tr>
+<td class="right">C</td>
+<td class="left">Awds</td>
+<td class="left">planned</td>
+</tr>
 
-<section id="cite">
-  <h2>Citing</h2>
-  <div class="cite">
-D. Wakeham, <em>Structure and Interpretation of Quantum Programs II:<br>
-The Way of Yaw</em>. Torsor Labs, 2026. https://yawlang.dev<br>
-<br>
-D. Wakeham, <em>Structure and Interpretation of Quantum Programs I:<br>
-Foundations</em>. arXiv:2509.04527.
-  </div>
-</section>
+<tr>
+<td class="right">D</td>
+<td class="left">Reference programs</td>
+<td class="left">planned</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> FAQs</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Q. <i>Isn't this just a library with fancy syntax?</i> <br  />
+A. No, it's a different way of thinking about quantum computing and an
+accompanying language to implement that thinking.
+</p>
 
-<footer>
-  <span><a href="https://github.com/torsor-io/yaw">github.com/torsor-io/yaw</a></span>
-  <span><a href="https://torsor.io">Torsor Labs</a></span>
-  <span><a href="https://heptar.ch">heptar.ch</a></span>
-  <span>Apache 2.0</span>
-</footer>
+<p>
+Q. <i>Can I keep working with qubits?</i> <br  />
+A. Sure, but you address them via their Pauli algebra and
+corresponding eigenvectors rather than bitstrings.
+</p>
 
+<p>
+Q. <i>Can I do continuous variable computing?</i> <br  />
+A. Soon! This is a neat generalization of the algebra of qudits.
+</p>
+
+<p>
+Q. <i>Aren't operators just as low-level as circuits?</i> <br  />
+A. Yes, in the same way gauge theory is equivalent to regular
+electrodynamics. The former abstracts the latter.
+</p>
+
+<p>
+Q. <i>Presentations are related to the word problem, which is
+undecidable, right?</i> <br  />
+A. Yes, so we restrict to a decidable fragment that happens to include
+everything we care about.
+</p>
+
+
+<p>
+Q. <i>How can you actually compile any of this to hardware?</i> <br  />
+A. Cramming one Hilbert space into another is called error correction,
+and the tools already exist for it. Implementation is a work in progress.
+</p>
+
+
+<p>
+Q. <i>Doesn't your approach throw away phase information?</i> <br  />
+A. Global phase yes, relative phase no. Global phase is fake anyway
+(and a source of bugs) so it's no loss.
+</p>
+
+
+<p>
+Q. <i>Sounds like a lot of hard math&#x2026;</i> <br  />
+A. You can get by with high school algebra!
+</p>
+
+<p>
+Q. <i>What does "yaw" mean?</i> <br  />
+A. It is a self-conjugating recursive acronym for <b>Yaw Algebraic Way</b>.
+</p>
+
+<p>
+Q. <i>Where are the solutions to exercise?</i> <br  />
+A. Coming to the appendix soon!
+</p>
+</div>
+</div>
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Citation</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+D. Wakeham, <i>Structure and Interpretation of Quantum Programs II:
+The Way of Yaw</i>. Torsor Labs, 2026. <a href="https://yawlang.dev">https://yawlang.dev</a>
+</p>
+</div>
+</div>
 </div>
 </body>
 </html>
