@@ -186,34 +186,32 @@ architectures, and makes error correction first class.
 Grover search, with database size \(d\) a functional parameter:
 </p>
 <pre class="example">
-*&gt; def grover(d, marked):
-...    $alg = qudit(d)
-...    def reflect(P): return I - 2*P
-...    G = reflect(proj(Z, marked)) * (-reflect(proj(X, 0)))
-...    r = int((pi/4)*sqrt(d)) + 1
-...    return measure(Z, (G**r) « char(X, 0))()[1]
+def grover(d, marked):
+    $alg = qudit(d)
+    def reflect(P): return I - 2*P
+    G = reflect(proj(Z, marked)) * (-reflect(proj(X, 0)))
+    r = int((pi/4)*sqrt(d)) + 1
+    return measure(Z, (G**r) « char(X, 0))()[1]
 </pre>
 <p>
 Checking Knill-Laflamme for the five-qubit code:
 </p>
 <pre class="example">
-*&gt; stabs = [cycle(k, X[0, 3]*Z[1, 2]) for k in range(4)]
-*&gt; P = prod((Is + S)/2 for S in stabs)
-*&gt; errs = [E[k] for k in range(5) for E in (X, Z)]
-*&gt; def kl(A, B): return scalar(P * A.d * B * P, P)
-*&gt; all(kl(A, B) is not None for A in errs for B in errs)
-True
+alg   = qudit(2, n=5); X, Z, I = alg.X, alg.Z, alg.I
+stabs = [cycle(k, X[0, 3]*Z[1, 2]) for k in range(4)]
+P     = prod(((@5) I + S)*0.5 for S in stabs)
+errs  = [E[k] for k in range(5) for E in (X, Z)]
+def kl(A, B): return scalar(P * A.d * B * P, P)
+all(kl(A, B) is not None for A in errs for B in errs) # True
 </pre>
 <p>
 Defining the GKP state on a photonic quantum computer (WIP):
 </p>
 <pre class="example">
-*&gt; $alg = &lt;X, Z | unit, braid(-1)&gt;
-*&gt; gkp = weylState(lambda a, b: 1 if a % 2 == 0 else 0)
-*&gt; gkp | X**2, gkp | Z**2    
-(1, 1)
-*&gt; gkp | X, gkp | Z          
-(0, 1)
+$alg = &lt;X, Z | unit, braid(-1)&gt;
+gkp = weylState(lambda a, b: 1 if a % 2 == 0 else 0)
+gkp | X**2, gkp | Z**2 # (1, 1)
+gkp | X, gkp | Z       # (0, 1)
 </pre>
 <p>
 Read on for more examples.
