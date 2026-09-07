@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Introduction </title>
-<!-- 2026-09-07 Mon 11:15 -->
+<title>Preview </title>
+<!-- 2026-09-07 Mon 11:24 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="David Wakeham">
@@ -186,7 +186,7 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">Introduction </h1>
+<h1 class="title">Preview </h1>
 <p>
 This paper introduces <code>yaw</code>, a language for algebraic quantum
 programming. Before we dive into the details, it will be helpful to
@@ -268,31 +268,13 @@ This proceeds in a few stages. Keeping the operator algebra abstract has
 the advantage that we can specify it in different ways. For instance,
 the algebra of a qubit \(\mathcal{A}_2\) can be viewed as the unit
 matrices
-$$ E_{11} =
-</p>
-<p>
-  \begin{bmatrix}
-    1 &amp; 0 \\ 0 &amp; 0
-  \end{bmatrix},
-E_{12} =
-</p>
-<p>
-  \begin{bmatrix}
-    0 &amp; 1 \\ 0 &amp; 0
-  \end{bmatrix},
-E_{21} =
-</p>
-<p>
-  \begin{bmatrix}
-    0 &amp; 0 \\ 1 &amp; 0
-  \end{bmatrix},
-E_{22} =
-</p>
-<p>
-  \begin{bmatrix}
-    0 &amp; 0 \\ 0 &amp; 1
-  \end{bmatrix}.
-$$
+\[
+E_{11} =  \begin{bmatrix}
+    1 & 0 \\ 0 & 0
+  \end{bmatrix}, \quad E_{12} =   \begin{bmatrix}     0 & 1 \\ 0 & 0
+\end{bmatrix}, \quad E_{21} =   \begin{bmatrix}     0 & 0 \\ 1 & 0
+\end{bmatrix}, \quad E_{22} =   \begin{bmatrix}     0 & 0 \\ 0 & 1   \end{bmatrix}.
+\]
 These have a very sparse multiplicative structure:
 \[
   E_{ab}E_{cd} = \delta_{bc}E_{ad}.
@@ -300,33 +282,12 @@ These have a very sparse multiplicative structure:
 An alternative parameterization is given by the celebrated Pauli
 matrices \(\sigma_1 = X, \sigma_2 = Y, \sigma_3 = Z\), with the explicit
 matrix expressions
-</p>
-
-<p>
-$$
-  &sigma;_1 =
-</p>
-<p>
-\begin{bmatrix}
-  0 &amp; 1 \\ 1 &amp; 0
-\end{bmatrix}, \quad
-&sigma;_2 =
-</p>
-<p>
-\begin{bmatrix}
-  0 &amp; i \\ -i &amp; 0
-\end{bmatrix}, \quad
-&sigma;_3 =
-</p>
-<p>
-\begin{bmatrix}
-  1 &amp; 0 \\ 0 &amp; -1
-\end{bmatrix}.
-\label{eq:pauli-mats}
-$$
-</p>
-
-<p>
+\[
+  \sigma_1 = \begin{bmatrix}     0 & 1 \\ 1 & 0   \end{bmatrix}, \quad
+\sigma_2 =   \begin{bmatrix}     0 & i \\ -i & 0   \end{bmatrix},
+\quad \sigma_3 =   \begin{bmatrix}     1 & 0 \\ 0 & -1
+\end{bmatrix}. \label{eq:pauli-mats}
+\]
 These have a much richer
 multiplicative structure:
 $$
@@ -532,7 +493,7 @@ and it follows that
   \pi^{(Z)}_0).
 \]
 Extending to a sum of terms
-\(W = \frac{1}{\sqrt{d}}\sum_{k=0}^{d-1} X^k\), we have<label for="sn-8" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-8" class="margin-toggle"/><span class="sidenote">This is a special form of the <em>quantum Fourier transform (QFT)</em> that we cover at greater depth below. More generally it takes the form \(W = \frac{1}{\sqrt{d}}\sum_{k=0}^{d-1} X^kZ^{-(k+1)}\).</span>
+\(W = \frac{1}{\sqrt{d}}\sum_{k=0}^{d-1} X^k\), we have<label for="sn-8" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-8" class="margin-toggle"/><span class="sidenote">This is a special form of the <em>quantum Fourier transform (QFT)</em> that we cover at greater depth below. More generally it takes the form \(W = \frac{1}{\sqrt{d}}\sum_{k=0}^{d-1} X^kZ^{-(k+1)}.\)</span>
 \[
   \text{C}X \left(W\otimes I\right) \triangleleft (\pi^{(Z)}_0 \otimes
   \pi^{(Z)}_0) = \frac{1}{\sqrt{d}}\sum_{k=0}^{d-1}\left(X^k \otimes
