@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>1.1. Algebras </title>
+<!-- 2026-09-07 Mon 12:53 -->
+<meta  charset="utf-8">
+<meta  name="generator" content="Org-mode">
+<meta  name="author" content="David Wakeham">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+<script src="contents.js"></script>
+<script type="text/javascript" src="sidebar_darkmode.js"></script>
+<style>.smallcaps{font-variant:small-caps;letter-spacing:.04em}</style>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],tags:'ams',processEscapes:true}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+<script src="contents.js"></script>
+<script type="text/javascript" src="sidebar_darkmode.js"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>pre { padding-top: 25px !important; }</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/javascript" src="http://orgmode.org/mathjax/MathJax.js"></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
+
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">1.1. Algebras </h1>
+<p>
+High school math teaches us three things about algebra: first, that it
+is about meaningless symbols like \(x\) and \(y\).<label for="mn-1" class="margin-toggle">&#8853;</label><input type="checkbox" id="mn-1" class="margin-toggle"/><span class="marginnote"><img src="./img/algebra.png" alt="The immortal truths of high school math" style="width:100%"/><br/><em>The immortal truths of high school math.</em></span>
+This is not so far from the truth, in quantum programming at least; we
+call our meaningless symbols generators \(\mathcal{G}\) and use them to
+form our expressions. To construct an algebra with a given set of
+symbols <code>gens</code>, we invoke the global algebra variable <code>$alg</code> and equate
+it to <code>&lt;gens|&gt;</code>. The simplest thing we can create is
+</p>
+
+<pre class="example">
+*&gt; $alg = &lt;X|&gt;
+</pre>
+
+<p>
+namely the algebra generated by a single symbol \(X\). This consists of
+all products and linear combinations of \(X\) with itself, i.e. the set of
+complex polynomials in \(X\), often called \(\mathbb{C}[X, X^*]\). We can
+check that it simplifies as expected:
+</p>
+
+<pre class="example">
+*&gt; (X - 1)**2 - (X + 1)**2
+-4*X
+</pre>
+
+<p>
+We can do straight-up high school algebra as well:
+</p>
+
+<pre class="example">
+*&gt; def quad(a, b, c):
+...    delta = sqrt(b**2 - 4*a*c)
+...    return [(-b+delta)/(2*a), (-b-delta)/(2*a)]
+*&gt; x = quad(1, 4, 4)[0]
+*&gt; x**2 + 4*x + 4
+0
+</pre>
+
+<p>
+The quadratic formula works! Now, back to our main programming.
+</p>
+
+<p>
+The second thing we learn is that algebra is about solving equations.
+Once again, this turns out to be fairly accurate, since the second
+ingredient in the definition of an algebra is a set of <i>relations</i>
+\(\mathcal{R}\), which are equations the generators satisfy. We use the
+constructor <code>&lt;gens|rels&gt;</code>, where <code>rels</code> are either equations or
+shorthands, e.g.
+</p>
+
+<pre class="example">
+*&gt; $alg = &lt;Y, Z | comm&gt;
+</pre>
+
+<p>
+which consists of all products and linear combinations of <i>commuting</i>
+\(Y\) and \(Z\), i.e. the polynomial ring \(\mathbb{C}[Y,Y^*, Z, Z^*]\).
+Accordingly, we have identities like
+</p>
+
+<pre class="example">
+*&gt; (Y - Z)**2 - (Y + Z)**2
+-4*Y*Z
+</pre>
+
+<p>
+as expected. So, if you want to play around with multivariate
+polynomials (not exactly high school algebra) you can use <code>yaw</code> as well.
+</p>
+
+<p>
+Nothing so far has the special structure needed to do quantum computing.
+Loosely speaking, we want each generator \(X\) to satisfy a polynomial
+relation of the form \(p(X, X^*) = 0\) with a bounded solution set when
+restricted to \(\mathbb{C}\). A simple example is the algebra generated by
+a single unitary:
+</p>
+
+<pre class="example">
+*&gt; $alg = &lt;U | unit&gt;
+*&gt; U*U.d
+I
+</pre>
+
+<p>
+where <code>U.d</code> stands for \(U^*\). A unitary \(U\) satisfies the polynomial
+relation \(p(U,U^*) = UU^*- I = 0\), and when interpreted over
+\(\mathbb{C}\), the solutions are phases on the unit circle,
+\(\mathbb{S}^1 = \{e^{i\theta} : \theta\in [0,2\pi)\}\), which is a
+manifestly bounded set. The result can be viewed<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">By something called the <em>Gelfand transform</em>; see Exercise 1.3.</span>
+as the C\({}^*\)-algebra of continuous functions on the unit circle,
+\(\mathcal{A}\cong C^0[\mathbb{S}^1]\). In contrast, a single Hermitian
+operator satisfies a relation \(p(H, H^*) = H - H^* = 0\), which is solved
+by all real numbers:
+</p>
+
+<pre class="example">
+*&gt; $alg = &lt;H | herm&gt;
+*&gt; H - H.d
+0
+</pre>
+
+<p>
+Since \(\mathbb{R}\) is unbounded, the corresponding algebra
+\(\mathbb{C}[H]\) is <i>not</i> C\({}^*\), but rather a polynomial ring over
+\(\mathbb{C}\) with (formally) real variable.
+</p>
+
+<p>
+We could spend time constructing further examples of
+infinite-dimensional C\({}^*\)-algebras, and indeed, these are relevant to
+<i>continuous variable</i> quantum computing, but we will defer their
+treatment to a later tutorial. Our focus will be on <i>discrete variable</i>
+systems which have a finite number of dimensions. In this case, we
+require only a finite number of possible monomials built from
+generators. So, given two generators \(X\) and \(Z\), the infinite list
+\[
+  X, X^2, \ldots, X^*, (X^*)^2, \ldots, Z, Z^2, \ldots, Z^*, (Z^*)^2
+  \ldots, XZ, (XZ)^2, \ldots
+\]
+must collapse to a finite set. That requires each of \(X\), \(X^*\), \(Z\),
+\(Z^*\), \(XZ\), etc, to have a finite <i>order</i>, that is, a finite index such
+that raising to that index gives the identity:
+\[
+  X^{\text{ord}(X)} = Z^{\text{ord}(Z)} = (XZ)^{\text{ord}(XZ)} =
+  \cdots = I.
+\]
+It's simplest to set \(\text{ord}(X)=\text{ord}(Z)=d\) equal by fiat, and
+to implement \(\text{ord}(X^*)=\text{ord}(Z^*) = d\) by taking \(X\) and \(Z\)
+unitary. Enforcing that \(XZ\) has finite order is a little trickier; the
+usual approach is to allow \(X\) and \(Z\) to commute <i>up to a phase</i>
+\(\omega\). This implies
+\[
+  ZX = \omega XZ \quad \Longrightarrow \quad (ZX)^d =
+  \omega^{d(d-1)/2} Z^d  X^d = \omega^{d(d-1)/2} I,
+\]
+by counting the number of times we need to pass an \(X\) over a \(Z\). When
+\(\omega\) is a $d$th root of unity and \(d\) is odd, then
+\(\omega^{d(d-1)/2} = 1\) and hence \(\text{ord}(XZ) = d\); if \(d\) is even,
+then \(\omega^{d(d-1)} = 1\) and \(\text{ord}(XZ) = 2d\), or equivalently,
+\(\text{ord}(iXZ) = d\). Either way, we can take \(\omega = e^{2\pi i/d}\).
+</p>
+
+<p>
+This leads to the final construction of this section. As above, we use
+<code>unit</code> to make our operators unitary, and we introduce <code>pow(d)</code> for the
+relations \(X^d = Z^d = I\), and <code>braid(w)</code> for \(ZX = \omega XZ\):
+</p>
+
+<pre class="example">
+*&gt; $alg = &lt;X, Z | unit, pow(d), braid(w)&gt;
+*&gt; X**d
+I
+</pre>
+
+<p>
+This is the algebra of a <i>qudit</i>, also known as the <i>generalized
+Clifford algebra</i>. It has dimension \(d^2\), since its elements are of the
+form
+\[
+  A = \sum_{a,b=0}^{d-1} c_{ab} X^a Z^b.
+\]
+A special case is the trusty old Pauli algebra, \(d = 2\), with relations
+\[  |X|^2 = X^2 = |Z|^2 = Z^2 = I, \quad XZ = -ZX.
+\]
+A phase \(\omega = -1\) means \(X\) and \(Z\) anticommute, which we also write
+</p>
+
+<pre class="example">
+*&gt; $alg = &lt;X, Z | unit, pow(2), anti&gt;
+</pre>
+
+<p>
+To make life easier, <code>yaw</code> offers the shortcuts <code>qudit(d)</code> and <code>qubit()</code>
+so you don't have to type everything out when defining algebras.
+</p>
+
+<p>
+The third thing we learn in high school? That algebra has no application
+in real life. Unlike the first two observations, this couldn't be more
+wrong. Our thesis is that algebra is the foundation of quantum
+mechanics; reality is quantum-mechanical; <i>ipso facto</i>, reality is based
+on algebra. Far from having no application, algebra appears to ground
+<i>reality itself</i>. This might not make you rich or happy, but it will
+provide fodder for undergraduate philosophy seminars, dinner parties,
+and obscure programming paradigms.
+</p>
+</div>
+</body>
+</html>
