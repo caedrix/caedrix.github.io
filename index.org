@@ -2,6 +2,7 @@
 states are. It reduces code complexity, is interoperable between
 architectures, and makes error correction first class.
 
+-----
 * Examples
 Grover search, with database size $d$ a functional parameter:
 #+BEGIN_EXAMPLE shell
@@ -31,6 +32,7 @@ Defining the GKP state on a photonic quantum computer:
 (0, 1)
 #+END_EXAMPLE
 Read on for more examples.
+-----
 * Installation
 Install the repo (requires ~Python 3.10~ or later):
 #+BEGIN_EXAMPLE shell
@@ -124,6 +126,9 @@ A. Coming to the appendix soon!
 * Citation
 D. Wakeham, /Structure and Interpretation of Quantum Programs II:
 The Way of Yaw/. Torsor Labs, 2026. https://yawlang.dev
+
+D. Wakeham, /Structure and Interpretation of Quantum Programs I:
+Foundations/. Torsor Labs, 2025. [[https://arxiv.org/abs/2509.04527][arXiv:2509.04527]].
 * COMMENT Getting started
 -----
 There are three ways to use ~yaw~: using the ~yaw REPL~ (interpreted),
@@ -627,7 +632,7 @@ Next time, we'll use these states to perform a magic trick called *teleportation
 #+HTML_DOCTYPE: xhtml-strict
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
 #+HTML_HEAD: <script type="text/javascript" src="sidebar_darkmode.js"></script>
-#+HTML_HEAD: <h1><code>*> yaw</code></h1><script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+#+HTML_HEAD: <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 #+HTML_LINK_UP:
 #+HTML_MATHJAX: 
 #+INFOJS_OPT:
