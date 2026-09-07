@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Introduction </title>
+<!-- 2026-09-07 Mon 11:15 -->
+<meta  charset="utf-8">
+<meta  name="generator" content="Org-mode">
+<meta  name="author" content="David Wakeham">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+<script type="text/javascript" src="sidebar_darkmode.js"></script>
+<style>.smallcaps{font-variant:small-caps;letter-spacing:.04em}</style>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],tags:'ams',processEscapes:true}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+<script type="text/javascript" src="sidebar_darkmode.js"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>pre { padding-top: 25px !important; }</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/javascript" src="http://orgmode.org/mathjax/MathJax.js"></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
+
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Introduction </h1>
+<p>
+This paper introduces <code>yaw</code>, a language for algebraic quantum
+programming. Before we dive into the details, it will be helpful to
+recall what "algebraic quantum programming" means.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">For a considerably lengthier version, we refer readers to the prequel paper, <em>The Structure and Interpretation of Quantum Programs I: Foundations</em> (2025).</span>
+Usually, quantum programming occurs at the level of a (typically
+finite-dimensional) Hilbert space \(\mathcal{H}\), with basic objects the
+states \(|\psi\rangle \in \mathcal{H}\). We manipulate these using linear
+operators on the Hilbert space \(A \in \mathcal{B}(\mathcal{H})\); these
+are built out of primitive, physically simple(r) operations
+\(\mathcal{G} \subseteq \mathcal{B}(\mathcal{H})\) called "gates", and the
+whole workflow of preparing a state \(|\psi\rangle\), building an
+operation \(A\) from simpler gates, and extracting outputs from
+\(A|\psi\rangle\), is called a <i>quantum circuit</i>. The canonical example is
+to initialize \(|\psi\rangle = |0^n\rangle\) in the Hilbert space of \(n\)
+qubits, \(\mathcal{H} = \mathcal{H}_2^{\otimes n}\), generate
+\(\mathcal{B}(\mathcal{H})\) from a two-qubit universal gate set like
+\(\mathcal{G}=\{H_i, S_i, T_i, \text{CNOT}_{ij}\}\) where \(i\) and \(j\)
+indicate which qubits are acted on, and finally measure in the \(Z\)
+basis.
+</p>
+
+<p>
+This is a fairly reasonable physical picture of what goes on inside a
+quantum computer, provided we ignore the physical errors induced by
+interactions with the environment. But (even ignoring errors) certain
+limitations of the circuit paradigm become apparent. The focus on
+compilation of operators from gate sets makes the typical presentation
+of an algorithm dense, obscure, and low-level. Here is Grover search for
+instance:
+</p>
+
+
+<div id="fig:grover" class="figure">
+<p><img src="./img/grover-wiki.png" alt="grover-wiki.png" width="100%">
+</p>
+<p><span class="figure-number">Figure 1:</span> Quantum circuit for Grover search, taken from Wikipedia.</p>
+</div>
+
+<p>
+This is a relatively tame example, but illustrates the basic problem:
+what the circuit <i>does</i> is not the same as what the circuit <i>is</i>. We
+cannot tell the first from the second. We can try to rectify the problem
+with "macros", that is, abstraction boxes which stand for more complex
+expressions, and that helps. But defining a macro like the diffusion
+operator
+\[
+  D = 2 |0^n\rangle\langle 0^n| - I
+\]
+does not immediately help us understand what the operator is doing in
+our algorithm. A better hint comes from the oracle \(U_\omega\), which is
+<i>defined</i> by its behaviour on basis states as
+\[
+  U_\omega |\kappa\rangle = (-1)^{\delta_{\omega,\kappa}} |\kappa\rangle
+\]
+where \(\omega\) and \(\kappa\) are \(n\)-bit (classical) strings. This is
+easy to explain: it flips the phase of \(|\omega\rangle\) and leaves
+anything else alone.
+</p>
+
+<p>
+Algebraic quantum programming takes this hint radically. Oracles are
+operators with specified behaviour, so we make the whole foundation of
+the approach operators with specified behaviour. Instead of a Hilbert
+space \(\mathcal{H}\), we focus on the operators
+\(\mathcal{B}(\mathcal{H})\), and in fact to avoid relying on Hilbert
+space we define <i>abstract</i> operator algebras \(\mathcal{A}\) called
+<i>C\({}^*\)-algebras</i> which carry a linear structure, allow multiplication
+\(A, B \mapsto A \cdot B\), taking of adjoints \(A \mapsto A^*\), and
+finally have a notion of size \(A \mapsto \Vert A \Vert\). <label for="mn-1" class="margin-toggle">&#8853;</label><input type="checkbox" id="mn-1" class="margin-toggle"/><span class="marginnote"><img src="./img/oracle2.png" alt="An edifice built of oracles" style="width:100%"/><br/><em>An edifice built of oracles.</em></span>
+These can always be realized on a specific, concrete Hilbert space, and
+indeed, this is what allows us to compile our programs on conventional
+quantum computers. Although we touch on the issue of compilation below,
+we leave a deeper exploration to upcoming work, and focus instead on how
+to formulate algorithms when "everything is an oracle".
+</p>
+
+<p>
+This proceeds in a few stages. Keeping the operator algebra abstract has
+the advantage that we can specify it in different ways. For instance,
+the algebra of a qubit \(\mathcal{A}_2\) can be viewed as the unit
+matrices
+$$ E_{11} =
+</p>
+<p>
+  \begin{bmatrix}
+    1 &amp; 0 \\ 0 &amp; 0
+  \end{bmatrix},
+E_{12} =
+</p>
+<p>
+  \begin{bmatrix}
+    0 &amp; 1 \\ 0 &amp; 0
+  \end{bmatrix},
+E_{21} =
+</p>
+<p>
+  \begin{bmatrix}
+    0 &amp; 0 \\ 1 &amp; 0
+  \end{bmatrix},
+E_{22} =
+</p>
+<p>
+  \begin{bmatrix}
+    0 &amp; 0 \\ 0 &amp; 1
+  \end{bmatrix}.
+$$
+These have a very sparse multiplicative structure:
+\[
+  E_{ab}E_{cd} = \delta_{bc}E_{ad}.
+\]
+An alternative parameterization is given by the celebrated Pauli
+matrices \(\sigma_1 = X, \sigma_2 = Y, \sigma_3 = Z\), with the explicit
+matrix expressions
+</p>
+
+<p>
+$$
+  &sigma;_1 =
+</p>
+<p>
+\begin{bmatrix}
+  0 &amp; 1 \\ 1 &amp; 0
+\end{bmatrix}, \quad
+&sigma;_2 =
+</p>
+<p>
+\begin{bmatrix}
+  0 &amp; i \\ -i &amp; 0
+\end{bmatrix}, \quad
+&sigma;_3 =
+</p>
+<p>
+\begin{bmatrix}
+  1 &amp; 0 \\ 0 &amp; -1
+\end{bmatrix}.
+\label{eq:pauli-mats}
+$$
+</p>
+
+<p>
+These have a much richer
+multiplicative structure:
+$$
+  \sigma_i \sigma_j = \delta_{ij} I + i \epsilon_{ijk} \sigma_k,
+  \label{eq:pauli-rel}
+$$
+where \(\epsilon_{ijk} = \mbox{sgn}(ijk)\) is the Levi-Civita tensor.
+These are unitary and Hermitian, so they act both as transformations
+(unitary) and measurements (Hermitian), explaining their ubiquity for
+quantum computing. Finally, this set of operators is "overcomplete" in
+the sense that we can generate all three from products of two, for
+instance \(X\) and \(Z\). So a more convenient parameterization for some
+purposes is simply \(X\) and \(Z\), which <i>anticommute</i>:
+\[
+  XZ = -ZX.
+\]
+We could go on, but the point is that these all span the same set of
+operators \(\mathcal{B}(\mathcal{H}_2)\), but the useful computational
+properties live in the multiplicative rather than the additive
+structure.
+</p>
+
+<p>
+To foreground and flexibly parameterize this multiplicative structure,
+it helps to define the operator algebra independent of the Hilbert space
+on which it acts. We do this using the method of <i>presentations</i>, where
+a C\({}^*\)-algebra \(\mathcal{A} = \langle\mathcal{G}|\mathcal{R}\rangle\)
+is defined in terms of the operators \(\mathcal{G}\) that multiplicatively
+generate the full algebra, and the relations \(\mathcal{R}\) they satisfy.
+This replaces the explicit matrix description. For instance, the \(XZ\)
+parameterization corresponds to the presentation
+\[
+  \mathcal{A}_2 = \langle X, Z \,|\, XX^* = X^2 = ZZ^* = Z^2 = I, \,
+  XZ = -ZX\rangle,
+\]
+i.e. \(X\) and \(Z\) are Hermitian unitaries that anticommute. This makes
+the "oracular" nature of programs clear.
+</p>
+
+<p>
+Of course, we cannot dispense with states; they are the bridge from
+abstract operators to physically realized measurements. But instead of
+thinking of them as vectors in a Hilbert space, we view them as
+probability distributions over measurement outcomes \(S(\mathcal{A})\), or
+rather, <i>expectation functionals</i>
+\(\mathbb{E}_\pi: \mathcal{A}\to\mathbb{C}\) over operators. Like the
+expectation functions familiar from probability theory, they are linear
+in their inputs and normalized:
+\[
+  \mathbb{E}_\pi[\alpha A + \beta B] = \alpha\mathbb{E}_\pi[A] +
+  \beta\mathbb{E}_\pi[B], \quad  \mathbb{E}_\pi[I] = 1.
+\]
+Choosing an initial state like \(|0^n\rangle\) corresponds here to
+choosing an "eigenfunctional" of some operator, meaning the operator has
+zero variance. For instance, an eigenfunctional \(\mathbb{E}_\pi\) of \(Z\)
+satisfies
+\[
+  \mathbb{E}_\pi[|Z|^2] =  \mathbb{E}_\pi[Z^2] =
+  \left|\mathbb{E}_\pi[Z]\right|^2.
+\]
+This makes sense if we view states as measurement averages; an
+eigenfunctional corresponds to an eigenstate, where we always observe
+the same thing so the variance in outcome is zero.
+</p>
+
+<p>
+To actually enumerate different states, Hilbert space becomes
+indispensable. The <span class="smallcaps">Gelfand-Naimark-Segal (GNS) construction</span>
+allows us to build a Hilbert space \(\mathcal{H}_\pi\) directly from an
+operator algebra \(\mathcal{A}\) and a state \(\mathbb{E}_\pi\); this gives
+a list of "pure states" from which we can build expectation functionals
+by mixing. Listing pure states is analogous<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">In fact, it is more than an analogy: these are both instances of a generalized Stone duality over different fields.</span>
+to the way we can list truth-value assignments in classical Boolean
+algebra; our list is exponentially large, but exhaustive and therefore
+helpful when we need to look for (counter)examples. On the flip side, we
+use Boolean algebra to manipulate digital circuits, and the
+C\({}^*\)-algebraic approach is the analogue for quantum circuits. This
+explains (at least at a high-concept level) why restricting quantum
+computing to Hilbert space creates problems. It's like doing classical
+computing entirely with truth tables!
+</p>
+
+<p>
+Once we have an algebra
+\(\mathcal{A} = \langle \mathcal{G}|\mathcal{R}\rangle\) and the dual
+perspective afforded by states \(\pi \in S(\mathcal{A})\) (including the
+GNS Hilbert space \(\mathcal{H}_\pi\)), we almost have enough ingredients
+to start baking algorithms. The only thing missing is the ability to
+<i>combine</i> things. There are three basic methods of composition:
+</p>
+
+<ul class="org-ul">
+<li>spatial composition, aka the <i>tensor product</i>;
+</li>
+<li>temporal composition, aka <i>conjugation</i>; and
+</li>
+<li>functional composition, aka <i>quantum channels</i>.
+</li>
+</ul>
+
+<p>
+The tensor product takes objects in different algebras (operators,
+states, etc) and configures them simultaneously. For instance, acting
+with operator \(A \in \mathcal{A}\) and \(B \in \mathcal{A}'\) at the same
+time corresponds to the operator
+\(A \otimes B \in \mathcal{A} \otimes \mathcal{A}'\). Entanglement is
+simply the failure of an object to tensor-factorize.
+</p>
+
+<p>
+If the tensor product captures spatial composition, <i>conjugation</i>
+captures composition in time. More precisely, the Heisenberg evolution
+of an observable \(A\) is given by
+\[
+  A \mapsto U^* A U = U \triangleright A,
+\]
+where \(U\) is the time evolution operator, and \(\triangleright\) is the
+<i>(operator) conjugator</i>.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote">We use \(\triangleright\) instead of the conventional \(\text{Ad}_U\) action since we find the infix notation cleaner.</span>
+We define the <i>state conjugator</i> \(\triangleleft\) as the "pullback" of
+operator conjugation:
+\[
+  ( U \triangleleft \pi) [A] = \pi( U \triangleright A) = \pi (U^*AU).
+\]
+This is the appropriate Schrödinger evolution when the state is related
+to vectors in a Hilbert space by \(\pi(A) = \langle \pi |A |\pi\rangle\).
+Strictly speaking, we could view multiplication \(A, B \mapsto A \cdot B\)
+as composition in time ("do \(B\), then \(A\)"), but time <i>evolution</i> via
+conjugation is a richer temporal notion than simple multiplication.
+</p>
+
+<p>
+Finally, we can compose via <i>channels</i>. Channels model noisy processes
+and measurements. A channel is a generalized form of conjugation, where
+instead of conjugating with one operator, we conjugate with several.
+Schematically, for a family of operators \(K_\lambda\) labelled by
+\(\lambda \in \mathfrak{L}\) that sum to the identity,
+\(\sum_{\lambda\in \mathfrak{L}} K_\lambda K_\lambda^* = I\), the
+associated operator and state channels are the sum of operator and state
+conjugators:
+\[
+  \mathcal{C}_{\mathfrak{L}} = \sum_{\lambda\in \mathfrak{L}}
+  K_\lambda\, \triangleright, \quad
+  \mathcal{C}^{\mathfrak{L}} = \sum_{\lambda\in \mathfrak{L}}
+  K_\lambda \,\triangleleft.
+\]
+If the channel is <i>observed</i> in state \(\pi\), then outcome \(\lambda\) is
+measured with probability<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote">The requirement that \(K_\lambda K_\lambda^*\) sums to unity then corresponds to conservation of probability.</span>
+\(p_\lambda\) given by the <span class="smallcaps">Born rule</span> as
+\[
+  p_\lambda = \pi[K_\lambda K_\lambda^*],
+\]
+and the channel (conditioned on this outcome) according to the
+<span class="smallcaps">Lüders rule</span> by
+\[
+  \mathcal{C}_{\mathfrak{L}} \mapsto p_\lambda^{-1} K_\lambda\,
+  \triangleright, \quad \mathcal{C}^{\mathfrak{L}} \mapsto
+  p_\lambda^{-1} K_\lambda \,\triangleleft.
+\]
+The canonical example is <i>projector-valued measurement (PVM)</i>, where the
+\(K_\lambda\) are orthogonal projectors that resolve the identity:
+\[
+  \sum_{\lambda} \Pi_\lambda = I, \quad
+  \Pi_\lambda \Pi_\mu = \delta_{\mu\lambda}\Pi_\lambda.
+\]
+In state \(\pi\), we observe outcome \(\lambda\) with probability
+\(p_\lambda = \pi(\Pi_\lambda)\), and the post-measurement state is \(p_\lambda^{-1}\Pi_\lambda \triangleleft \pi\).<label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote">This rule may be familiar from a first course on quantum computing. See for instance the drily canonical reference <em>Quantum Computation and Quantum Information</em> (2000), Nielsen and Chuang.</span>
+</p>
+
+<p>
+From these primitives, we can build everything else. As a simple example
+of how this works, we can start by defining the <i>generalized Clifford</i>
+or simply /qudit algebra/<label for="sn-6" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-6" class="margin-toggle"/><span class="sidenote">Known by many other names, including the generalized Pauli, Weyl-Heisenberg, or Sylvester matrices.</span>
+</p>
+\begin{equation}
+  \mathcal{A}_d = \langle X, Z \,|\, XX^* = X^d = ZZ^* = Z^d = I, \,
+  ZX = \omega_d XZ\rangle,
+  \label{eq:pres-qudit}
+\end{equation}
+<p>
+where \(X\) and \(Z\) are <i>unipotent</i> unitaries whose $d$th power is the
+identity, and <i>braid</i>, i.e. commute up to a $d$th root of unity
+\(\omega_d = e^{2\pi i /d}\). We can factorize the unipotence relation of
+\(Z\) to obtain its eigenvalues,
+\[
+  Z^d - I = \prod_{k=0}^{d-1} (Z - \omega_d^k I),
+\]
+and build the projector onto \(\omega_d^k\) explicitly as
+\[
+  \Pi_{k}^{(Z)} = \frac{\prod_{j\neq k}(Z - \omega_d^j
+    I)}{\prod_{j\neq k}(\omega_d^k - \omega_d^j)}.
+\]
+Using projectors and working on the tensor product
+\(\mathcal{A}_d^{\otimes 2}\), we can define a controlled-\(X\) operation:
+\[
+  \text{CX} = \sum_{k=0}^{d-1} \Pi_{k}^{(Z)} \otimes X^k,
+\]
+which applies \(X^k\) in the second slot when it encounters \(\pi^{(Z)}_k\),
+the \(\omega_d^k\)-eigenfunctional of \(Z\), in the first. You can show that \(X \triangleleft \pi^{(Z)}_k = \pi^{(Z)}_{k+1}\),<label for="sn-7" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-7" class="margin-toggle"/><span class="sidenote">This is easy to derive from the braiding relation: \[ZX |\omega_d^k\rangle = \omega_d X Z |\omega_d^k\rangle = \omega_d^{k+1} X |\omega_d^k\rangle.\]</span>
+and it follows that
+\[
+  \text{C}X (X^k \otimes I) \triangleleft (\pi^{(Z)}_0 \otimes
+  \pi^{(Z)}_0) = (X^k \otimes X^k) \triangleleft (\pi^{(Z)}_0 \otimes
+  \pi^{(Z)}_0).
+\]
+Extending to a sum of terms
+\(W = \frac{1}{\sqrt{d}}\sum_{k=0}^{d-1} X^k\), we have<label for="sn-8" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-8" class="margin-toggle"/><span class="sidenote">This is a special form of the <em>quantum Fourier transform (QFT)</em> that we cover at greater depth below. More generally it takes the form \(W = \frac{1}{\sqrt{d}}\sum_{k=0}^{d-1} X^kZ^{-(k+1)}\).</span>
+\[
+  \text{C}X \left(W\otimes I\right) \triangleleft (\pi^{(Z)}_0 \otimes
+  \pi^{(Z)}_0) = \frac{1}{\sqrt{d}}\sum_{k=0}^{d-1}\left(X^k \otimes
+  X^k\right) \triangleleft (\pi^{(Z)}_0 \otimes \pi^{(Z)}_0),
+\]
+or in the GNS Hilbert space associated with \(\pi^{(Z)}_0\),
+\[
+  \text{C}X (W\otimes I)|0\rangle\otimes |0\rangle =
+  \frac{1}{\sqrt{d}}\sum_{k=0}^{d-1} |k\rangle\otimes |k\rangle.
+\]
+This state has the miraculous property that the outcome of a \(Z\)
+measurement on the first system<label for="sn-9" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-9" class="margin-toggle"/><span class="sidenote">This is the PVM with components \(\Pi_k^{(Z)} \otimes I\) for \(k \in \{0, 1, \ldots, d-1\}\); similarly, a \(Z\) measurement on the second system has projectors \(I\otimes\Pi_k^{(Z)}\).</span>
+automatically matches the outcome of a \(Z\) measurement on the second;
+this is "spooky action at a distance". We have just performed our first
+nontrivial quantum algorithm, and produced an entangled state.
+</p>
+
+<p>
+This little construction already contains the whole ethos of the paper.
+We specified an algebra by generators and relations, treated states as
+expectation functionals, and then <i>composed</i> until something
+recognizably algorithmic fell out. In what follows, we apply the same
+philosophy to five canonical protocols&#x2014;teleportation, Grover search,
+Fourier sampling, simulation, and error correction&#x2014;which not only
+demonstrate different aspects of algebraic quantum programming, but in
+turn, are illuminated by the algebraic perspective. We may draw fewer
+circuits, and fall out of touch with compilation-level details, but we
+trade "how" for "why", with intuition and unifying themes emerging
+elegantly from the algebra. It's a good trade.
+</p>
+</div>
+</body>
+</html>
