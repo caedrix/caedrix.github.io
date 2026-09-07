@@ -199,7 +199,7 @@ Checking Knill-Laflamme for the five-qubit code:
 <pre class="example">
 alg   = qudit(2, n=5); X, Z, I = alg.X, alg.Z, alg.I
 stabs = [cycle(k, X[0, 3]*Z[1, 2]) for k in range(4)]
-P     = prod(((@5) I + S)*0.5 for S in stabs)
+P     = prod(((@5)I + S)*0.5 for S in stabs)
 errs  = [E[k] for k in range(5) for E in (X, Z)]
 def kl(A, B): return scalar(P * A.d * B * P, P)
 all(kl(A, B) is not None for A in errs for B in errs) # True
