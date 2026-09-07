@@ -1,9 +1,7 @@
-#+TITLE: Preview
+#+TITLE: 1.0. Preview
 #+AUTHOR: David Wakeham
 #+OPTIONS: toc:nil num:nil ^:nil H:4
 #+HTML_DOCTYPE: html5
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
-#+HTML_HEAD: <script type="text/javascript" src="sidebar_darkmode.js"></script>
 #+HTML_HEAD: <style>.smallcaps{font-variant:small-caps;letter-spacing:.04em}</style>
 #+HTML_HEAD: <script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],tags:'ams',processEscapes:true}};</script>
 #+HTML_HEAD: <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
@@ -12,7 +10,7 @@
 
 This paper introduces ~yaw~, a language for algebraic quantum
 programming. Before we dive into the details, it will be helpful to
-recall what "algebraic quantum programming" means.@@html:<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">For a considerably lengthier version, we refer readers to the prequel paper, <em>The Structure and Interpretation of Quantum Programs I: Foundations</em> (2025).</span>@@
+preview what "algebraic quantum programming" means.@@html:<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">For a considerably lengthier version, we refer readers to the prequel paper, <em>The Structure and Interpretation of Quantum Programs I: Foundations</em> (2025).</span>@@
 Usually, quantum programming occurs at the level of a (typically
 finite-dimensional) Hilbert space $\mathcal{H}$, with basic objects the
 states $|\psi\rangle \in \mathcal{H}$. We manipulate these using linear
@@ -315,6 +313,7 @@ elegantly from the algebra. It's a good trade.
 #+HTML_CONTAINER: div
 #+HTML_DOCTYPE: xhtml-strict
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+#+HTML_HEAD: <script src="contents.js"></script>
 #+HTML_HEAD: <script type="text/javascript" src="sidebar_darkmode.js"></script>
 #+HTML_HEAD: <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 #+HTML_LINK_UP:

@@ -57,25 +57,29 @@
     }
 
     function createSidebar() {
-        // Create sidebar structure
+        // Create sidebar structure: book contents on top, page headings below
         const sidebar = document.createElement('div');
         sidebar.className = 'sidebar';
         sidebar.innerHTML = `
-            <h3>Contents</h3>
-            <nav>
-                <ul class="toc" id="toc"></ul>
-            </nav>
+            <nav class="book-nav" id="book-nav"></nav>
+            <div class="page-nav">
+                <h3>On this page</h3>
+                <nav>
+                    <ul class="toc" id="toc"></ul>
+                </nav>
+            </div>
         `;
         document.body.appendChild(sidebar);
 
         // Create sidebar toggle button
         const sidebarToggle = document.createElement('button');
         sidebarToggle.className = 'sidebar-toggle';
-        sidebarToggle.textContent = '§';
+        sidebarToggle.textContent = '\u00a7';
         sidebarToggle.setAttribute('aria-label', 'Toggle sidebar');
         document.body.appendChild(sidebarToggle);
 
-        // Generate table of contents
+        // Book contents (from contents.js), then this page's headings
+        renderBookNav();
         generateTOC();
 
         // Check if sidebar should be open by default (desktop)
@@ -85,8 +89,56 @@
         } else {
             document.body.classList.add('sidebar-closed');
         }
-        
+
         console.log('Sidebar created');
+    }
+
+    function currentPage() {
+        const path = window.location.pathname;
+        const file = path.substring(path.lastIndexOf('/') + 1);
+        return file || 'index.html';
+    }
+
+    function renderBookNav() {
+        const host = document.getElementById('book-nav');
+        const book = window.YAW_CONTENTS;
+
+        // No contents.js on this page: hide the section and use headings only
+        if (!host || !book || !Array.isArray(book.parts)) {
+            if (host) host.remove();
+            const pageNav = document.querySelector('.page-nav h3');
+            if (pageNav) pageNav.textContent = 'Contents';
+            console.log('No YAW_CONTENTS found; using page headings only');
+            return;
+        }
+
+        const here = currentPage();
+        let html = '';
+
+        if (book.title) {
+            html += book.href
+                ? `<a class="book-title" href="${book.href}">${book.title}</a>`
+                : `<span class="book-title">${book.title}</span>`;
+        }
+
+        book.parts.forEach(function(part) {
+            if (part.name) html += `<h3 class="book-part">${part.name}</h3>`;
+            html += '<ul class="book-list">';
+            (part.items || []).forEach(function(item) {
+                const num    = item.n ? `<span class="book-n">${item.n}</span>` : '';
+                const status = item.status && item.status !== 'live'
+                    ? `<span class="book-status">${item.status}</span>` : '';
+                const active = item.href && item.href === here ? ' active' : '';
+
+                html += item.href
+                    ? `<li class="book-item${active}"><a href="${item.href}">${num}<span class="book-label">${item.label}</span></a>${status}</li>`
+                    : `<li class="book-item pending">${num}<span class="book-label">${item.label}</span>${status}</li>`;
+            });
+            html += '</ul>';
+        });
+
+        host.innerHTML = html;
+        console.log('Book navigation rendered');
     }
 
     function setupSidebarToggle() {
@@ -117,9 +169,14 @@
             }
         });
 
-        // Handle window resize
+        // Handle window resize. Only force a state when crossing the
+        // breakpoint, so a deliberate toggle isn't undone by a stray resize.
+        let wasWide = window.innerWidth > 1024;
         window.addEventListener('resize', function() {
-            if (window.innerWidth > 1024) {
+            const isWide = window.innerWidth > 1024;
+            if (isWide === wasWide) return;
+            wasWide = isWide;
+            if (isWide) {
                 sidebar.classList.add('open');
                 document.body.classList.remove('sidebar-closed');
             } else {
@@ -136,67 +193,63 @@
             return;
         }
 
-        // Look for headings in org mode structure - try both content div and body
+        // Page headings only: skip the page title, and skip anything inside
+        // the sidebar itself (the book nav has its own headings).
         const contentDiv = document.getElementById('content') || document.body;
-        const headings = contentDiv.querySelectorAll('h1, h2, h3, h4, h5, h6');
-        
+        const headings = Array.from(
+            contentDiv.querySelectorAll('h2, h3, h4')
+        ).filter(h => !h.closest('.sidebar'));
+
         console.log(`Found ${headings.length} headings for TOC`);
-        
+
         if (headings.length === 0) {
-            console.warn('No headings found - TOC will be empty');
+            const section = document.querySelector('.page-nav');
+            if (section) section.style.display = 'none';
             return;
         }
-        
+
         headings.forEach(function(heading, index) {
-            // Skip if heading already has an ID, otherwise create one
             if (!heading.id) {
-                // Create a clean ID from the heading text
                 const cleanText = heading.textContent
                     .toLowerCase()
-                    .replace(/[^\w\s-]/g, '') // Remove special chars
-                    .replace(/\s+/g, '-')     // Replace spaces with hyphens
+                    .replace(/[^\w\s-]/g, '')
+                    .replace(/\s+/g, '-')
                     .trim();
                 heading.id = cleanText || `heading-${index}`;
             }
 
             const li = document.createElement('li');
             const a = document.createElement('a');
-            
+
             a.href = `#${heading.id}`;
             a.textContent = heading.textContent;
             a.className = `toc-${heading.tagName.toLowerCase()}`;
-            
-            // Smooth scroll functionality
+
             a.addEventListener('click', function(e) {
                 e.preventDefault();
                 const target = document.getElementById(heading.id);
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                    
-                    // Update URL hash
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     history.pushState(null, null, `#${heading.id}`);
-                    
-                    // Close sidebar on mobile after navigation
                     if (window.innerWidth <= 1024) {
                         document.querySelector('.sidebar').classList.remove('open');
                     }
                 }
             });
-            
+
             li.appendChild(a);
             toc.appendChild(li);
         });
-        
+
         console.log('TOC generated successfully');
     }
 
     function setupScrollSpy() {
-        const tocLinks = document.querySelectorAll('.toc a');
+        const tocLinks = document.querySelectorAll('#toc a');
         const contentDiv = document.getElementById('content') || document.body;
-        const headings = contentDiv.querySelectorAll('h1, h2, h3, h4, h5, h6');
+        const headings = Array.from(
+            contentDiv.querySelectorAll('h2, h3, h4')
+        ).filter(h => !h.closest('.sidebar'));
         
         if (headings.length === 0) {
             console.warn('No headings found for scroll spy');
@@ -285,7 +338,8 @@ setTimeout(fixCodeBlockSpacing, 2000);
     // Export for debugging
     window.YawDocs = {
         initialize: initialize,
-        generateTOC: generateTOC
+        generateTOC: generateTOC,
+        renderBookNav: renderBookNav
     };
 
 function createNavigationButtons() {

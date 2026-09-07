@@ -1,0 +1,71 @@
+/* Sidebar book navigation — append to enhanced_tufte.css.
+   Uses the variables already defined there, so it themes automatically. */
+
+.sidebar .book-title {
+    display: block;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 0 0 1.2rem;
+    color: var(--text-color);
+    text-decoration: none;
+    border-bottom: none;
+}
+.sidebar .book-title:hover { color: var(--accent, #5B3496); }
+
+.sidebar h3.book-part {
+    font-size: .72rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    opacity: .6;
+    margin: 1.4rem 0 .4rem;
+}
+
+.sidebar ul.book-list {
+    list-style: none;
+    margin: 0 0 .4rem;
+    padding: 0;
+}
+
+.sidebar .book-item {
+    display: flex;
+    align-items: baseline;
+    gap: .45rem;
+    font-size: .9rem;
+    padding: .16rem 0;
+}
+.sidebar .book-item a {
+    display: flex;
+    align-items: baseline;
+    gap: .45rem;
+    flex: 1;
+    text-decoration: none;
+    border-bottom: none;
+    color: var(--text-color);
+    border-left: 2px solid transparent;
+    padding-left: .4rem;
+    margin-left: -.4rem;
+}
+.sidebar .book-item a:hover { background: var(--sidebar-hover); }
+
+.sidebar .book-item.active > a {
+    border-left-color: var(--accent, #5B3496);
+    background: var(--sidebar-active);
+    font-weight: 600;
+}
+
+.sidebar .book-n     { opacity: .5; font-size: .78rem; min-width: 1.6rem; }
+.sidebar .book-label { flex: 1; }
+
+.sidebar .book-item.pending { opacity: .45; padding-left: .4rem; }
+.sidebar .book-status {
+    font-size: .66rem;
+    letter-spacing: .04em;
+    opacity: .7;
+    white-space: nowrap;
+}
+
+.sidebar .page-nav {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--sidebar-border);
+}
