@@ -11,30 +11,36 @@
 // If this file is absent, the sidebar falls back to on-page headings only.
 
 window.YAW_CONTENTS = {
-  title: 'SIQP II',
+  title: 'Structure and Interpretation of Quantum Programs II',
   href: 'index.html',
 
   parts: [
     {
-      name: 'Basics',
-      items: [
+      name: '',
+	items: [
+        { n: '1.0', label: 'Preview',             href: 'intro.html',    status: 'live' },
         { n: '1.1', label: 'Algebras',             href: 'algebras.html',    status: 'live' },
         { n: '1.2', label: 'Operators and states', href: 'operators.html',   status: 'live' },
         { n: '1.3', label: 'Laws of composition',  href: 'composition.html', status: 'live' }
       ]
     },
     {
-      name: 'Algorithms',
+      name: 'Basic Algorithms',
       items: [
         { n: '2.1', label: 'Send',      href: 'send.html',     status: 'live' },
         { n: '2.2', label: 'Search',    href: 'search.html',   status: 'live' },
         { n: '2.3', label: 'Sample',    href: 'sample.html',   status: 'live' },
-        { n: '2.4', label: 'Simulate',                         status: 'drafting' },
+          { n: '2.4', label: 'Simulate',                         status: 'drafting' },
         { n: '2.5', label: 'Salvage',                          status: 'drafting' },
-        { n: '2.6', label: 'Subgroup',                         status: 'planned' },
-        { n: '2.7', label: 'Shadow',                           status: 'planned' },
-        { n: '2.8', label: 'Signal',                           status: 'planned' },
-        { n: '2.9', label: 'Sparsity',                         status: 'planned' }
+      ]
+    },
+    {
+      name: 'Advanced Algorithms',
+      items: [
+        { n: '3.1', label: 'Subgroup',                         status: 'planned' },
+        { n: '3.2', label: 'Shadow',                           status: 'planned' },
+        { n: '3.3', label: 'Signal',                           status: 'planned' },
+        { n: '3.4', label: 'Sparsity',                         status: 'planned' }
       ]
     },
     {

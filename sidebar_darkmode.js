@@ -1,9 +1,24 @@
 // Org Mode compatible theme toggle and sidebar
 (function() {
     'use strict';
+
+    // Guard against the script being included twice. Org gathers #+HTML_HEAD
+    // keywords from the whole buffer, including COMMENT subtrees, so a stray
+    // duplicate is easy to introduce; without this, two sidebars are built and
+    // the second (empty) one covers the first.
+    if (window.__yawDocsLoaded) {
+        console.warn('sidebar_darkmode.js loaded twice; ignoring the second copy');
+        return;
+    }
+    window.__yawDocsLoaded = true;
     
     // Wait for both DOM and MathJax to be ready
     function initialize() {
+        // Belt and braces: never build a second sidebar, whatever fires us.
+        if (document.querySelector('.sidebar') || document.querySelector('.theme-toggle')) {
+            console.log('Already initialized; skipping');
+            return;
+        }
         console.log('Initializing Yaw documentation features...');
         
         // Initialize theme first
@@ -57,6 +72,10 @@
     }
 
     function createSidebar() {
+        // Remove any sidebar left by an earlier run before building a new one
+        document.querySelectorAll('.sidebar, .sidebar-toggle')
+                .forEach(function(el) { el.remove(); });
+
         // Create sidebar structure: book contents on top, page headings below
         const sidebar = document.createElement('div');
         sidebar.className = 'sidebar';
@@ -99,11 +118,54 @@
         return file || 'index.html';
     }
 
+    // Which parts are collapsed, remembered between pages
+    function navState() {
+        try { return JSON.parse(localStorage.getItem('yaw-nav') || '{}'); }
+        catch (e) { return {}; }
+    }
+    function saveNavState(state) {
+        try { localStorage.setItem('yaw-nav', JSON.stringify(state)); } catch (e) {}
+    }
+
+    function makeItem(item, here) {
+        const li = document.createElement('li');
+        li.className = 'book-item';
+
+        const num = document.createElement('span');
+        num.className = 'book-n';
+        num.textContent = item.n || '';
+
+        const label = document.createElement('span');
+        label.className = 'book-label';
+        label.textContent = item.label;
+
+        if (item.href) {
+            const a = document.createElement('a');
+            a.href = item.href;
+            a.appendChild(num);
+            a.appendChild(label);
+            li.appendChild(a);
+            if (item.href === here) li.classList.add('active');
+        } else {
+            li.classList.add('pending');
+            li.appendChild(num);
+            li.appendChild(label);
+        }
+
+        if (item.status && item.status !== 'live') {
+            const st = document.createElement('span');
+            st.className = 'book-status';
+            st.textContent = item.status;
+            li.appendChild(st);
+        }
+        return li;
+    }
+
     function renderBookNav() {
         const host = document.getElementById('book-nav');
         const book = window.YAW_CONTENTS;
 
-        // No contents.js on this page: hide the section and use headings only
+        // No contents.js on this page: drop the section, relabel the other
         if (!host || !book || !Array.isArray(book.parts)) {
             if (host) host.remove();
             const pageNav = document.querySelector('.page-nav h3');
@@ -112,34 +174,55 @@
             return;
         }
 
-        const here = currentPage();
-        let html = '';
+        const here  = currentPage();
+        const state = navState();
 
-        if (book.title) {
-            html += book.href
-                ? `<a class="book-title" href="${book.href}">${book.title}</a>`
-                : `<span class="book-title">${book.title}</span>`;
-        }
+        // Outer collapsible: the whole book
+        const outer = document.createElement('details');
+        outer.className = 'book-outer';
+        outer.open = state.book !== false;
 
-        book.parts.forEach(function(part) {
-            if (part.name) html += `<h3 class="book-part">${part.name}</h3>`;
-            html += '<ul class="book-list">';
-            (part.items || []).forEach(function(item) {
-                const num    = item.n ? `<span class="book-n">${item.n}</span>` : '';
-                const status = item.status && item.status !== 'live'
-                    ? `<span class="book-status">${item.status}</span>` : '';
-                const active = item.href && item.href === here ? ' active' : '';
+        const title = document.createElement('summary');
+        title.className = 'book-title';
+        title.textContent = book.title || 'Contents';
+        outer.appendChild(title);
 
-                html += item.href
-                    ? `<li class="book-item${active}"><a href="${item.href}">${num}<span class="book-label">${item.label}</span></a>${status}</li>`
-                    : `<li class="book-item pending">${num}<span class="book-label">${item.label}</span>${status}</li>`;
-            });
-            html += '</ul>';
+        outer.addEventListener('toggle', function() {
+            const s = navState(); s.book = outer.open; saveNavState(s);
         });
 
-        host.innerHTML = html;
+        book.parts.forEach(function(part, pi) {
+            const items = part.items || [];
+            const key = 'part-' + (part.name || pi);
+            // always open the part containing the current page
+            const hasHere = items.some(it => it.href && it.href === here);
+
+            const det = document.createElement('details');
+            det.className = 'book-part-group';
+            det.open = hasHere || state[key] !== false;
+
+            const sum = document.createElement('summary');
+            sum.className = 'book-part';
+            sum.textContent = part.name || '';
+            det.appendChild(sum);
+
+            const ul = document.createElement('ul');
+            ul.className = 'book-list';
+            items.forEach(it => ul.appendChild(makeItem(it, here)));
+            det.appendChild(ul);
+
+            det.addEventListener('toggle', function() {
+                const s = navState(); s[key] = det.open; saveNavState(s);
+            });
+
+            outer.appendChild(det);
+        });
+
+        host.innerHTML = '';
+        host.appendChild(outer);
         console.log('Book navigation rendered');
     }
+
 
     function setupSidebarToggle() {
         const sidebar = document.querySelector('.sidebar');
@@ -193,8 +276,7 @@
             return;
         }
 
-        // Page headings only: skip the page title, and skip anything inside
-        // the sidebar itself (the book nav has its own headings).
+        // Page headings only: skip the title, and anything in the sidebar
         const contentDiv = document.getElementById('content') || document.body;
         const headings = Array.from(
             contentDiv.querySelectorAll('h2, h3, h4')
@@ -208,9 +290,19 @@
             return;
         }
 
+        // Match the book list: number in its own column, label beside it
+        toc.classList.add('book-list');
+
         headings.forEach(function(heading, index) {
+            // Pull org's section number out of the heading text
+            const clone = heading.cloneNode(true);
+            const numEl = clone.querySelector('[class^="section-number"]');
+            let num = '';
+            if (numEl) { num = numEl.textContent.trim(); numEl.remove(); }
+            const label = clone.textContent.trim();
+
             if (!heading.id) {
-                const cleanText = heading.textContent
+                const cleanText = label
                     .toLowerCase()
                     .replace(/[^\w\s-]/g, '')
                     .replace(/\s+/g, '-')
@@ -219,11 +311,21 @@
             }
 
             const li = document.createElement('li');
-            const a = document.createElement('a');
+            li.className = 'book-item toc-' + heading.tagName.toLowerCase();
 
+            const a = document.createElement('a');
             a.href = `#${heading.id}`;
-            a.textContent = heading.textContent;
-            a.className = `toc-${heading.tagName.toLowerCase()}`;
+
+            const n = document.createElement('span');
+            n.className = 'book-n';
+            n.textContent = num;
+
+            const l = document.createElement('span');
+            l.className = 'book-label';
+            l.textContent = label;
+
+            a.appendChild(n);
+            a.appendChild(l);
 
             a.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -243,6 +345,7 @@
 
         console.log('TOC generated successfully');
     }
+
 
     function setupScrollSpy() {
         const tocLinks = document.querySelectorAll('#toc a');
@@ -267,9 +370,10 @@
             });
 
             tocLinks.forEach(function(link) {
-                link.classList.remove('active');
+                const li = link.closest('li') || link;
+                li.classList.remove('active');
                 if (link.getAttribute('href') === `#${current}`) {
-                    link.classList.add('active');
+                    li.classList.add('active');
                 }
             });
         }
