@@ -205,7 +205,7 @@ def kl(A, B): return scalar(P * A.d * B * P, P)
 all(kl(A, B) is not None for A in errs for B in errs) # True
 </pre>
 <p>
-Defining the GKP state on a photonic quantum computer (WIP):
+Defining the GKP state on a photonic quantum computer:
 </p>
 <pre class="example">
 $alg = &lt;X, Z | unit, braid(-1)&gt;
@@ -407,7 +407,7 @@ corresponding eigenvectors rather than bitstrings.
 
 <p>
 Q. <i>Can I do continuous variable computing?</i> <br  />
-A. Soon! This is a neat generalization of the algebra of qudits.
+A. Yes! This is a neat generalization of the algebra of qudits.
 </p>
 
 <p>
