@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>1.2. Operators and states </title>
+<!-- 2026-09-07 Mon 15:54 -->
+<meta  charset="utf-8">
+<meta  name="generator" content="Org-mode">
+<meta  name="author" content="David Wakeham">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+<script src="contents.js"></script>
+<script type="text/javascript" src="sidebar_darkmode.js"></script>
+<style>.smallcaps{font-variant:small-caps;letter-spacing:.04em}</style>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],tags:'ams',processEscapes:true}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+<script src="contents.js"></script>
+<script type="text/javascript" src="sidebar_darkmode.js"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>pre { padding-top: 25px !important; }</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/javascript" src="http://orgmode.org/mathjax/MathJax.js"></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
+
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">1.2. Operators and states </h1>
+<p>
+So far, we've just done math. The time has come to interpret things
+<i>physically</i>. Each operator \(A \in \mathcal{A}\) has a set of
+<i>eigenvalues</i>, scalars \(\lambda \in \mathbb{C}\) such that \(A - \lambda I\)
+has no multiplicative inverse. We call this set the <i>spectrum</i> of \(A\),
+labelled \(\text{spec}(A)\).
+If an operator satisfies a minimal<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">In other words, no polynomial \(p'\) of lower degree satisfies \(p'(A, A^*) = 0\).</span> polynomial identity \(p(A, A^*) = 0\), then the complex solutions \(p(\lambda, \overline{\lambda})\) constitute the spectrum.
+For instance, in the Pauli algebra (\(d = 2\)), the Pauli \(X\) operator
+satisfies
+\[
+  X^2 - I = 0 \quad \Longrightarrow \quad \lambda^2 - 1 = 0 \quad
+  \Longrightarrow \quad \text{spec}(X) = \{1, -1\}.
+\]
+We can reproduce this calculation using the <code>spec()</code> function in <code>yaw</code>:
+</p>
+
+<pre class="example">
+*&gt; $alg = qubit()
+*&gt; spec(X)
+[1, -1]
+</pre>
+
+<p>
+You can compute the spectrum for qudit operators similarly:
+</p>
+
+<pre class="example">
+*&gt; $alg = qudit(3)
+*&gt; spec(X)
+[1, (-0.5+0.866j), (-0.5-0.866j)]
+</pre>
+
+<p>
+This even works in infinite dimensions.
+The spectrum of the unitary generator \(U\) (with no other constraints)
+is the unit circle:
+\[ |U|^2 - I = 0 \quad \Longrightarrow \quad |\lambda|^2 - 1 = 0 \quad
+  \Longrightarrow \quad \text{spec}(U) = \mathbb{S}^1.
+\]
+You can view this result a few different ways in Exercise 1.3.
+</p>
+
+<p>
+The deep physical insight of quantum mechanics is as follows:
+measuring an operator means observing its eigenvalues at random. Put
+more carefully, measurement turns each \(A\in\mathcal{A}\) into a random
+variable with values \(\lambda \in \text{spec}(A)\).
+We write \(A \leftarrow \lambda\) for this observation, or \(A
+\overset{\pi}{\leftarrow} \lambda\) if we want to make the state
+explicit.
+We can decompose a diagonalizable<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote">Really, we mean an operator obeying the spectral theorem.</span> operator \(A\) into a sum of orthogonal projectors,
+\[
+  A = \sum_{\lambda \in \text{spec}(A)} \lambda \Pi^{(A)}_\lambda,
+  \quad \Pi^{(A)}_\lambda \Pi^{(A)}_\mu =
+  \delta_{\mu\lambda}\Pi^{(A)}_\lambda.
+\]
+These projectors can often be written entirely in terms of \(A\). For
+instance, the Pauli \(Z\) operator can be written
+\[
+  Z = \Pi^{(Z)}_{+1} - \Pi^{(Z)}_{-1}, \quad \Pi^{(Z)}_{\pm 1} =
+  \frac{1}{2}(I \pm Z).
+\]
+In <code>yaw</code>, projectors are accessed using <code>proj(A, k)</code>, where \(k\)
+enumerates eigenvalues in the same order they appear in <code>spec(A)</code>:
+</p>
+
+<pre class="example">
+*&gt; $alg = qudit(2)
+*&gt; proj(Z, 0)
+proj(Z, 0)
+*&gt; proj(Z, 0).expand()
+1/2 + Z/2
+*&gt; proj(Z, 1).expand()
+1/2 - Z/2
+</pre>
+
+<p>
+We force <code>yaw</code> to display the functional form of the projector with
+<code>.expand()</code>, which otherwise remains <code>proj(A, k)</code>.
+</p>
+
+<p>
+The projector \(\Pi^{(A)}_\lambda\) has a binary spectrum,<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote">Since \(\Pi^2 - \Pi = \Pi(\Pi - I) = 0\), with eigenvalues \(\lambda = 0, 1\).</span> with \(\Pi^{(A)}_\lambda \leftarrow 1\) just in case \(A \leftarrow \lambda\) and otherwise \(\Pi^{(A)}_\lambda \leftarrow 0\).
+Thus, the expectation of \(\Pi^{(A)}_\lambda\) is precisely the
+probability that \(A \leftarrow \lambda\):
+\[
+  \label{eq:6}
+  \mathbb{E}[\Pi^{(A)}_\lambda] =
+  1\cdot\mathbb{P}[\Pi^{(A)}_\lambda \leftarrow 1] + 0
+  \cdot\mathbb{P}[\Pi^{(A)}_\lambda \leftarrow 0] =
+  \mathbb{P}[A \leftarrow \lambda].
+\]
+Thus, from projectors and expectations we recover all the measurement
+probabilities!
+The first part of this equation&#x2014;the projectors&#x2014;are recoverable
+from the relevant operators \(A\).
+The expectation function \(\mathbb{E}\) is more mysterious.<label for="mn-1" class="margin-toggle">&#8853;</label><input type="checkbox" id="mn-1" class="margin-toggle"/><span class="marginnote"><img src="./img/map.png" alt="A journey full of expectation" style="width:90%"/><br/><em>A journey full of expectation.</em></span>
+It turns out that, in the algebraic framework, <i>expectations are
+states</i>. There is no Hilbert space of vectors (for now), just a set
+\(S(\mathcal{A})\) of consistent expectation functions. Expectation
+functions are linear, normalized, and positive, in the sense that
+\[
+  \label{eq:3}
+  \mathbb{E}_\pi\left[\sum_i \alpha_i A_i\right] = \sum_i \alpha_i
+  \mathbb{E}_\pi[A_i], \quad \mathbb{E}_\pi[I] = 1, \quad
+  \mathbb{E}_\pi[|A|^2] \geq 0,
+\]
+where \(|A|^2\) automatically has positive eigenvalues \(|\lambda|^2\). We
+turn this round and <i>define</i> a state as a positive, normalized
+functional.<label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote">The term &ldquo;functional&rdquo; implies linearity. The two definitions are equivalent, as you'll show in Exercise 2.1.</span>
+</p>
+
+<p>
+The simplest way to prepare states is to make measurements. If you
+measure \(A\) and observe \(\lambda\), you'll now be in a state where \(A
+\leftarrow \lambda\) with probability \(1\). We write the state as
+\(\pi^{(A)}_\lambda\), and by definition,
+\[
+  \label{eq:7}
+  \pi^{(A)}_\lambda[\Pi^{(A)}_\mu] = \delta_{\mu\lambda}.
+\]
+In <code>yaw</code>, you can invoke the state using <code>char(A, k)</code>, which uses the
+same indexing as <code>proj(A, k)</code>. We apply a state-as-expectation-functional
+using the pipe notation<label for="sn-6" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-6" class="margin-toggle"/><span class="sidenote">The reason for this choice will become clear in the next section.</span> <code>A|state</code>:<label for="sn-7" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-7" class="margin-toggle"/><span class="sidenote">Note that using <code>pi</code> as a variable clashes with the existing numerical meaning, so we use <code>psi</code> instead.</span>
+</p>
+
+<pre class="example">
+*&gt; psi0 = char(Z, 0)
+*&gt; proj(Z, 0) | psi0
+1
+*&gt; proj(Z, 1) | psi0
+0.0
+</pre>
+
+<p>
+We can always take a convex combination of expectation functions,
+\[
+  \mathbb{E} =  p_1 \mathbb{E}_1 + (1-p_1)\mathbb{E}_2,
+\]
+for \(p_1 \in [0, 1]\).
+You can check this remains linear, positive and normalized, and hence
+a valid expectation.
+This just probabilistically reframes the old idea of mixing states. In
+<code>yaw</code>, this is straightforward:
+</p>
+
+<pre class="example">
+*&gt; psi1 = char(Z, 1)
+*&gt; proj(Z, 0) | 0.2*psi0 + 0.8*psi1
+0.2
+</pre>
+
+<p>
+This is <i>not</i> the same as adding vectors in Hilbert space; a feature
+and a bug of the algebraic approach is that this sort of
+&amp;ldquo;coherent&amp;rdquo; addition is difficult.<label for="sn-8" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-8" class="margin-toggle"/><span class="sidenote">It's a bug because we're used to thinking this way. It's a feature because we shouldn't be thinking this way!</span>
+</p>
+
+<p>
+Although difficult, it is not impossible. We can recover the usual
+Hilbert space using a technique called the Gelfand-Naimark-Segal (GNS)
+construction.
+We won't belabour the details, but the basic point is that, given a
+state \(\pi \in S(\mathcal{A})\), we can build a Hilbert space
+\(\mathcal{H}_\pi\) from \(\mathcal{A}\) itself, with inner product<label for="sn-9" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-9" class="margin-toggle"/><span class="sidenote">The catch is that we have to identify \(A\) and \(B\) with an entire class of operators. See Exercise 2.2 for more.</span>
+\[
+  \langle A, B \rangle_\pi = \pi (A^*B).
+\]
+An operator then corresponds to a vector \(|B\rangle_\pi\), and
+operators in \(\mathcal{A}\) act via \(A|B\rangle_\pi =|AB\rangle_\pi\).
+Thus, operators have two roles: vectors and matrices.
+With <code>yaw</code>, you can access the former using <code>gnsVec(state, operator)</code>
+and the latter with <code>gnsMat(state, operator)</code>:
+</p>
+
+<pre class="example">
+*&gt; $alg = qudit(2)
+*&gt; gnsVec(char(Z, 0), X)
+[0.+0.j 1.+0.j]
+*&gt; Y = 1.j*X*Z
+*&gt; gnsMat(char(Z, 0), Y)
+[[0.+0.j 0.-1.j]
+ [0.+1.j 0.+0.j]]
+</pre>
+
+<p>
+The advantage of Hilbert space is that (in the finite-dimensional
+case) it explicitly lists all the pure states, that is, states that
+cannot be obtained by mixing. By mixing them, we get all possible
+states, so the density matrices \(\mathcal{M}(\mathcal{H}_\pi) =
+S(\mathcal{A})\). This is a beautiful result!<label for="sn-10" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-10" class="margin-toggle"/><span class="sidenote">Why? Because it's not obvious that we had to get all the pure states via GNS, or that mixing should be the only operation needed to obtain the rest.</span>
+</p>
+
+<p>
+Let's summarize. Measurement turns operators into a random
+distribution over eigenvalues; states are consistent expectation
+functionals for this distribution across the whole algebra; we can
+recover probabilities by taking the expectation of projectors; and
+finally, we can describe the full set of pure states using the GNS
+construction, and by mixing, get \(S(\mathcal{A})\).
+It's an elegant state of affairs.
+</p>
+</div>
+</body>
+</html>
