@@ -16,7 +16,7 @@ window.YAW_CONTENTS = {
 
   parts: [
     {
-      name: '',
+      name: 'Introduction',
 	items: [
         { n: '1.0', label: 'Preview',             href: 'SIQPII/intro.html',    status: 'live' },
         { n: '1.1', label: 'Algebras',             href: 'SIQPII/algebras.html',    status: 'live' },

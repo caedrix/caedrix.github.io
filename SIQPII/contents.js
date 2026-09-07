@@ -16,7 +16,7 @@ window.YAW_CONTENTS = {
 
   parts: [
     {
-      name: '',
+      name: 'Introduction',
 	items: [
         { n: '1.0', label: 'Preview',             href: 'intro.html',    status: 'live' },
         { n: '1.1', label: 'Algebras',             href: 'algebras.html',    status: 'live' },
