@@ -857,6 +857,7 @@ pre.py {
     background: var(--sidebar-bg);
     border: 1px solid var(--sidebar-border);
     border-radius: 4px;
+    opacity: 0%;
     padding: 3px 3px;
     cursor: pointer;
     font-family: et-book;
