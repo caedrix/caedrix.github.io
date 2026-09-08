@@ -5,101 +5,44 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>yaw — REPL</title>
 <meta name="description" content="Run yaw in the browser. An algebraic quantum programming language.">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+<script src="contents.js"></script><script type="text/javascript" src="sidebar_darkmode.js"></script>
 <style>
-:root{
-  --paper:#D3DFE1;
-  --raised:#E8F0F0;
-  --ink:#152029;
-  --soft:#4C6067;
-  --rule:#A9BEC2;
-  --phase:#5B3496;
-  --err:#9B2C3A;
+/* REPL-specific styles, using the same variables and typography as index.html */
+.yawmark {
+  font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,"DejaVu Sans Mono",monospace;
+  font-size:clamp(38px,8vw,64px); font-weight:700; font-style:normal;
+  letter-spacing:-.045em; line-height:1.05; margin:2.2rem 0 1.4rem;
+  text-align:left; color:var(--text-color,#111);
 }
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;background:var(--paper);color:var(--ink);
-  font-family:Spectral,Georgia,serif;font-size:1.05rem;line-height:1.6;
-  display:flex;flex-direction:column;
-}
-.wrap{max-width:60rem;margin:0 auto;padding:0 1.25rem;width:100%;
-      flex:1;display:flex;flex-direction:column;min-height:0}
-a{color:var(--phase);text-decoration:none;border-bottom:1px solid rgba(91,52,150,.34)}
-a:hover{border-bottom-color:var(--phase)}
-code,pre,.mono,#log,#line{font-family:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace}
-
-header{padding:2rem 0 1rem;display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap}
-.mark{font-family:'JetBrains Mono',monospace;font-size:1.9rem;font-weight:700;
-      letter-spacing:-.045em;margin:0;line-height:1}
-.mark .p{color:var(--phase);font-weight:400}
-.sub{color:var(--soft);font-style:italic;font-size:1rem}
-header .spacer{flex:1}
-header a.home{font-size:.9rem}
-
-#status{
-  font-size:.82rem;color:var(--soft);padding:.4rem 0 .7rem;
-  font-family:'JetBrains Mono',monospace;min-height:1.6rem;
-}
-#status .bar{display:inline-block;width:9rem;height:.42rem;background:var(--rule);
-  border-radius:2px;vertical-align:middle;margin-left:.5rem;overflow:hidden}
-#status .bar i{display:block;height:100%;width:0;background:var(--phase);transition:width .3s ease}
-
-#term{
-  flex:1;min-height:14rem;
-  background:var(--raised);border:1px solid var(--rule);border-radius:4px;
-  padding:.9rem 1rem;overflow-y:auto;font-size:.82rem;line-height:1.65;
-}
-#log{white-space:pre-wrap;word-break:break-word;margin:0}
-#log .in{color:var(--ink)}
-#log .in .p{color:var(--phase)}
-#log .out{color:var(--soft)}
-#log .err{color:var(--err)}
-
-#entry{display:flex;align-items:baseline;gap:.5rem;margin-top:.15rem}
-#prompt{color:var(--phase);font-family:'JetBrains Mono',monospace;font-size:.82rem;
-        flex:0 0 auto;white-space:pre}
-#line{
-  flex:1;border:none;background:transparent;color:var(--ink);
-  font-size:.82rem;line-height:1.65;padding:0;outline:none;
-}
-#line:disabled{opacity:.4}
-
-.tools{display:flex;flex-wrap:wrap;gap:.45rem;padding:.85rem 0 .3rem}
-.tools button{
-  font-family:Spectral,Georgia,serif;font-size:.86rem;
-  background:var(--raised);color:var(--ink);
-  border:1px solid var(--rule);border-radius:3px;
-  padding:.28rem .7rem;cursor:pointer;
-}
-.tools button:hover:not(:disabled){border-color:var(--phase);color:var(--phase)}
-.tools button:disabled{opacity:.45;cursor:default}
-.tools .gap{flex:1}
-
-footer{padding:.9rem 0 2rem;font-size:.86rem;color:var(--soft)}
-footer kbd{
-  font-family:'JetBrains Mono',monospace;font-size:.78rem;
-  border:1px solid var(--rule);border-radius:3px;padding:0 .3rem;background:var(--raised);
-}
-@media (max-width:640px){
-  body{font-size:1rem}
-  #term,#line,#prompt,#log{font-size:.76rem}
-  .mark{font-size:1.5rem}
-}
+.yawmark-prompt { color:#5B3496; font-weight:400; letter-spacing:-.02em; }
+.repl-subtitle { font-style:italic; margin-top:-.6rem; margin-bottom:2rem; font-size:1.4rem; line-height:1.2; color:var(--text-color); }
+.repl-status { font-size:1rem; color:var(--text-color); margin:1rem 0 .8rem; font-family:'JetBrains Mono',monospace; }
+.repl-status .bar { display:inline-block; width:9rem; height:.42rem; background:var(--border-color); border-radius:2px; vertical-align:middle; margin-left:.5rem; overflow:hidden; }
+.repl-status .bar i { display:block; height:100%; width:0; background:#5B3496; transition:width .3s ease; }
+#term { width:55%; min-height:18rem; background:var(--code-bg); border:1px solid var(--border-color); border-radius:4px; padding:.9rem 1rem; overflow-y:auto; font-family:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace; font-size:.9rem; line-height:1.65; color:var(--code-text); }
+#log { white-space:pre-wrap; word-break:break-word; margin:0; }
+#log .in { color:var(--code-text); } #log .in .p { color:#B49BE8; } #log .out { color:var(--code-text); } #log .err { color:#f28a8a; }
+#entry { display:flex; align-items:baseline; gap:.5rem; margin-top:.15rem; }
+#prompt { color:#B49BE8; font-family:'JetBrains Mono',monospace; font-size:.9rem; flex:0 0 auto; white-space:pre; }
+#line { flex:1; border:none; background:transparent; color:var(--code-text); font-family:'JetBrains Mono',monospace; font-size:.9rem; line-height:1.65; padding:0; outline:none; }
+#line:disabled { opacity:.4; }
+.tools { width:55%; display:flex; flex-wrap:wrap; gap:.45rem; padding:.85rem 0 .3rem; }
+.tools button { font-family:inherit; font-size:1rem; background:var(--sidebar-bg); color:var(--text-color); border:1px solid var(--sidebar-border); border-radius:3px; padding:.28rem .7rem; cursor:pointer; }
+.tools button:hover:not(:disabled) { border-color:#5B3496; color:#5B3496; }
+.tools button:disabled { opacity:.45; cursor:default; } .tools .gap { flex:1; }
+.repl-footer { width:55%; padding:.9rem 0 2rem; font-size:1rem; color:var(--text-color); }
+.repl-footer kbd { font-family:'JetBrains Mono',monospace; font-size:.78rem; border:1px solid var(--border-color); border-radius:3px; padding:0 .3rem; background:var(--sidebar-bg); }
+@media (max-width:1024px) { #term,.tools,.repl-footer { width:90%; } }
+@media (max-width:760px) { #term,.tools,.repl-footer { width:100%; } .yawmark { font-size:clamp(34px,12vw,52px); } }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div id="content">
 
-<header>
-  <h1 class="mark"><span class="p">*&gt;</span> yaw</h1>
-  <span class="sub">a REPL in your browser</span>
-  <span class="spacer"></span>
-  <a class="home" href="index.html">back to the book</a>
-</header>
+<h1 class="yawmark"><span class="yawmark-prompt">*&gt;</span>yaw</h1>
 
-<div id="status">Idle. Press Run, or type below, to start the interpreter.</div>
+<div id="status" class="repl-status">Idle. Press Run, or type below, to start the interpreter.</div>
 
 <div id="term"><div id="log"></div>
   <div id="entry">
@@ -119,7 +62,7 @@ footer kbd{
   <button id="clear">Clear</button>
 </div>
 
-<footer>
+<footer class="repl-footer">
   First run downloads the Python interpreter and libraries (about 25&nbsp;MB);
   it is cached afterwards. <kbd>↑</kbd> and <kbd>↓</kbd> walk history,
   <kbd>Enter</kbd> on a blank continuation line ends a block. Type
