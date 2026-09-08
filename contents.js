@@ -46,7 +46,7 @@ window.YAW_CONTENTS = {
     {
       name: 'Appendices',
       items: [
-        { n: 'A', label: 'Exercises',          href: 'exercises.html', status: 'live' },
+        { n: 'A', label: 'Exercises',          href: 'SIQPII/exercises.html', status: 'live' },
         { n: 'B', label: 'Solutions',                                  status: 'drafting' },
         { n: 'C', label: 'Circuit diagrams',                           status: 'planned' },
         { n: 'D', label: 'Reference programs',                         status: 'planned' }
