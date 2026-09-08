@@ -17,7 +17,7 @@
 }
 .yawmark-prompt { color:#213E69; font-weight:400; letter-spacing:-.02em; }
 .repl-subtitle { font-style:italic; margin-top:-.6rem; margin-bottom:2rem; font-size:1.4rem; line-height:1.2; color:var(--text-color); }
-.repl-status { font-size:1rem; color:var(--text-color); margin:1rem 0 .8rem; font-family:'JetBrains Mono',monospace; }
+.repl-status { font-size:1.2rem; color:var(--text-color); margin:1rem 0 .8rem; font-family:'JetBrains Mono',monospace; }
 .repl-status .bar { display:inline-block; width:9rem; height:.42rem; background:var(--border-color); border-radius:2px; vertical-align:middle; margin-left:.5rem; overflow:hidden; }
 .repl-status .bar i { display:block; height:100%; width:0; background:#213E69; transition:width .3s ease; }
 #term { width:92%; height:25rem; background:var(--code-bg); border:1px solid var(--border-color); border-radius:4px; padding:.9rem 1rem; overflow-y:auto; font-family:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace; font-size:1rem; line-height:1.65; color:var(--code-text); }
@@ -55,7 +55,7 @@
 <body>
 <div id="content">
 
-<h1 class="yawmark"><span class="yawmark-prompt">*&gt;</span>yaw<span class="yawmark-caret"></span></h1>
+<h1 class="yawmark"><span class="yawmark-prompt">*&gt;</span><a href="index.html">yaw</a><span class="yawmark-caret"></span></h1>
 
 <div id="status" class="repl-status">Idle. Press Run to start the
   interpreter.</div>
@@ -69,13 +69,13 @@
 </div>
 
 <div class="tools">
-  <button id="boot">Run</button>
+  <button id="boot"><code>Run</code></button>
 <!--  <button class="ex" data-ex="bell" disabled>Bell state</button>
   <button class="ex" data-ex="grover" disabled>Grover</button>
   <button class="ex" data-ex="gkp" disabled>GKP</button>
   <button class="ex" data-ex="code" disabled>Five-qubit code</button>
   <span class="gap"></span> -->
-  <button id="clear">Clear</button>
+  <button id="clear"><code>Clear</code></button>
 </div>
 
 <!--<p>
