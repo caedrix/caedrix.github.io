@@ -8,6 +8,16 @@
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="David Wakeham" />
+<meta name="description" content="yaw is a quantum programming language which specifies what operators do, not what states are. It reduces code complexity, is interoperable between architectures, and makes error correction first class.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="yaw">
+<meta property="og:title" content="yaw — algebraic quantum programming">
+<meta property="og:description" content="A quantum programming language which specifies what operators do, not what states are. Grover in six lines; try it in the browser.">
+<meta property="og:url" content="https://yawlang.dev/">
+<meta property="og:image" content="https://yawlang.dev/img/card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Grover search in six lines of yaw">
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center; }
@@ -199,7 +209,7 @@ Checking Knill-Laflamme for the five-qubit code:
 <pre class="example">
 $alg  = qudit(2, n=5)
 stabs = [cycle(k, X[0, 3]*Z[1, 2]) for k in range(4)]
-P     = prod([(((@5) I) + S)*0.5 for S in stabs])
+P     = prod([((@5) I + S)*0.5 for S in stabs])
 errs  = [E[k] for k in range(5) for E in (X, Z)]
 def kl(A, B): return scalar(P * A.d * B * P, P)
 all(kl(A, B) is not None for A in errs for B in errs)   # True
