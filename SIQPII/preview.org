@@ -13,8 +13,12 @@ programming. Before we dive into the details, it will be helpful to
 preview what "algebraic quantum programming" means.@@html:<label
 for="sn-1" class="margin-toggle sidenote-number"></label><input
 type="checkbox" id="sn-1" class="margin-toggle"/><span
-class="sidenote">For a considerably lengthier version, we refer
-readers to the prequel paper, <em><a href="https://arxiv.org/abs/2509.04527">The Structure and Interpretation of Quantum Programs I: Foundations</a></em> (2025).</span>@@
+class="sidenote">Suceeding sections will develop the material more
+slowly and with code on hand. For a considerably lengthier theoretical
+treatment, we refer
+readers to the prequel paper, <em><a
+href="https://arxiv.org/abs/2509.04527">The Structure and
+Interpretation of Quantum Programs I: Foundations</a></em> (2025).</span>@@
 Usually, quantum programming occurs at the level of a (typically
 finite-dimensional) Hilbert space $\mathcal{H}$, with basic objects the
 states $|\psi\rangle \in \mathcal{H}$. We manipulate these using linear
