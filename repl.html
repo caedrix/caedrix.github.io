@@ -58,7 +58,7 @@
 <h1 class="yawmark"><span class="yawmark-prompt">*&gt;</span>yaw<span class="yawmark-caret"></span></h1>
 
 <div id="status" class="repl-status">Idle. Press Run to start the
-  interpreter. Press Clear to clear.</div>
+  interpreter.</div>
 
 <div id="term"><div id="log"></div>
   <div id="entry">
@@ -274,7 +274,7 @@ function startWorker() {
     if (m.type === 'status') setStatus(m.text, m.pct);
     else if (m.type === 'ready') {
       ready = true;
-      setStatus('Ready. yaw 0.1.1 — type help for commands.');
+      setStatus('yaw 0.1.1. Type Help for commands, press Clear to clear.');
       lineEl.disabled = false;
       exBtns.forEach(b => b.disabled = false);
       lineEl.focus();
