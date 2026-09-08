@@ -7,6 +7,7 @@ full context management, braiding, and advanced features.
 
 from yaw_prototype import *
 from sympy import sqrt
+import re
 import sys
 import traceback
 import os
@@ -274,62 +275,91 @@ class YawREPL:
 
         return line
     
-    def _preprocess_tensor_powers(self, line):
-        """Replace (@n) expr with explicit tensor product chain.
-        
-        Transforms:
-            (@3) X → X @ X @ X
-            (@5) char(Z, 0) → char(Z, 0) @ char(Z, 0) @ char(Z, 0) @ char(Z, 0) @ char(Z, 0)
-            init = (@3) X → init = X @ X @ X
-            
-        This provides convenient shorthand for tensor powers.
-        Creates explicit @ chains for consistency across states and operators.
+    def _read_operand(self, text, i):
+        """Read one balanced operand starting at index i.
+
+        Returns (operand_text, end_index), or (None, i) if there isn't one.
+        An operand is either a parenthesised group, or a name followed by any
+        chain of calls, subscripts and attribute accesses -- so char(Z, 0),
+        X[0, 3] and alg.X all read as single units.
         """
-        import re
-        
-        # Pattern: (@n) followed by rest of line
-        match = re.search(r'\(@(\d+)\)\s+(.+)', line)
-        
-        if match:
-            n = int(match.group(1))
-            rest = match.group(2).strip()
-            
-            # Check if there's an assignment before (@n)
-            assignment_match = re.match(r'(.+?=)\s*\(@\d+\)\s+(.+)', line)
-            if assignment_match:
-                # Handle: var = (@n) expr
-                lhs = assignment_match.group(1)
-                expr = assignment_match.group(2)
-                # Build explicit chain: expr @ expr @ expr @ ...
-                tensor_chain = ' @ '.join([f'({expr})'] * n)
-                return f"{lhs} {tensor_chain}"
+        n = len(text)
+        while i < n and text[i].isspace():
+            i += 1
+        if i >= n:
+            return None, i
+
+        start = i
+        if text[i] == '(':
+            depth = 0
+            while i < n:
+                if text[i] == '(':
+                    depth += 1
+                elif text[i] == ')':
+                    depth -= 1
+                    if depth == 0:
+                        return text[start:i + 1], i + 1
+                i += 1
+            return None, start                      # unbalanced; give up
+
+        m = re.match(r'[A-Za-z_]\w*', text[i:])
+        if not m:
+            return None, start
+        i += m.end()
+
+        # trailing call / subscript / attribute chains
+        while i < n:
+            if text[i] in '([':
+                opener, closer = text[i], ')' if text[i] == '(' else ']'
+                depth = 0
+                j = i
+                while j < n:
+                    if text[j] == opener:
+                        depth += 1
+                    elif text[j] == closer:
+                        depth -= 1
+                        if depth == 0:
+                            j += 1
+                            break
+                    j += 1
+                else:
+                    break
+                i = j
+            elif text[i] == '.':
+                m2 = re.match(r'\.[A-Za-z_]\w*', text[i:])
+                if not m2:
+                    break
+                i += m2.end()
             else:
-                # Handle: (@n) expr (no assignment)
-                # Build explicit chain: expr @ expr @ expr @ ...
-                tensor_chain = ' @ '.join([f'({rest})'] * n)
-                return tensor_chain
-        
-        return line
-    
-        def replace_tensor_power(match):
-            n = match.group(1)
-            # Return empty string - we'll append ** n at the end
-            return ''
-        
-        # Check if line contains (@n) pattern
-        if re.search(r'\(@\d+\)', line):
-            # Extract the number
-            match = re.search(r'\(@(\d+)\)', line)
-            if match:
-                n = match.group(1)
-                # Remove the (@n) prefix and add ** n suffix
-                line = re.sub(r'\(@\d+\)\s*', '', line)
-                # Add ** n to the expression
-                # Handle case where line already has other operations
-                line = f'({line}) ** {n}'
-        
-        return line
-    
+                break
+        return text[start:i], i
+
+    def _preprocess_tensor_powers(self, line):
+        """Replace (@n) expr with an explicit tensor chain.
+
+        Transforms:
+            (@3) X            -> ((X) @ (X) @ (X))
+            (@5) char(Z, 0)   -> ((char(Z, 0)) @ ... )
+            init = (@3) X     -> init = ((X) @ (X) @ (X))
+
+        Only the operand immediately after (@n) is expanded, read as a
+        balanced expression. The previous version consumed the rest of the
+        line, which silently corrupted anything with (@n) nested inside a
+        larger expression -- for instance inside a comprehension.
+        """
+        pattern = re.compile(r'\(@(\d+)\)')
+
+        while True:
+            m = pattern.search(line)
+            if not m:
+                return line
+            count = int(m.group(1))
+            operand, end = self._read_operand(line, m.end())
+            if operand is None:
+                return line                          # nothing to expand
+            chain = ' @ '.join([f'({operand})'] * count)
+            line = line[:m.start()] + '(' + chain + ')' + line[end:]
+
     def is_continuation(self, line):
 
         """Check if line is a continuation of current statement."""
