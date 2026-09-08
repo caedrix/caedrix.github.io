@@ -857,6 +857,7 @@ pre.py {
     background: var(--sidebar-bg);
     border: 1px solid var(--sidebar-border);
     border-radius: 4px;
+    opacity: 0%;
     padding: 3px 3px;
     cursor: pointer;
     font-family: et-book;
@@ -959,7 +960,7 @@ pre.py {
     text-decoration: none;
     border-bottom: none;
 }
-.sidebar .book-title:hover { color: var(--accent, #5B3496); }
+.sidebar .book-title:hover { color: var(--accent, #213E69); }
 
 /* ---------------------------------------------------------- part headings */
 
@@ -1013,7 +1014,7 @@ pre.py {
 .sidebar .book-item > a:hover { background: var(--sidebar-hover); }
 
 .sidebar .book-item.active > a {
-    border-left-color: var(--accent, #5B3496);
+    border-left-color: var(--accent, #213E69);
     background: var(--sidebar-active);
     font-weight: 600;
 }
