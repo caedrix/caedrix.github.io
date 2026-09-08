@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>2.2. Search </title>
+<!-- 2026-09-08 Tue 07:32 -->
+<meta  charset="utf-8">
+<meta  name="generator" content="Org-mode">
+<meta  name="author" content="David Wakeham">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+<script src="contents.js"></script>
+<script type="text/javascript" src="sidebar_darkmode.js"></script>
+<style>.smallcaps{font-variant:small-caps;letter-spacing:.04em}</style>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],tags:'ams',processEscapes:true}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+<script src="contents.js"></script>
+<script type="text/javascript" src="sidebar_darkmode.js"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>pre { padding-top: 25px !important; }</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/javascript" src="http://orgmode.org/mathjax/MathJax.js"></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
+
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">2.2. Search </h1>
+<p>
+Our next algorithmic primitive involves <i>unstructured search</i>. The basic
+idea is that we have a database \(\mathcal{D}\) of \(d\) entries
+\(x_i \in \mathcal{D}\), and a single marked item \(x_m\) we are searching
+for inside that database. &amp;ldquo;Unstructured&amp;rdquo; means that there is
+no binary search tree, categories, or other internal scaffolding that a
+search could use; we can only check an entry against an oracle function
+\(f: \mathcal{D} \to \{0, 1\}\) that returns \(1\) if \(i=m\) and otherwise
+returns \(0\), i.e. \(f(x_i) = \delta_{im}\). This is analogous to trying
+entries in a combination lock until the lock opens.
+</p>
+
+<p>
+With a quantum computer, we can promote the database to an algebra
+\(\mathcal{A}_\mathcal{D}\), with a projector \(\Pi_m=\Pi_m^{(Z)}\) onto the
+marked item; this answers &amp;ldquo;yes&amp;rdquo; or &amp;ldquo;no&amp;rdquo; when
+presented with a state \(\pi^{(Z)}_i\) representing item \(x_i\), and thus
+encodes \(f\):
+\[
+  \pi^{(Z)}_i(\Pi_m) = \delta_{im} = f(x_i).
+\]
+In <code>yaw</code>, this takes the form:
+</p>
+
+<pre class="example">
+*&gt; def f(i):
+...    return proj(Z, i) | char(Z, m)
+</pre>
+
+<p>
+Quantumly, our best bet is to try everything at once. This is most
+naturally represented by the state \(\pi_+ = \pi^{(X)}_0\), which has a
+corresponding dual projector \(\Pi_+=\Pi_0^{(X)}\). We will focus on the
+subalgebra
+\[
+  \mathcal{A}_{\Pi} = \langle \Pi_m, \Pi_+\rangle \subseteq \mathcal{A}_d
+\]
+generated by the secret answer \(\Pi_m\) and the parallel guess \(\Pi_+\),
+since these are the two distinguished operators we have at hand. The
+goal will be to construct an operator that maps the initial guess
+\(\pi_+\) to the correct answer \(\pi_m = \pi^{(Z)}_m\). A simple ansatz is
+time evolution by some Hamiltonian \(H\) contained in the subalgebra:
+\[
+  e^{-iHt} \triangleleft \pi_+ \overset{?}{=} \pi_m, \quad H \in
+  \mathcal{A}_{\Pi}.
+\]
+Since it maps \(\pi_+\) to \(\pi_m\), we expect \(H\) to involve both
+projectors, with the simplest choice being
+\[
+  \label{eq:20}
+  H = \Pi_m + \Pi_+.
+\]
+We implement this as
+</p>
+
+<pre class="example">
+*&gt; H = proj(Z, m) + proj(X, 0)
+</pre>
+
+<p>
+For a very small amount of time evolution \(t \ll |H|\), this evolution
+takes the form \(e^{-iHt} \approx 1 - i t (\Pi_m + \Pi_+)\), and hence
+\[
+  e^{-iHt} \triangleleft \pi_+ \approx (1 - t^2)\pi_+ + t^2 \Pi_m
+  \triangleleft \pi_+ + \mathcal{O}(it),
+\]
+where the imaginary terms \(\mathcal{O}(it)\) involve left and right
+products that keep the full result coherent.<label for="mn-1" class="margin-toggle">&#8853;</label><input type="checkbox" id="mn-1" class="margin-toggle"/><span class="marginnote"><img src="./img/clock.png" alt="Time evolution gradually exchanges one state for the other" style="width:100%"/><br/><em>Time evolution gradually exchanges one state for the other.</em></span>
+This is decreasing the amount of <i>pure</i> \(\pi_+\) in the state
+by \(t^2\), filtering out \(\pi_m\) from \(\pi_+\) by applying the projector
+\(\Pi_m\), and replacing to the tune of \(t^2\). In words, it appears to be
+turning \(\pi_+\) into \(\pi_m\) at a quadratic rate in time! Using
+pseudocode for Hamiltonian evolution, our algorithm is then
+</p>
+
+<pre class="example">
+*&gt; def guess(t):
+...    prop = exp(-1j*t*H)
+...    final = prop « char(X, 0)
+...    _, index = measure(Z, final)()
+...    return index
+</pre>
+
+<p>
+Assuming this Hamiltonian works (you can show this in Exercise 5.1), how
+quickly will it evolve \(\pi_+\) to \(\pi_m\)? The shortest time to evolve
+between states \(\pi_\text{init}\) and \(\pi_\text{final}\) in a two-level
+system with Hamiltonian \(H\) is governed by the <i>Rabi uncertainty
+relation</i> (Exercise 5.2)
+\[
+  \label{eq:rabi}\tag{2.2.1}
+  t^* \geq \frac{\pi}{2\sqrt{\kappa}}, \quad \kappa = [H \triangleleft
+  \pi_\text{init}] \left(\Pi_\text{final}\right).
+\]
+We can think of \(\kappa\) as a <i>transition amplitude</i> between
+\(\pi_\text{init}\) and \(\pi_\text{final}\). In our case,
+\[
+  \kappa = \pi_+ \left( (\Pi_m + \Pi_+)\Pi_m(\Pi_m + \Pi_+)\right) = 4
+  \pi_+ \left(\Pi_m\right) = \frac{4}{d},
+\]
+since (by symmetry) any \(Z\) projector should have the same expectation
+\(\pi_+ (\Pi^{(Z)}_i) = C\), and the \(Z\) projectors add to unity:
+\[
+  1 = \pi_+ (I) = \sum_{i=0}^{d-1}\pi_+ (\Pi^{(Z)}_i) = dC \quad
+  \Longrightarrow \quad C = \frac{1}{d}.
+\]
+Thus, from \(\eqref{eq:rabi}\), we find an optimal evolution time<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">This is in agreement with the results of Farhi and Gutmann. Reference to be added.</span>
+\[
+  \label{eq:22}
+  t^* \geq \frac{\pi \sqrt{d}}{4}.
+\]
+Incorporating the dimension and marked item<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">Strictly, we should replace this with dependence on the projector \(\Pi_+\), but it complicates dependencies.</span>
+as parameters, we obtain a pseudocode search algorithm
+</p>
+
+<pre class="example">
+*&gt; def hamiltonianSearch(d, marked):
+...    H = proj(Z, marked) + proj(X, 0)
+...    t = pi*sqrt(d)/4
+...    prop = exp(-1j*t*H)
+...    final = prop « char(X, 0)
+...    return measure(Z, final)()[1]
+</pre>
+
+<p>
+Evolution with this Hamiltonian is messy. We can <i>approximate</i> it using
+the result of Trotter and Suzuki,<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote">Add reference. See Exercise 5.3.</span>
+who independently derived
+\[
+  e^{-it(A + B)} = \lim_{n\to\infty}
+  \left[e^{-itA/n}e^{-itB/n}\right]^n,
+\]
+with an error given by<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote">Reference Childs et al.</span>
+\[
+  \left\Vert e^{-it(A + B)} -
+    \left[e^{-itA/n}e^{-itB/n}\right]^n\right\Vert \leq
+  \frac{t^2}{2n} \Vert [A, B ]\Vert.
+\]
+In our case, \(A = \Pi_+\) and \(B = \Pi_m\). The exponential simplifies for
+projectors, since
+\[\begin{align*}  e^{-it \Pi/n} & = \sum_{k\geq 0} \frac{(-it/n)^k
+\Pi^k}{k!} \\ & = I   + \Pi\sum_{k\geq 1} \frac{(-it/n)^k }{k!} = I +
+(e^{-it/n} - 1) \Pi. \end{align*}\]
+In <code>yaw</code>, this approximation scheme becomes (real code!)
+</p>
+
+<pre class="example">
+*&gt; def trotter(projList, time, steps):
+...    factors = [I + (exp(-1j*time/steps)-1)*proj
+...                           for proj in projList]
+...    return prod(factors)**steps
+</pre>
+
+<p>
+This gives a family of search algorithms, depending on the total number
+of steps, or equivalently, the step size \(\delta = t/n\), in which we
+evolve to the final state
+\[\begin{align*} \pi_\text{final} & = [R_\delta(\Pi_m)
+R_\delta(\Pi_+)]^n                      \triangleleft \pi_+
+\\   R_\delta(\Pi) & = e^{-i\delta \Pi} = I + (e^{-i\delta} - 1 )\Pi, \end{align*}\]
+and measure in the \(Z\) basis to make our guess \(m^*\),
+\(Z \overset{\pi_\text{final}}{\longleftarrow} m^*\).
+Continuing to assume that the algorithm saturates the Rabi bound, we get
+a compact algorithm for Trotterized search:
+</p>
+
+<pre class="example">
+*&gt; def trotterSearch(d, marked, time, steps):
+...    PiList = [proj(Z, marked), proj(X, 0)]
+...    prop = trotter(PiList, time, steps)
+...    final = prop « char(X, 0)
+...    return measure(Z, final)()[1]
+</pre>
+
+<p>
+For \(n\) steps and \(t = \pi\sqrt{d}/4\), the error is bounded by
+\[
+  \frac{t^2}{2n} \Vert [\Pi_+, \Pi_m]\Vert =
+  \frac{\pi^2d}{32n}\Vert [\Pi_+, \Pi_m]\Vert \leq
+  \frac{\pi^2\sqrt{d}}{32n},
+\]
+where \(\Vert \cdot \Vert\) indicates the largest (absolute) eigenvalue.<label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote">See exercises.</span>
+This means that when the number of steps \(n \sim \sqrt{d}\), the error is
+\(\mathcal{O}(1)\):
+\[
+  \frac{\pi^2\sqrt{d}}{32n} \sim \frac{\pi^2}{32} \approx 0.3.
+\]
+Our Trotterization formula is no longer reliable here. One can show
+(Exercise 5.5) that in this regime there is an additional \(\pi\) in the
+relation between steps and evolution time,<label for="sn-6" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-6" class="margin-toggle"/><span class="sidenote">This is analogous to the way that moving round a circle turns a circumferential step of length \(2\pi r\) into a diameter span of length \(2r\).</span>
+so that
+\[
+  e^{-it(A + B)} \approx \left[ R_{\pi\delta}(A)
+    R_{\pi\delta}(B)\right]^n.
+\]
+and hence for \(\delta = 1\) or \(n = \pi\sqrt{d}/4\), we have steps
+\[
+  R_\pi(\Pi) = I + (e^{-i\pi} - 1) \Pi = I - 2\Pi,
+\]
+with \(R_\pi(\Pi_m)\) the <i>oracle reflection</i> and \(R_\pi(\Pi_+)\) the
+<i>diffusion operator</i>. Together, they give the <i>Grover operator</i>
+\(G = R_\pi(\Pi_m) R_\pi(\Pi_+)\), with
+\[
+  \label{eq:11}
+  \pi_\text{final} = G^n \triangleleft \pi_+, \quad Z
+  \overset{\pi_\text{final}}{\longleftarrow} m^*.
+\]
+This is the famous discrete search algorithm of Lov Grover.<label for="sn-7" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-7" class="margin-toggle"/><span class="sidenote">Add references.</span>
+We can implement a Hamiltonian version of this algorithm, accounting for
+the additional factor of \(\pi\):
+</p>
+
+<pre class="example">
+*&gt; def groverTrotter(d, marked):
+...    steps = int(pi*sqrt(d)/4) + 1
+...    return trotterSearch(d, marked, pi*steps, steps)
+</pre>
+
+<p>
+or the textbook version (with some minor refinements) as follows:
+</p>
+
+<pre class="example">
+*&gt; def grover(d, marked):
+...    $alg = qudit(d)
+...    def reflect(P): return I - 2*P
+...    G = reflect(proj(Z, marked)) * (-reflect(proj(X, 0)))
+...    r = int((pi/4)*sqrt(d)) + 1  # take the ceiling
+...    return measure(Z, (G**r) « char(X, 0))()[1]
+</pre>
+
+<p>
+There is a minus sign in the operator \(G = -R_\pi(\Pi_m) R_\pi(\Pi_+)\),
+irrelevant to the final measurement, and we use the ceiling
+\(n = \lceil \pi\sqrt{d}/4\rceil\) for the number of steps. Let's check
+that this is accurate:
+</p>
+
+<pre class="example">
+*&gt; d, marked, trials = 5, 3, 100
+*&gt; sum(grover(d, marked) == marked for _ in range(trials))/trials
+0.96
+</pre>
+
+<p>
+You can play around with this and see that the hit rate improves with
+the size of the database!
+</p>
+
+<p>
+What is the significance of this algorithm? Unlike teleportation, which
+involves a new way of transmitting information, quantum search is a new
+way of performing a classical task. For a database of \(d\) items, Grover
+or Trotterized Hamiltonian evolution take \(\mathcal{O}(\sqrt{d})\) steps<label for="sn-8" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-8" class="margin-toggle"/><span class="sidenote">In fact \(\Theta(\sqrt{d})\) steps. Rabi establishes a lower bound, and the exercises show the upper bound.</span>
+to find the marked needle in the unstructured haystack, while the best a
+classical computer can do is \(\mathcal{O}(d)\), since it must test every
+possibility until it finds the right one. This represents a <i>quadratic
+speedup</i> for search, and is a prime example of what is called <i>quantum
+computational advantage</i>.
+</p>
+</div>
+</body>
+</html>

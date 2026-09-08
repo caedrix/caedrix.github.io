@@ -11,6 +11,7 @@ This module provides a functional approach to quantum computing based on:
 
 from sympy.physics.quantum import Operator, Dagger
 from sympy import sqrt, expand, Mul, Add, Pow
+from sympy import exp as _sympy_exp
 from sympy.core.numbers import Number as SympyNumber
 from typing import List, Tuple
 from functools import reduce
@@ -1431,6 +1432,8 @@ class YawOperator:
             return TensorSum([self, other], _skip_normalize=True)
         elif isinstance(other, TensorSum):
             return TensorSum([self] + other.terms, _skip_normalize=True)
+        elif _is_numerical_operator(other):
+            return NotImplemented        # let the matrix side handle it
         else:
             return YawOperator(self._expr + other, self.algebra)
 
@@ -8040,6 +8043,29 @@ def embed(op, i, tensorAlg):
     return tensor(*factors)
 
 
+def op_exp(x):
+    """Exponential that also works on matrix-backed operators.
+
+    Falls through to SymPy's exp for everything symbolic, so it can be bound
+    to the name `exp` without changing ordinary use. For a numerical operator
+    it computes the true matrix exponential by diagonalisation, which is what
+    Hamiltonian evolution such as exp(-1j*t*H) needs.
+    """
+    if isinstance(x, (_NumericalOperator, _NumericalProjector)):
+        M = x._matrix
+        if np.allclose(M, M.conj().T):
+            vals, vecs = np.linalg.eigh(M)
+            E = vecs @ np.diag(np.exp(vals)) @ vecs.conj().T
+        else:
+            vals, vecs = np.linalg.eig(M)
+            E = vecs @ np.diag(np.exp(vals)) @ np.linalg.inv(vecs)
+        result = _NumericalOperator(x.backend)
+        result._matrix = E
+        result.algebra = getattr(x, 'algebra', None)
+        return result
+    return _sympy_exp(x)
+
+
 def cycle(k, op):
     """Cyclically permute the tensor factors of op by k positions.
 
@@ -8343,7 +8369,54 @@ class _NumericalEigenState:
 
 
 class _NumericalProjector:
-    """Numerical projector wrapper that mimics Projector interface."""
+    """Numerical projector wrapper that mimics Projector interface.
+
+    Arithmetic mirrors _NumericalOperator: projectors add and subtract with
+    each other, with scalars, and with symbolic YawOperators, so that
+    expressions like proj(Z, m) + proj(X, 0) or I - 2*proj(Z, k) work.
+    """
+
+    def _coerce(self, other):
+        """Convert a compatible operand to a matrix, or return None."""
+        if isinstance(other, (_NumericalOperator, _NumericalProjector)):
+            return other._matrix
+        if isinstance(other, (int, float, complex)):
+            return other * np.eye(self.backend.d, dtype=complex)
+        if hasattr(other, 'is_number') and other.is_number:
+            return complex(other) * np.eye(self.backend.d, dtype=complex)
+        if type(other).__name__ == 'YawOperator':
+            try:
+                return _yaw_to_numerical(other, self.backend)._matrix
+            except Exception:
+                return None
+        return None
+
+    def _wrap(self, matrix):
+        result = _NumericalOperator(self.backend)
+        result._matrix = matrix
+        result.algebra = getattr(self, 'algebra', None)
+        return result
+
+    def __add__(self, other):
+        m = self._coerce(other)
+        if m is None:
+            raise NotImplementedError(f"Cannot add with {type(other).__name__}")
+        return self._wrap(self._matrix + m)
+
+    def __sub__(self, other):
+        m = self._coerce(other)
+        if m is None:
+            raise NotImplementedError(f"Cannot subtract with {type(other).__name__}")
+        return self._wrap(self._matrix - m)
+
+    def __radd__(self, other):
+        m = self._coerce(other)
+        return NotImplemented if m is None else self._wrap(m + self._matrix)
+
+    def __rsub__(self, other):
+        m = self._coerce(other)
+        return NotImplemented if m is None else self._wrap(m - self._matrix)
+
     
     def __init__(self, observable, index, backend):
         self.observable = observable

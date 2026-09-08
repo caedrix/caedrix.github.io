@@ -962,6 +962,7 @@ class YawREPL:
             Encoding, rep, comm, acomm, gnsVec, gnsMat, spec, minimal_poly,
             VecState, ite, embed, cycle, prod, scalar,
             weyl, WeylState, weylState, five_qubit_code, StabilizerCode,
+            op_exp,
             MixedState, mixed,
             is_projector, is_unitary, is_hermitian  # Operator property checks
         )
@@ -987,7 +988,7 @@ class YawREPL:
         # SymPy imports
         from sympy import sqrt, exp, pi, I as sympy_I, symbols, Symbol
         namespace['sqrt'] = sqrt
-        namespace['exp'] = exp
+        namespace['exp'] = op_exp   # matrix-aware; falls back to sympy
         namespace['pi'] = pi
         namespace['symbols'] = symbols
         namespace['Symbol'] = Symbol
@@ -2151,7 +2152,7 @@ class YawREPL:
       expr ! pow(3), herm         # Just relations
 
       Examples:
-        A**3 ! pow(3)               # Evaluate A³ with pow(3) relation
+        A**3 ! pow(3)              # Evaluate AÂ³ with pow(3) relation
         X + Y ! X = 2, Y = 3        # Evaluate with temporary X=2, Y=3
 
     OPERATORS & STATES:
@@ -2307,7 +2308,10 @@ class YawREPL:
 
       # QFT
       W = qft(X, Z)
-      W >> Z                           # X
+      W >> Z                           # Should give X
+
+      # Error correction
+      TODO!
 ────────────────────────────────────────────────────────────
     """
         return help_text.strip()
