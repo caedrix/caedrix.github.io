@@ -960,7 +960,7 @@ pre.py {
     text-decoration: none;
     border-bottom: none;
 }
-.sidebar .book-title:hover { color: var(--accent, #213E69); }
+.sidebar .book-title:hover { color: var(--accent, #8c8c8c); }
 
 /* ---------------------------------------------------------- part headings */
 
