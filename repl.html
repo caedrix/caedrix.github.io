@@ -20,14 +20,14 @@
 .repl-status { font-size:1rem; color:var(--text-color); margin:1rem 0 .8rem; font-family:'JetBrains Mono',monospace; }
 .repl-status .bar { display:inline-block; width:9rem; height:.42rem; background:var(--border-color); border-radius:2px; vertical-align:middle; margin-left:.5rem; overflow:hidden; }
 .repl-status .bar i { display:block; height:100%; width:0; background:#5B3496; transition:width .3s ease; }
-#term { width:55%; min-height:18rem; background:var(--code-bg); border:1px solid var(--border-color); border-radius:4px; padding:.9rem 1rem; overflow-y:auto; font-family:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace; font-size:.9rem; line-height:1.65; color:var(--code-text); }
+#term { width:92%; min-height:18rem; background:var(--code-bg); border:1px solid var(--border-color); border-radius:4px; padding:.9rem 1rem; overflow-y:auto; font-family:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace; font-size:.9rem; line-height:1.65; color:var(--code-text); }
 #log { white-space:pre-wrap; word-break:break-word; margin:0; }
 #log .in { color:var(--code-text); } #log .in .p { color:#B49BE8; } #log .out { color:var(--code-text); } #log .err { color:#f28a8a; }
 #entry { display:flex; align-items:baseline; gap:.5rem; margin-top:.15rem; }
 #prompt { color:#B49BE8; font-family:'JetBrains Mono',monospace; font-size:.9rem; flex:0 0 auto; white-space:pre; }
 #line { flex:1; border:none; background:transparent; color:var(--code-text); font-family:'JetBrains Mono',monospace; font-size:.9rem; line-height:1.65; padding:0; outline:none; }
 #line:disabled { opacity:.4; }
-.tools { width:55%; display:flex; flex-wrap:wrap; gap:.45rem; padding:.85rem 0 .3rem; }
+.tools { width:96%; display:flex; flex-wrap:wrap; gap:.45rem; padding:.85rem 0 .3rem; }
 .tools button { font-family:inherit; font-size:1rem; background:var(--sidebar-bg); color:var(--text-color); border:1px solid var(--sidebar-border); border-radius:3px; padding:.28rem .7rem; cursor:pointer; }
 .tools button:hover:not(:disabled) { border-color:#5B3496; color:#5B3496; }
 .tools button:disabled { opacity:.45; cursor:default; } .tools .gap { flex:1; }
@@ -62,13 +62,13 @@
   <button id="clear">Clear</button>
 </div>
 
-<footer class="repl-footer">
-  First run downloads the Python interpreter and libraries (about 25&nbsp;MB);
+<p>
+  First run downloads the <code>Python</code> interpreter and libraries (about 25&nbsp;MB);
   it is cached afterwards. <kbd>↑</kbd> and <kbd>↓</kbd> walk history,
   <kbd>Enter</kbd> on a blank continuation line ends a block. Type
   <code>help</code> for commands. Use <code>&gt;&gt;</code> and
   <code>&lt;&lt;</code> in place of <code>»</code> and <code>«</code>.
-</footer>
+</p>
 
 </div>
 
