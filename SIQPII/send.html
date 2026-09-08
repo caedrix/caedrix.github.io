@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>2.1. Send </title>
+<!-- 2026-09-07 Mon 23:22 -->
+<meta  charset="utf-8">
+<meta  name="generator" content="Org-mode">
+<meta  name="author" content="David Wakeham">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+<script src="contents.js"></script>
+<script type="text/javascript" src="sidebar_darkmode.js"></script>
+<style>.smallcaps{font-variant:small-caps;letter-spacing:.04em}</style>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],tags:'ams',processEscapes:true}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+<script src="contents.js"></script>
+<script type="text/javascript" src="sidebar_darkmode.js"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>pre { padding-top: 25px !important; }</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/javascript" src="http://orgmode.org/mathjax/MathJax.js"></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
+
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">2.1. Send </h1>
+<p>
+Our first real algorithm involves two parties, conventionally called
+<span class="smallcaps">Alice</span> and <span class="smallcaps">Bob</span>, who wish to exchange a quantum state
+at a distance.<label for="mn-1" class="margin-toggle">&#8853;</label><input type="checkbox" id="mn-1" class="margin-toggle"/><span class="marginnote"><img src="./img/letter.png" alt="A letter from Alice" style="width:95%"/><br/><em>A letter from Alice. (Pun intended.)</em></span>
+We assume this is a pure state of a qudit,
+\(\psi = U \triangleleft \pi^{(Z)}_0\) for some unitary \(U\). We treat <code>U</code>
+and <code>d</code> as free parameters for now:
+</p>
+
+<pre class="example">
+*&gt; $alg = qudit(d)
+*&gt; psi = U « char(Z, 0)
+</pre>
+
+<p>
+To prepare the EPR state on a qudit, we follow the general recipe
+\[
+  \pi^{(\text{EPR})} = \text{CNOT}_d \triangleleft (\pi^{(X)}_0\otimes
+  \pi^{(Z)}_0),
+\]
+outlined in Exercise 3.2:
+</p>
+
+<pre class="example">
+*&gt; CNOT = sum(proj(Z,k) @ X**k for k in range(d))
+*&gt; EPR = CNOT « char(X, 0) @ char(Z, 0)
+</pre>
+
+<p>
+We suppose that Alice holds the state \(\psi\), and shares the EPR state
+with Bob, so the total initial state is
+</p>
+
+<pre class="example">
+*&gt; init = psi @ EPR
+</pre>
+
+<p>
+In order to transmit the state, we need to use a remarkable property of
+the EPR state \(\pi^{(\text{EPR})}\) and its dual projector
+\(\Pi^{(\text{EPR})}\) (see Exercise 4.2). For any operator
+\(M \in \mathcal{A}_d\),
+\[\begin{align}\Pi^{(\text{EPR})} \triangleright (M \otimes I) & =
+    \Pi^{(\text{EPR})} \triangleright (I \otimes M^\top)
+    \label{eq:mirror1} \\ (M \otimes I) \triangleleft
+\pi^{(\text{EPR})} & =     (I \otimes M^\top) \triangleleft
+\pi^{(\text{EPR})}.     \label{eq:mirror2} \end{align}
+\]
+In words, we can apply \(M\) to one end, or its transpose \(M^\top\) to the
+other. We won't define the transpose,<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">If you are really curious, define \(Z^\top = Z\), \(X^\top = X^*\), and \((AB)^\top = B^\top A^\top\).</span>
+since all we need is that it is <i>involutive</i>,
+\(M^{\top\top} = M\). The goal will be to use properties
+\(\eqref{eq:mirror1}\) and \(\eqref{eq:mirror2}\) on \(U\), but that requires
+an entangled <i>measurement</i> on Alice's system. The simplest choice is the
+<i>Bell basis</i>
+\[
+  \label{eq:14}
+  \Pi^{(\text{EPR})}_{ab} = (W_{ab}^* \otimes I) \triangleright
+  \Pi^{(\text{EPR})},
+\]
+where \(W_{ab} = X^a Z^b\) is the <i>Weyl operator basis</i> of \(\mathcal{A}_d\)
+and
+\[
+  \Pi^{(\text{EPR})}=\text{CNOT}_d^* \triangleright (\Pi^{(X)}_0
+  \otimes \Pi^{(Z)}_0)
+\]
+is the EPR projector dual to the EPR state \(\pi^{(\text{EPR})}\). In
+<code>yaw</code>, we implement the set \(\Pi^{(\text{EPR})}_{ab}\) as a list:
+</p>
+
+<pre class="example">
+*&gt; Pi = CNOT.d » proj(X, 0) @ proj(Z, 0)
+*&gt; bell = [((X**a * Z**b @ I).d » Pi) @ I
+...             for a in range(d) for b in range(d)]
+</pre>
+
+<p>
+Next, we measure in this basis, with post-measurement state <code>post</code> and
+measurement outcome <code>index</code>:
+</p>
+
+<pre class="example">
+*&gt; post, index = stMeasure(bell, init)()
+</pre>
+
+<p>
+What does Alice learn from the value of <code>index</code>? If Alice measures
+\(a, b\), she applies the projector \(\Pi^{(\text{EPR})}_{ab}\) to her two
+qudits. The end result is the entangled state \(\pi^{(\text{EPR})}_{ab}\)
+on her two qudits and a disentangled state on Bob's.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">See the exercises for further discussion of this disentangling property of Bell measurements.</span>
+When \(U = I\) and \(a, b = 0\), the resulting post-measurement state is
+\(\pi^{(\text{EPR})} \otimes \pi^{(Z)}_0\) as you can show in the
+exercises.
+</p>
+
+<p>
+What about nontrivial \(U\)? The only difference between \(U = I\) and
+general \(U\) is a factor of \(U \otimes I\) on Alice's qudits, and by
+\(\eqref{eq:mirror1}\),
+\[
+  \Pi^{(\text{EPR})}_{ab} \triangleright (U \otimes I)
+     = \Pi^{(\text{EPR})} \triangleright (W_{ab}^*U \otimes I) 
+     = \Pi^{(\text{EPR})} \triangleright \big(I \otimes
+        (W_{ab}^*U)^\top\big).
+\]
+In effect, we have transferred \(U\) (with correction) from Alice's first
+qudit to the second. Now we invoke \(\eqref{eq:mirror2}\):
+\[
+  \label{eq:17}
+  \big((W_{ab}^*U)^\top \otimes I \big) \triangleleft
+  \pi^{(\text{EPR})} = \big(I \otimes W_{ab}^*U \big) \triangleleft
+  \pi^{(\text{EPR})},
+\]
+using the fact \(M^{\top\top} = M\). Repeating the same disentangling
+measurement, we learn that the total state is
+\[
+  \pi^{(\text{EPR})}_{ab} \otimes
+  (W_{ab}^*U\triangleleft\pi^{(Z)}_0).
+\]
+Thus, if Bob applies \(W_{ab} = X^a Z^b\) to his qudit, he has \(\psi\):
+</p>
+
+<pre class="example">
+*&gt; a, b = index // d, index % d
+*&gt; final = (I @ I @ (X**a * Z**b)) « post
+</pre>
+
+<p>
+Here, <code>final</code> and <code>init</code> differ only in the location of \(\psi\).
+</p>
+
+<p>
+A cute way to check that this is indeed the state is to
+<i>undo</i>; \(U\) in Bob's state <code>final</code>, i.e. apply
+\(I \otimes I \otimes U^*\), to nominally obtain \(\pi^{(Z)}_0\) on Bob's
+system. Taking the expectation of \(I \otimes I \otimes Z\) then returns
+unity just in case we genuinely have the state \(\pi^{(Z)}_0\):<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote">A state with any variance in \(Z\) must return an expectation with absolute value strictly less than \(1\).</span>
+</p>
+
+<pre class="example">
+*&gt; undo = (I @ I @ U.d) « final
+*&gt; I @ I @ Z | undo
+1
+</pre>
+
+<p>
+We collect the full protocol as a function of dimension and
+unitary:<label for="mn-2"
+class="margin-toggle">&#8853;</label><input type="checkbox" id="mn-2"
+class="margin-toggle"/><span class="marginnote"><img align="center" src="./img/teleport.svg" alt="The teleportation protocol" style="width:55%"/><br/><em>1. A holds \(U|0\rangle\); AB share an EPR pair.<br/>2. A measures in the Bell basis.<br/>3. The correction \(W_{ab}^*\) and \(U\) are mirrored.<br/>4. A has a Bell state and B has \(W_{ab}^*U|0\rangle\).</em></span>
+</p>
+
+<pre class="example">
+*&gt; def teleport(d, U):
+...   $alg = qudit(d)
+...   CNOT = sum(proj(Z,k) @ X**k for k in range(d))
+...   EPR = CNOT « char(X, 0) @ char(Z, 0)
+...   init = (U « char(Z, 0)) @ EPR
+...   Pi = CNOT.d » proj(X, 0) @ proj(Z, 0)
+...   bell = [((X**a * Z**b @ I).d » Pi) @ I
+...              for a in range(d) for b in range(d)]
+...   post, index = stMeasure(bell, init)()
+...   return (I @ I @ (X**(index//d)*Z**(index%d))) « post
+</pre>
+
+<p>
+Zooming out, why is this algorithm important? It shows that there is a
+novel primitive in quantum computing: sending a quantum state. It
+happens instantaneously, the moment Alice performs the Bell measurement
+on her qudits, but is masked by the operator \(W_{ab}^*\) so that Alice
+must transmit the classical data \(a\) and \(b\) if Bob is to decode the
+state he already has in his possession.<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote">You can explore the causality-preserving aspects of this mechanism in the exercises.</span>
+Teleportation and entanglement form the basis of an entirely new
+discipline of <i>quantum communication</i>, but we leave further development
+of this subject for another time.
+</p>
+</div>
+</body>
+</html>
