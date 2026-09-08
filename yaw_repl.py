@@ -2351,9 +2351,6 @@ class YawREPL:
       # QFT
       W = qft(X, Z)
       W >> Z                           # Should give X
-
-      # Error correction
-      TODO!
 ────────────────────────────────────────────────────────────
     """
         return help_text.strip()
