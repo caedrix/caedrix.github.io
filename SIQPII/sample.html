@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>2.3. Sample </title>
-<!-- 2026-09-08 Tue 07:42 -->
+<!-- 2026-09-08 Tue 07:45 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="David Wakeham">
@@ -340,13 +340,11 @@ being expanded as
 To ensure \(U\) is unitary, we must scale coefficients \(c_i\) so that
 \(\sum_i |c_i|^2 = 1\). Then evolving \(\pi^{(Z)}_0\) with \(\tilde{U}\) and
 measuring in the \(Z\) basis gives
-</p>
-\begin{equation}
+\[
   \label{eq:sample-prob}
   \mathbb{P}\left[ Z \overset{\tilde{U}\triangleleft
       \pi^{(Z)}_0}{\longleftarrow} qk\right] = |c_k|^2,
-\end{equation}
-<p>
+\]
 as you can show in Exercise 6.1. In other words, measurement yields \(qk\)
 with probability proportional to \(|c_k|^2\). An important consequence is
 that, if the \(c_k = e^{i\theta_k}/\sqrt{d}\) have a common, normalized
@@ -416,12 +414,10 @@ For instance, if we want the probability of nontrivial common factor
 \]
 which is satisfied by \(\ell = 5\). Whatever this threshold probability,
 the total number of steps is
-</p>
-\begin{equation}
+\[
   \label{eq:13}
   \mathcal{O}(\sqrt{\log\epsilon}\log d),
-\end{equation}
-<p>
+\]
 with the prefactor depending only on failure tolerance \(\epsilon\), not
 \(d\). So this method remains vastly more efficient! Let's put it all
 together for the random phase case:
