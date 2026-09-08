@@ -2151,7 +2151,7 @@ class YawREPL:
       expr ! pow(3), herm         # Just relations
 
       Examples:
-        A**3 ! pow(3)              # Evaluate AÂ³ with pow(3) relation
+        A**3 ! pow(3)               # Evaluate A³ with pow(3) relation
         X + Y ! X = 2, Y = 3        # Evaluate with temporary X=2, Y=3
 
     OPERATORS & STATES:
@@ -2159,20 +2159,6 @@ class YawREPL:
       Conjugation:       A >> B  (conjugate B by A: A† B A)
       State conjugation: A << psi (apply A† ... A to state)
       Measurement:       A | psi (expectation value)
-
-    WIRE PLACEMENT (indexed tensor product):
-      A[k, n]            Embed A at wire k of n wires (0-indexed)
-      A[k]               Lazy WireSpec: A on wire k, n deferred
-      A[k](n)            Resolve lazy WireSpec to n-wire system
-      A[j] * B[k]        Compose placements on different wires
-      (A[j] * B[k])(n)   Resolve composed placement
-      wire(A, k, n)      Explicit function form (same as A[k, n])
-
-      Examples:
-        X[1, 3]          # I @ X @ I
-        Z[0, 3]          # Z @ I @ I
-        (X[0] * Z[2])(3) # X @ I @ Z
-        X[1]             # WireSpec, n=2 inferred: I @ X
 
     SUBSCRIPT NOTATION:
       P_{k}              Subscripted variables (k evaluated)
