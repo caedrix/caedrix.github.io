@@ -1,0 +1,584 @@
+The exercises below are mostly nontrivial extensions of the
+text. They are marked by symbols with the following meaning:
+\begin{itemize}[itemsep=-1pt]
+\item \usym{1F58D} = analytic
+\item \usym{1F5AE} = computational
+\item \usym{1F3DE} = useful for the text
+\item \usym{1F4AA} = hard
+\item \usym{1F571} = very hard
+\end{itemize}
+Solutions may be found online in the folder \texttt{/tutorials} of the
+\href{https://github.com/torsor-io/yaw}{GitHub repository}.
+
+%\noindent\hrulefill
+
+\vspace{5pt}
+\begin{Large}
+\noindent  0.1. \emph{Pauli relations} \usym{1F58D}
+\end{Large}
+\vspace{5pt}
+
+\noindent Above presented, we presented the Pauli algebra as generated
+by $X, Z$ such that
+\[
+  X^2 = |X|^2 = Z^2 = |Z|^2 = I, \quad XZ = -ZX.
+\]
+Define $\sigma_1 = X, \sigma_3 = Z$ and $\sigma_2=i XZ$.
+Verify the \emph{Pauli relation}
+\[
+  \sigma_i \sigma_j = \delta_{ij} I + i \epsilon_{ijk},
+\]
+where $\epsilon_{123} = +1$ and is totally antisymmetric in its indices.
+
+\vspace{5pt}
+\begin{Large}
+\noindent  0.2. \emph{The Walsh-Hadamard matrix} \usym{1F58D}\usym{1F3DE}  %\ding{46}
+\end{Large}
+\vspace{5pt}
+
+\noindent Recall the presentation (\ref{eq:pres-qudit}) above, and
+define the \emph{Walsh-Hadamard matrix} by
+\begin{equation}
+  \label{eq:2}
+  W = \frac{1}{\sqrt{d}}\sum_{k=0}^d X^k Z^{-(k+1)}.
+\end{equation}
+%This shifts between the $X$ and $Z$ basis.
+\begin{enumerate}[label=(\alph*), itemsep=-1pt]
+\item Show that $W$ is unitary. \emph{Hint}: the geometric sum
+  \[
+    1 + x + \cdots + x^{d-1} = \frac{1 - x^d}{1-x}, \quad x \neq 1,
+  \]
+  remains valid for operators (when appropriately interpreted).
+\item Prove that $W$ converts between $X$ and $Z$ in the sense that
+  \begin{equation}
+    \label{eq:4}
+    W Z W^* = X, \quad W^* X W = Z.
+  \end{equation}
+\item Finally, confirm the usual matrix elements
+  \[
+    W_{jk} = \langle j | W |k \rangle = \pi_0 (X^ j W X^k) = \omega^{j(d-k)}.
+  \]
+\end{enumerate}
+
+\vspace{5pt}
+\begin{Large}
+\noindent  0.3. \emph{Generalized Gell-Mann matrices} \usym{1F58D}\usym{1F4AA}
+\end{Large}
+\vspace{5pt}
+
+\noindent In (\ref{eq:pres-qudit}), we gave a presentation of the qudit
+algebra $\mathcal{A}_d$. It has the disadvantage that $X$ and $Z$ are not Hermitian
+(though they are unitary). An alternative generalization of the Pauli
+matrices is the \emph{Gell-Mann matrices}, which are traceless,
+Hermitian, and orthogonal in a sense we will describe below.
+We will define them in terms of the presentation (\ref{eq:pres-e}).
+They come in three flavours: symmetric (S) and antisymmetric (A) matrices defined by
+\begin{equation}
+  \notag
+  \lambda^\text{S}_{ab} = E_{ab} + E_{ba}, \quad \lambda^\text{A}_{ab} = -i(E_{ab} - E_{ba}),
+\end{equation}
+for $1 \leq a < b \leq d$, and diagonal (D) matrices for $1
+\leq a \leq d - 1$:
+\begin{equation}
+  \notag
+  \lambda^\text{D}_{a} = -\sqrt{\frac{2}{a(a+1)}}\left[\sum_{b=1}^a
+    E_{bb} - a E_{a+1,a+1}\right].
+\end{equation}
+\begin{enumerate}[label=(\alph*), itemsep=-1pt]
+\item
+\begin{enumerate}[label=\roman*., itemsep=-1pt]
+  \item Count generators and conclude that, provided we add $I$, the algebra has
+  the (correct) dimension $d^2$.
+
+\item Verify that generators are Hermitian $\lambda = \lambda^*$,
+  traceless $\mbox{tr}[\lambda]=0$, and orthogonal in the sense that
+  $\mbox{tr}[\lambda\lambda'] = 0$ for $\lambda \neq \lambda'$.
+\item Show that $\mbox{tr}[\lambda^2] = 2/d$ for all $\lambda$.
+    \end{enumerate} 
+\item 
+\begin{enumerate}[label=\roman*., itemsep=-1pt]
+  \item Let $i, j, k$ label arbitrary Gell-Mann matrices. Confirm
+    that the commutator obeys
+    \begin{equation}
+      [\lambda_i, \lambda_j] = 2i \sum_k f_{ijk}\lambda_k, \quad
+      f_{ijk} = -\frac{i}{4}\mbox{tr}[\lambda_i[\lambda_j,
+      \lambda_k]].\tag{A.1}
+    \end{equation}
+  \item Similarly, argue that
+    \begin{equation}
+      \{\lambda_i, \lambda_j\} = \frac{4}{d} \delta_{ij}I + 2\sum_k d_{ijk}\lambda_k, \quad
+      d_{ijk} = \frac{1}{4}\mbox{tr}[\lambda_i\{\lambda_j,
+      \lambda_k\}].\tag{A.2}
+    \end{equation}
+        \item Check that, when $d=2$, this reproduces the Pauli
+          relation (\ref{eq:pauli-rel}).
+  \end{enumerate}
+\end{enumerate}
+
+%\vspace{-5pt}
+% \noindent\hrulefill
+
+\vspace{5pt}
+\begin{Large}
+  \noindent  1.1. \emph{Local contexts} \usym{1F5AE} $\!$\usym{1F3DE}
+\end{Large}
+\vspace{5pt}
+
+\noindent In the \texttt{yaw} REPL, you evaluate expressions using the \emph{local
+  context} or \emph{bang operator} \texttt{!} (by analogy with \texttt{\#!} which
+tells a \texttt{UNIX shell} which interpreter to use). Some basic examples:
+\begin{minted}
+  [
+frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor=AliceBlue,
+fontsize=\footnotesize,
+linenos
+]{slurm}
+    *> X*Z*X ! comm
+    X**2*Z
+    *> X + Z ! X = 2, Z = 3
+    5
+\end{minted}
+These don't permanently change the variables involved, but are locally
+scoped to evaluate with that assumption.
+In this exercise, you'll use local context to do high school
+algebra.\sidenote{Note that the bang operator doesn't work inside
+  function definitions, so more generally you can use the
+  \texttt{local(A, R1, R2, ...)} function.}
+\begin{enumerate}[label=(\alph*), itemsep=-1pt] 
+\item Consider a quadratic $p(x) = ax^2 + bx + c$. Confirm that
+  \[
+    p(0) = c, \quad p(1) = a + b + c, \quad p(-1) = a - b + c.
+  \]
+\item Write a function \texttt{rootsFromVals(p)} that takes a quadratic
+  and produces its roots (if they exist), using local context, part (a) and
+  the quadratic formula.
+\end{enumerate}
+\vspace{5pt}
+
+\vspace{5pt}
+\begin{Large}
+  \noindent  1.2. \emph{Unit matrices} \usym{1F5AE} $\!$\usym{1F3DE}
+\end{Large}
+\vspace{5pt}
+
+\noindent For the unit matrices defined in (\ref{eq:pres-e}), the relations
+  \[
+    E_{ab}^* = E_{ba}, \quad E_{ab}E_{cd} = \delta_{bc} E_{ad}, \quad
+    \sum_a E_{aa} = I
+  \]
+  are exhaustive, as you will show below. We can implement the resulting parameterization of
+  $\mathcal{A}_d$ in \texttt{yaw} using \emph{subscripts} and
+  generator family helper function:
+\begin{minted}   [
+frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor=AliceBlue,
+fontsize=\footnotesize,
+linenos
+]{slurm}
+    *> E = GenFam('E') # Name a generator family
+    *> gens = [E_[(a, b)] for a in range(d)
+    ...                   for b in range(d)]
+    *> rel1 = [E_[(a, b)].d = E_[(b, a)] for a in range(d) 
+    ...                                  for b in range(d)]
+    *> rel2 = [E_[(a, b)]*E_[(c, d)] = int(b==c)*E_[(a, d)]
+    ...       for a, b, c, d in product(range(d), repeat=4)]
+    *> $alg = <gens | rel1, rel2>
+  \end{minted}
+\begin{enumerate}[label=(\alph*), itemsep=-1pt] 
+\item Explain why any monomial in the generators $E_{ab}$ either vanishes or
+  reduces to a single term. Conclude the relations are exhaustive.
+\item For $d = 2$, the matrices (\ref{eq:pauli-mats}) tell us that
+  \[
+    \sigma_1 = E_{12} + E_{21}, \quad \sigma_2 = i (E_{21} - E_{12}),
+    \quad \sigma_3 = E_{11} - E_{22}.
+  \]
+  Implement the $d = 2$ presentation and check the relations
+  (\ref{eq:pauli-rel}) for a few indices of your choice.
+\end{enumerate}
+
+%\noindent\hrulefill
+
+\vspace{5pt}
+\begin{Large}
+\noindent  1.3. \emph{Gelfand two ways} \usym{1F58D}\usym{1F571}
+\end{Large}
+\vspace{5pt}
+
+\noindent
+Consider the C${}^*$-algebra $\mathcal{A}_U$ generated by a single unitary $U$.
+  This acts on the Hilbert space of square-integrable functions on the
+  circle, $\mathcal{H} = L^2(\mathbb{S}^1)$, by copying the phase:
+  \[
+    U f(e^{i\theta}) = e^{i\theta}f(e^{i\theta}).
+  \]
+  The inner product on $\mathcal{H}$ is given by
+  \[
+    \langle f, g\rangle = \int_{\mathbb{S}^1} 
+    \overline{f(z)} g(z)\, \mathrm{d}z.
+  \]
+\begin{enumerate}[label=(\alph*), itemsep=-1pt]
+  \item Verify directly that $U$ is a unitary operator in the sense
+    that
+    \[
+      \langle U f, U g\rangle = \langle f, g\rangle.
+    \]
+  \item
+        \begin{enumerate}[label=\roman*., itemsep=-1pt] 
+        \item Consider an arbitrary element of $\mathcal{A}_U$, namely
+    finite linear combination of powers of $U$.
+    Argue that
+    \[
+      A = \sum_{k=-N}^N c_k U^k \quad \Longrightarrow \quad A
+      f(e^{i\theta}) = f(e^{i\theta})\sum_{k=-N}^N c_k e^{ik\theta},
+    \]
+    and hence $\mathcal{A}_U$ implements multiplication by an
+    arbitrary Fourier sum. Setting $f = \mathbf{1}$, show that this
+    action is unique, so we can identify elements $A\in \mathcal{A}_U$
+    with Fourier sums.  % Since we can set $f = \mathbf{1}$, i.e. the
+    % identity function on $\mathbb{S}^1$, we can identify elements $A\in \mathcal{A}_U$ with
+    % Fourier sums.
+  \item Technically, finite linear combinations of powers of $U$ only
+    form a $*$-algebra.  % Look up the Riesz-Fischer theorem, and use it to argue with
+   %  that the multiplicative image of $\mathcal{A}_U$ is dense in
+   %  $\mathcal{H}$. %https://en.wikipedia.org/wiki/Riesz%E2%80%93Fischer_theorem
+   % Thus, $\mathcal{A}_U \subseteq \mathcal{B}(\mathcal{H})$ can be
+   % viewed as the algebra of analytic functions on the unit circle.
+    The C${}^*$-algebra is obtained by taking the \emph{closure} (in
+    the $L^2$ norm) of the set of finite sums. Look up the
+    \textsc{Stone-Weierstrass theorem} and argue that the resulting
+    closure should be $C^0(\mathbb{S}^1)$.
+          \end{enumerate}
+  \item Here is another way to arrive at the same conclusion.
+    \begin{enumerate}[label=\roman*., itemsep=-1pt]
+    \item Define the \emph{spectrum}  $\Phi_\mathcal{A}=\text{spec}(\mathcal{A})$ of a commutative C${}^*$-algebra
+    $\mathcal{A}$ as the set of
+    multiplicative functionals $\phi: \mathcal{A} \to \mathbb{C}$,
+    also called \emph{characters}. % The
+    % \emph{Gelfand-Naimark theorem} shows that $\mathcal{A} \cong
+    % C^0(\Phi_\mathcal{A})$.
+    Argue that, for $\theta \in [0, 2\pi)$, the evaluation functional
+    \[
+      \iota_\theta (A) = A \mathbf{1} (e^{i\theta})
+    \]
+    is a character of $\mathcal{A}_U$.
+  \item Show that a character $\phi$ on $\mathcal{A}_U$ has its value
+    determined entirely by $\phi(U)$ for some $|\phi(U)|=1$. From
+    this, argue that every character has the form $\phi = \iota_\theta$.
+    % Are there any others?
+    % \emph{Hint:} No.
+  \item The \textsc{Gelfand-Naimark theorem} shows that a commutative
+    C${}^*$-algebra $\mathcal{A}$ may be identified with the algebra of continuous
+    functions on its spectrum $\mathcal{A} \cong
+    C^0(\Phi_\mathcal{A})$. Using this theorem and the previous parts,
+    conclude that $\mathcal{A}_U \cong C^0(\mathbb{S}^1)$.
+    % Conclude that $\mathcal{A}_U$ can be identified with the
+    % algebra of square-integrable functions on $\mathbb{S}^1$.
+  \end{enumerate}
+      \end{enumerate}
+% \item The next simplest example is the C${}^*$-algebra generated by
+%   \emph{two} unitaries $U, V$. By itself, this constitutes what is
+%   called the \emph{free C${}^*$-algebra on two generators}, a rather
+%   complex, infinite-dimensional 
+%   \[
+%     UV = \omega VU.
+%   \]
+%   Let us see how the resulting algebra depends on $\omega$.
+%   \begin{enumerate}[itemsep=-1pt]
+%   \item 
+%     \end{enumerate}
+% \end{enumerate}
+
+% \noindent\hrulefill
+
+\vspace{5pt}
+\begin{Large}
+  \noindent  2.1. \emph{Expectations} \usym{1F58D}
+\end{Large}
+\vspace{5pt}
+
+\noindent Consider a discrete, complex-valued random variable $Z$, which takes on values
+$Z = z_i \in \mathbb{C}$ with probability $p_i = \mathbb{P}[Z =
+z_i]$. Then the \emph{expectation} of $X$ is usually defined as
+$\mathbb{E}[Z] = \sum_i p_i z_i$.
+\begin{enumerate}[label=(\alph*), itemsep=-1pt]
+  \item \begin{enumerate}[label=\roman*., itemsep=-1pt] 
+    \item  Prove $\mathbb{E}[Z]$ is positive, i.e. $\mathbb{E}[Z] \geq 0$ when all $z_i \geq 0$.
+    \item Show $\mathbb{E}[Z]$ is linear, i.e. $\mathbb{E}[\alpha Z_1 +
+      \beta Z_2] = \alpha \mathbb{E}[Z_1]+\beta \mathbb{E}[Z_2]$.
+      \item Confirm that $\mathbb{E}[Z]$ is normalized in the sense
+        that $\mathbb{E}[I] = 1$, where $I$ is a random variable which
+        always equals unity.
+                \end{enumerate}
+  \item We will turn this round, and consider a function of random
+    variables $\langle Z\rangle$ which is positive, linear and
+    normalized.
+    Suppose we can decompose $Z$ it into sum of real functions $\Pi_i^{(Z)}$ obeying % $\Pi_i^{(Z)} \in \{0, 1\}$ such that
+      \[
+       Z = \sum_{i} z_i \Pi_i^{(Z)}, \quad I = \sum_{i} \Pi_i^{(Z)},
+       \quad  \Pi_i^{(Z)} \Pi_j^{(Z)} = \delta_{ij}\Pi_i^{(Z)}.
+   \]
+   From this spectral decomposition, we can recover probability!
+    \begin{enumerate}[label=\roman*., itemsep=-1pt] 
+    \item Show that $q_i = \langle \Pi_i^{(Z)}\rangle$ can be
+      interepreted as a probability, i.e. $q_i \geq 0$ and the $q_i$
+      sum to $1$.
+    \item Deduce that $\langle Z\rangle = \mathbb{E}[Z]$ for the
+      probability distribution $q_i$.
+                \end{enumerate}
+  \end{enumerate}
+  
+\vspace{5pt}
+\begin{Large}
+  \noindent  2.2. \emph{GNS construction} \usym{1F5AE}
+\end{Large}
+\vspace{5pt}
+
+\noindent The Gelfand-Naimark-Segal construction constructs a Hilbert
+space $\mathcal{H}_\pi$ from a state $\pi \in S(\mathcal{A})$. We'll
+explore this construction for a single qubit, starting with the eigenfunctional
+$\pi = \pi^{(Z)}_0$.
+
+\begin{enumerate}[label=(\alph*), itemsep=-1pt]
+\item \begin{enumerate}[label=\roman*., itemsep=-1pt]
+  \item For $A, B \in \mathcal{A}_2$, define the psuedo-Hermitian product
+  \[
+    \langle A, B\rangle_{\pi}' = \pi(A^*B).
+  \]
+  Implement this as the function \texttt{pseudoInner(A, B)}:
+  \begin{minted}   [
+frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor=AliceBlue,
+fontsize=\footnotesize,
+linenos
+]{slurm}
+    *> def pseudoInner(A, B):
+    ...    <yourFunctionHere>
+\end{minted}
+\item Verify (computationally) it is conjugate symmetric and additive
+  \[
+    \langle A, B\rangle_\pi' = \overline{\langle B, A\rangle_\pi'}, \quad
+    \langle A, B + C\rangle_\pi' = \langle A,
+    B\rangle_\pi'+ \langle A, C\rangle_\pi'
+  \]
+  for $A = H$, $B = Y$, and $C = Z$.
+\item Show (computationally) that the psuedo-Hermitian product is
+  \emph{not positive}, since
+  \[
+    \langle A, A\rangle_\pi' = 0, \quad A = Z- I.
+  \]
+  This means it is not a true inner product (hence the ``pseudo'').
+\end{enumerate}
+\item \begin{enumerate}[label=\roman*., itemsep=-1pt]
+  \item To create an inner product, we can perform the following
+    trick: we \emph{identify} $Z \sim I$, so that $Z - I \sim
+    0$. Define a reduction function $\eta_\text{red}: \mathcal{A}\to \mathcal{A}$ which replaces $Z$ with $I$ in an operator
+    expression:
+  \begin{minted}   [
+frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor=AliceBlue,
+fontsize=\footnotesize,
+linenos
+]{slurm}
+    *> def reduce(A):
+    ...    <yourFunctionHere>
+\end{minted}
+    \emph{Hint:} Check out Exercise 1.1.
+  \item The Hilbert space $\mathcal{H}_\pi$ consists of all reduced
+    operators $\eta_\text{red}(\mathcal{A}_2)$ with inner
+    product\sidenote{You can show that the pseudo-Hermitian product
+      doesn't care about $\eta_\text{red}$: it gives the same answers for
+      two operators with the same reduction.}
+    \[
+      \langle \eta_\text{red} (A), \eta_\text{red} (B)\rangle_\pi = \langle A,B\rangle_\pi' =
+      \pi(A^* B).
+    \]
+    Check using \texttt{yaw} that the vectors associated to $I \mapsto
+    |0\rangle$ and $X \mapsto |1\rangle$ (or simply $X^b \mapsto
+    |b\rangle$) constitute an orthonormal basis for this space.
+\item We can view an operator $A \in \mathcal{A}$ as a matrix acting
+  on $\mathcal{H}_\pi$ by $A |B\rangle_\pi = |AB\rangle_\pi$, and
+  hence matrix elements
+  \[
+    \langle b| A |b'\rangle = \pi (X^b A X^{b'}).
+  \]
+  Using this recipe, numerically confirm that $H = (X + Z)/\sqrt{2}$
+  has matrix representation
+  \[
+    H \mapsto \frac{1}{\sqrt{2}}
+    \begin{bmatrix}
+      1 & 1 \\ 1 & -1
+    \end{bmatrix}.
+  \]
+  \end{enumerate}
+% \item Repeat the exercise for $\mathcal{A}_d$ and $\pi =
+%   \pi^{(Z)}_0$ and the Walsh-Hadamard matrix $W$. Confirm your results are consistent with
+%   Exercise 0.2.
+    \end{enumerate}
+      
+\vspace{5pt}
+\begin{Large}
+  \noindent  2.3. \emph{The noncommutative torus} \usym{1F58D}\usym{1F571}
+\end{Large}
+\vspace{5pt}
+
+\noindent Recall that a single unitary $U$ generates functions on the circle $\mathbb{S}^1$
+(Exercise 1.3). We will explore the different spaces---and
+states---generated by two unitaries $U$ and $V$.
+%can generate functions on a torus $\mathbb{S}^1\times \mathbb{S}^1$.
+\begin{enumerate}[label=(\alph*), itemsep=-1pt]
+\item Consider the algebra $\mathcal{A}_{U,V}$ of commuting unitaries,
+  $UV = VU$. It acts on the Hilbert space of square-integrable functions $\mathcal{H} =
+  L^2(\mathbb{S}^1\times \mathbb{S}^1)$ via
+  \[
+    U f(e^{i\alpha}, e^{i\beta}) = e^{i\alpha} f(e^{i\alpha}, e^{i\beta}), \quad V f(e^{i\alpha}, e^{i\beta}) = e^{i\beta} f(e^{i\alpha}, e^{i\beta}).
+  \]
+  \begin{enumerate}[label=\roman*., itemsep=-1pt]
+  \item Verify that $U$ and $V$ are unitary and commute.
+  \item By an argument (or two!) analogous to Exercise 1.3, show that
+    $\mathcal{A}_{U,V} \cong C^0(\mathbb{T}^2)$, where $\mathbb{T}^2 =
+    \mathbb{S}^1\times \mathbb{S}^1$ is the
+    \emph{torus}.\sidenote{Also known as the donut.}
+    %This is just continuous functions on the \emph{torus} $\mathbb{T}^2$. 
+  \item For a square-integrable Fourier series
+    \[
+      A = \sum_{m,n\in\mathbb{Z}}  c_{m,n} U^m V^n,
+    \]
+    argue that the coefficient projection $\pi_{0}(A) = c_{0,0}$ is a state, i.e. linear,
+    normalized, and positive.
+  \item Show that no other coefficients $c_{m,n}$ are states.
+  \end{enumerate}
+\item Now consider the algebra $\mathcal{A}_\theta$ with two unitary
+  generators $U$ and $V$ satisfying a braiding relation $VU = e^{i\theta} UV$ for $\theta \not\in
+  2\pi\mathbb{Z}$. For square-integrable functions on $\mathbb{S}^1$, define
+  \[
+    Uf (e^{i\alpha}) = e^{i\alpha} f(e^{i\alpha}), \quad V
+    f(e^{i\alpha}) = f(e^{i\alpha-\theta}).
+  \]
+  This algebra is called the \emph{noncommutative torus}.
+  \begin{enumerate}[label=\roman*., itemsep=-1pt]
+  \item Verify that $U$ and $V$ are unitary and braid appropriately.
+  \item Argue that, for the Fourier series
+    \[
+      A = \sum_{m,n\in\mathbb{Z}}  c_{m,n} U^m V^n,
+    \]
+    the coefficient projection $\pi_{0}(A) = c_{0,0}$ is a state.
+  \item If $\theta$ is irrational, argue that no other coefficient
+    projection is a state.
+    Conversely, if $\theta \in \mathbb{Q}$ is
+    rational, argue that $c_{m,n}$ is a state whenever $\theta m,
+    \theta n \in \mathbb{Z}$.
+  \end{enumerate}
+  \end{enumerate}
+    
+\vspace{5pt}
+\begin{Large}
+  \noindent  3.1. \emph{Hadamard?}  \usym{1F5AE} %\usym{1F58D}
+\end{Large}
+\vspace{5pt}
+
+\vspace{5pt}
+\begin{Large}
+  \noindent  3.2. \emph{EPR} \usym{1F5AE}
+\end{Large}
+\vspace{5pt}
+
+\noindent Factorization, qudit version
+
+\vspace{5pt}
+\begin{Large}
+  \noindent  3.3. \emph{Qudit depolarizer} \usym{1F5AE}
+\end{Large}
+\vspace{5pt}
+
+\vspace{5pt}
+\begin{Large}
+  \noindent  3.4. \emph{Many worlds (branching)} \usym{1F5AE}
+\end{Large}
+\vspace{5pt}
+
+\vspace{5pt}
+\begin{Large}
+  \noindent  4.1. \emph{Single-qudit unitaries} \usym{1F58D}
+\end{Large}
+\vspace{5pt}
+
+\vspace{5pt}
+\begin{Large}
+  \noindent  4.2. \emph{Variance and averages} \usym{1F5AE}
+\end{Large}
+\vspace{5pt}
+
+\vspace{5pt}
+\begin{Large}
+  \noindent  4.3. \emph{Operator mirroring} \usym{1F58D}
+\end{Large}
+\vspace{5pt}
+
+\vspace{5pt}
+\begin{Large}
+  \noindent  4.4. \emph{Gate teleportation} \usym{1F5AE}
+\end{Large}
+\vspace{5pt}
+
+\vspace{5pt}
+\begin{Large}
+  \noindent  4.5. \emph{Causality and encryption} \usym{1F58D} %\emph{Single-qudit unitaries}
+\end{Large}
+\vspace{5pt}
+
+\vspace{5pt}
+\begin{Large}
+  \noindent  5.1. \emph{A Hamiltonian} \usym{1F5AE}
+\end{Large}
+\vspace{5pt}
+
+\vspace{5pt}
+\begin{Large}
+  \noindent  5.2. \emph{Rabi uncertainty} \usym{1F5AE}
+\end{Large}
+\vspace{5pt}
+
+\vspace{5pt}
+\begin{Large}
+  \noindent  5.3. \emph{Trotter-Suzuki} \usym{1F5AE}
+\end{Large}
+\vspace{5pt}
+
+\vspace{5pt}
+\begin{Large}
+  \noindent  5.4. \emph{Multiple marked items} \usym{1F5AE}
+\end{Large}
+\vspace{5pt}
+
+\vspace{5pt}
+\begin{Large}
+  \noindent  5.5. \emph{Rotation geometry} \usym{1F5AE} %\emph{Database scaling}
+\end{Large}
+\vspace{5pt}
+
+\vspace{5pt}
+\begin{Large}
+  \noindent  6.1. \emph{Check algorithm} \usym{1F5AE}
+\end{Large}
+\vspace{5pt}
+
+\vspace{5pt}
+\begin{Large}
+  \noindent  6.2. \emph{QFT parallelization in qudits} \usym{1F5AE}
+\end{Large}
+\vspace{5pt}
+
+\vspace{5pt}
+\begin{Large}
+  \noindent  6.4. \emph{Normal subgroups} \usym{1F5AE}
+\end{Large}
+\vspace{5pt}

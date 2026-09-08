@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>A. Exercises </title>
+<!-- 2026-09-08 Tue 08:06 -->
+<meta  charset="utf-8">
+<meta  name="generator" content="Org-mode">
+<meta  name="author" content="David Wakeham">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+<script src="contents.js"></script>
+<script type="text/javascript" src="sidebar_darkmode.js"></script>
+<style>.smallcaps{font-variant:small-caps;letter-spacing:.04em}</style>
+<style>
+/* (a), (b) at the top level; i., ii. one level down */
+#content ol { list-style-type: lower-alpha; }
+#content ol ol { list-style-type: lower-roman; }
+#content ol li { margin-bottom: .35em; }
+.mark { font-style: normal; letter-spacing: .08em; margin-left: .3em; }
+.stub { color: #888; font-style: italic; }
+</style>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],tags:'ams',processEscapes:true}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+<script src="contents.js"></script>
+<script type="text/javascript" src="sidebar_darkmode.js"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>pre { padding-top: 25px !important; }</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/javascript" src="http://orgmode.org/mathjax/MathJax.js"></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
+
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">A. Exercises </h1>
+<p>
+The exercises below are mostly nontrivial extensions of the text. They
+are marked by symbols with the following meaning:
+</p>
+
+<ul class="org-ul">
+<li>🖍 = analytic
+</li>
+<li>💻 = computational
+</li>
+<li>📚 = useful for the text
+</li>
+<li>💪 = hard
+</li>
+<li>💀 = very hard
+</li>
+</ul>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">0.1. Pauli relations <span class="mark">🖍</span></h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Above, we presented the Pauli algebra as generated by \(X, Z\) such that
+\[
+  X^2 = |X|^2 = Z^2 = |Z|^2 = I, \quad XZ = -ZX.
+\]
+Define \(\sigma_1 = X\), \(\sigma_3 = Z\) and \(\sigma_2 = i XZ\). Verify the
+<i>Pauli relation</i>
+\[
+  \sigma_i \sigma_j = \delta_{ij} I + i \epsilon_{ijk}\sigma_k,
+\]
+where \(\epsilon_{123} = +1\) and is totally antisymmetric in its indices.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">0.2. The Walsh-Hadamard matrix <span class="mark">🖍📚</span></h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Recall the qudit presentation from Chapter 1.1, and define the
+<i>Walsh-Hadamard matrix</i> by
+\[
+  \label{eq:2}
+  W = \frac{1}{\sqrt{d}}\sum_{k=0}^{d-1} X^k Z^{-(k+1)}.
+\]
+</p>
+
+<ol class="org-ol">
+<li>Show that \(W\) is unitary. <i>Hint</i>: the geometric sum
+\[
+     1 + x + \cdots + x^{d-1} = \frac{1 - x^d}{1-x}, \quad x \neq 1,
+   \]
+remains valid for operators (when appropriately interpreted).
+</li>
+<li>Prove that \(W\) converts between \(X\) and \(Z\) in the sense that
+</li>
+</ol>
+<p>
+\[
+     \label{eq:4}
+     W Z W^* = X, \quad W^* X W = Z.
+\]
+</p>
+<ol class="org-ol">
+<li>Finally, confirm the usual matrix elements
+\[
+     W_{jk} = \langle j | W |k \rangle = \pi_0 (X^j W X^k) =
+     \omega^{j(d-k)}.
+   \]
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">0.3. Generalized Gell-Mann matrices <span class="mark">🖍💪</span></h2>
+<div class="outline-text-2" id="text-3">
+<p>
+We gave a presentation of the qudit algebra \(\mathcal{A}_d\) in Chapter
+1.1. It has the disadvantage that \(X\) and \(Z\) are not Hermitian (though
+they are unitary). An alternative generalization of the Pauli matrices
+is the <i>Gell-Mann matrices</i>, which are traceless, Hermitian, and
+orthogonal in a sense we will describe below. We will define them in
+terms of the unit-matrix presentation. They come in three flavours:
+symmetric (S) and antisymmetric (A) matrices defined by
+\[
+  \lambda^\text{S}_{ab} = E_{ab} + E_{ba}, \quad \lambda^\text{A}_{ab}
+  = -i(E_{ab} - E_{ba}),
+\]
+for \(1 \leq a < b \leq d\), and diagonal (D) matrices for
+\(1 \leq a \leq d - 1\):
+\[
+  \lambda^\text{D}_{a} = -\sqrt{\frac{2}{a(a+1)}}\left[\sum_{b=1}^a
+    E_{bb} - a E_{a+1,a+1}\right].
+\]
+</p>
+
+<ol class="org-ol">
+<li>Basic properties.
+<ol class="org-ol">
+<li>Count generators and conclude that, provided we add \(I\), the
+algebra has the (correct) dimension \(d^2\).
+</li>
+<li>Verify that generators are Hermitian \(\lambda = \lambda^*\),
+traceless \(\mbox{tr}[\lambda]=0\), and orthogonal in the sense that
+\(\mbox{tr}[\lambda\lambda'] = 0\) for \(\lambda \neq \lambda'\).
+</li>
+<li>Show that \(\mbox{tr}[\lambda^2] = 2/d\) for all \(\lambda\).
+</li>
+</ol>
+</li>
+<li>Structure constants.
+<ol class="org-ol">
+<li>Let \(i, j, k\) label arbitrary Gell-Mann matrices. Confirm that the
+commutator obeys
+\[
+        [\lambda_i, \lambda_j] = 2i \sum_k f_{ijk}\lambda_k, \quad
+        f_{ijk} = -\frac{i}{4}\mbox{tr}[\lambda_i[\lambda_j,
+        \lambda_k]].\tag{A.1}
+      \]
+</li>
+<li>Similarly, argue that
+\[
+        \{\lambda_i, \lambda_j\} = \frac{4}{d} \delta_{ij}I +
+        2\sum_k d_{ijk}\lambda_k, \quad d_{ijk} =
+        \frac{1}{4}\mbox{tr}[\lambda_i\{\lambda_j,
+        \lambda_k\}].\tag{A.2}
+      \]
+</li>
+<li>Check that, when \(d=2\), this reproduces the Pauli relation of
+Exercise 0.1.
+</li>
+</ol>
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">1.1. Local contexts <span class="mark">💻📚</span></h2>
+<div class="outline-text-2" id="text-4">
+<p>
+In the <code>yaw</code> REPL, you evaluate expressions using the <i>local context</i> or
+<i>bang operator</i> <code>!</code> (by analogy with <code>#!</code> which tells a UNIX shell which
+interpreter to use). Some basic examples:
+</p>
+
+<pre class="example">
+*&gt; X*Z*X ! comm
+X**2*Z
+*&gt; X + Z ! X = 2, Z = 3
+5
+</pre>
+
+<p>
+These don't permanently change the variables involved, but are locally
+scoped to evaluate with that assumption. In this exercise, you'll use
+local context to do high school
+algebra.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">Note that the bang operator doesn't work inside function definitions, so more generally you can use the <code>local(A, R1, R2, ...)</code> function.</span>
+</p>
+
+<ol class="org-ol">
+<li>Consider a quadratic \(p(x) = ax^2 + bx + c\). Confirm that
+\[
+     p(0) = c, \quad p(1) = a + b + c, \quad p(-1) = a - b + c.
+   \]
+</li>
+<li>Write a function <code>rootsFromVals(p)</code> that takes a quadratic and
+produces its roots (if they exist), using local context, part (a) and
+the quadratic formula.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">1.2. Unit matrices <span class="mark">💻📚</span></h2>
+<div class="outline-text-2" id="text-5">
+<p>
+For the unit matrices of Chapter 1.1, the relations
+\[
+  E_{ab}^* = E_{ba}, \quad E_{ab}E_{cd} = \delta_{bc} E_{ad}, \quad
+  \sum_a E_{aa} = I
+\]
+are exhaustive, as you will show below. We can implement the resulting
+parameterization of \(\mathcal{A}_d\) in <code>yaw</code> using <i>subscripts</i> and the
+generator family helper function:
+</p>
+
+<pre class="example">
+*&gt; E = GenFam('E')  # Name a generator family
+*&gt; gens = [E[(a, b)] for a in range(d)
+...                  for b in range(d)]
+*&gt; rel1 = [E[(a, b)].d == E[(b, a)] for a in range(d)
+...                                 for b in range(d)]
+*&gt; rel2 = [E[(a, b)]*E[(c, e)] == int(b == c)*E[(a, e)]
+...        for a, b, c, e in product(range(d), repeat=4)]
+*&gt; $alg = &lt;gens | rel1, rel2&gt;
+</pre>
+
+<ol class="org-ol">
+<li>Explain why any monomial in the generators \(E_{ab}\) either vanishes
+or reduces to a single term. Conclude the relations are exhaustive.
+</li>
+<li>For \(d = 2\), the Pauli matrices tell us that
+\[
+     \sigma_1 = E_{12} + E_{21}, \quad \sigma_2 = i (E_{21} - E_{12}),
+     \quad \sigma_3 = E_{11} - E_{22}.
+   \]
+Implement the \(d = 2\) presentation and check the Pauli relation of
+Exercise 0.1 for a few indices of your choice.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">1.3. Gelfand two ways <span class="mark">🖍🕱</span></h2>
+<div class="outline-text-2" id="text-6">
+<p>
+Consider the C\({}^*\)-algebra \(\mathcal{A}_U\) generated by a single
+unitary \(U\). This acts on the Hilbert space of square-integrable
+functions on the circle, \(\mathcal{H} = L^2(\mathbb{S}^1)\), by copying
+the phase:
+\[
+  U f(e^{i\theta}) = e^{i\theta}f(e^{i\theta}).
+\]
+The inner product on \(\mathcal{H}\) is given by
+\[
+  \langle f, g\rangle = \int_{\mathbb{S}^1} \overline{f(z)} g(z)\,
+  \mathrm{d}z.
+\]
+</p>
+
+<ol class="org-ol">
+<li>Verify directly that \(U\) is a unitary operator in the sense that
+\[
+     \langle U f, U g\rangle = \langle f, g\rangle.
+   \]
+</li>
+<li>The algebra as functions.
+<ol class="org-ol">
+<li>Consider an arbitrary element of \(\mathcal{A}_U\), namely a finite
+linear combination of powers of \(U\). Argue that
+\[
+        A = \sum_{k=-N}^N c_k U^k \quad \Longrightarrow \quad A
+        f(e^{i\theta}) = f(e^{i\theta})\sum_{k=-N}^N c_k e^{ik\theta},
+      \]
+and hence \(\mathcal{A}_U\) implements multiplication by an
+arbitrary Fourier sum. Setting \(f = \mathbf{1}\), show that this
+action is unique, so we can identify elements \(A\in \mathcal{A}_U\)
+with Fourier sums.
+</li>
+<li>Technically, finite linear combinations of powers of \(U\) only form
+a \(*\)-algebra. The C\({}^*\)-algebra is obtained by taking the
+<i>closure</i> (in the \(L^2\) norm) of the set of finite sums. Look up
+the <span class="smallcaps">Stone-Weierstrass theorem</span> and argue that the
+resulting closure should be \(C^0(\mathbb{S}^1)\).
+</li>
+</ol>
+</li>
+<li>Here is another way to arrive at the same conclusion.
+<ol class="org-ol">
+<li>Define the <i>spectrum</i> \(\Phi_\mathcal{A}=\text{spec}(\mathcal{A})\)
+of a commutative C\({}^*\)-algebra \(\mathcal{A}\) as the set of
+multiplicative functionals \(\phi: \mathcal{A} \to \mathbb{C}\),
+also called <i>characters</i>. Argue that, for \(\theta \in [0, 2\pi)\),
+the evaluation functional
+\[
+        \iota_\theta (A) = A \mathbf{1} (e^{i\theta})
+      \]
+is a character of \(\mathcal{A}_U\).
+</li>
+<li>Show that a character \(\phi\) on \(\mathcal{A}_U\) has its value
+determined entirely by \(\phi(U)\) for some \(|\phi(U)|=1\). From
+this, argue that every character has the form
+\(\phi = \iota_\theta\).
+</li>
+<li>The <span class="smallcaps">Gelfand-Naimark theorem</span> shows that a commutative
+C\({}^*\)-algebra \(\mathcal{A}\) may be identified with the algebra
+of continuous functions on its spectrum
+\(\mathcal{A} \cong C^0(\Phi_\mathcal{A})\). Using this theorem and
+the previous parts, conclude that
+\(\mathcal{A}_U \cong C^0(\mathbb{S}^1)\).
+</li>
+</ol>
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7">2.1. Expectations <span class="mark">🖍</span></h2>
+<div class="outline-text-2" id="text-7">
+<p>
+Consider a discrete, complex-valued random variable \(Z\), which takes on
+values \(Z = z_i \in \mathbb{C}\) with probability
+\(p_i = \mathbb{P}[Z = z_i]\). Then the <i>expectation</i> of \(Z\) is usually
+defined as \(\mathbb{E}[Z] = \sum_i p_i z_i\).
+</p>
+
+<ol class="org-ol">
+<li>Properties of the expectation.
+<ol class="org-ol">
+<li>Prove \(\mathbb{E}[Z]\) is positive, i.e. \(\mathbb{E}[Z] \geq 0\)
+      when all \(z_i \geq 0\).
+</li>
+<li>Show \(\mathbb{E}[Z]\) is linear, i.e.
+\[
+        \mathbb{E}[\alpha Z_1 + \beta Z_2] = \alpha \mathbb{E}[Z_1] +
+        \beta \mathbb{E}[Z_2].
+      \]
+</li>
+<li>Confirm that \(\mathbb{E}[Z]\) is normalized in the sense that
+\(\mathbb{E}[I] = 1\), where \(I\) is a random variable which always
+equals unity.
+</li>
+</ol>
+</li>
+<li>We will turn this round, and consider a function of random variables
+\(\langle Z\rangle\) which is positive, linear and normalized. Suppose
+we can decompose \(Z\) into a sum of real functions \(\Pi_i^{(Z)}\)
+obeying
+\[
+     Z = \sum_{i} z_i \Pi_i^{(Z)}, \quad I = \sum_{i} \Pi_i^{(Z)},
+     \quad \Pi_i^{(Z)} \Pi_j^{(Z)} = \delta_{ij}\Pi_i^{(Z)}.
+   \]
+From this spectral decomposition, we can recover probability!
+<ol class="org-ol">
+<li>Show that \(q_i = \langle \Pi_i^{(Z)}\rangle\) can be interpreted as
+a probability, i.e. \(q_i \geq 0\) and the \(q_i\) sum to \(1\).
+</li>
+<li>Deduce that \(\langle Z\rangle = \mathbb{E}[Z]\) for the probability
+distribution \(q_i\).
+</li>
+</ol>
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8">2.2. GNS construction <span class="mark">💻</span></h2>
+<div class="outline-text-2" id="text-8">
+<p>
+The Gelfand-Naimark-Segal construction constructs a Hilbert space
+\(\mathcal{H}_\pi\) from a state \(\pi \in S(\mathcal{A})\). We'll explore
+this construction for a single qubit, starting with the eigenfunctional
+\(\pi = \pi^{(Z)}_0\).
+</p>
+
+<ol class="org-ol">
+<li>The pseudo-Hermitian product.
+<ol class="org-ol">
+<li>For \(A, B \in \mathcal{A}_2\), define the pseudo-Hermitian product
+\[
+        \langle A, B\rangle_{\pi}' = \pi(A^*B).
+      \]
+Implement this as the function <code>pseudoInner(A, B)</code>:
+
+<pre class="example">
+*&gt; def pseudoInner(A, B):
+...    &lt;yourFunctionHere&gt;
+</pre>
+</li>
+
+<li>Verify (computationally) it is conjugate symmetric and additive
+\[
+        \langle A, B\rangle_\pi' = \overline{\langle B, A\rangle_\pi'},
+        \quad \langle A, B + C\rangle_\pi' = \langle A, B\rangle_\pi'+
+        \langle A, C\rangle_\pi'
+      \]
+for \(A = H\), \(B = Y\), and \(C = Z\).
+</li>
+<li>Show (computationally) that the pseudo-Hermitian product is <i>not
+positive</i>, since
+\[
+        \langle A, A\rangle_\pi' = 0, \quad A = Z- I.
+      \]
+This means it is not a true inner product (hence the
+&amp;ldquo;pseudo&amp;rdquo;).
+</li>
+</ol>
+</li>
+<li>Reduction and the Hilbert space.
+<ol class="org-ol">
+<li>To create an inner product, we can perform the following trick: we
+<i>identify</i> \(Z \sim I\), so that \(Z - I \sim 0\). Define a reduction
+function \(\eta_\text{red}: \mathcal{A}\to \mathcal{A}\) which
+replaces \(Z\) with \(I\) in an operator expression:
+
+<pre class="example">
+*&gt; def reduce(A):
+...    &lt;yourFunctionHere&gt;
+</pre>
+
+<p>
+<i>Hint:</i> Check out Exercise 1.1.
+</p>
+</li>
+<li>The Hilbert space \(\mathcal{H}_\pi\) consists of all reduced
+operators \(\eta_\text{red}(\mathcal{A}_2)\) with inner
+product<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">You can show that the pseudo-Hermitian product doesn't care about \(\eta_\text{red}\): it gives the same answers for two operators with the same reduction.</span>
+\[
+        \langle \eta_\text{red} (A), \eta_\text{red} (B)\rangle_\pi =
+        \langle A,B\rangle_\pi' = \pi(A^* B).
+      \]
+Check using <code>yaw</code> that the vectors associated to
+\(I \mapsto |0\rangle\) and \(X \mapsto |1\rangle\) (or simply
+\(X^b \mapsto |b\rangle\)) constitute an orthonormal basis for this
+space.
+</li>
+<li>We can view an operator \(A \in \mathcal{A}\) as a matrix acting on
+\(\mathcal{H}_\pi\) by \(A |B\rangle_\pi = |AB\rangle_\pi\), and hence
+matrix elements
+\[
+        \langle b| A |b'\rangle = \pi (X^b A X^{b'}).
+      \]
+Using this recipe, numerically confirm that \(H = (X + Z)/\sqrt{2}\)
+has matrix representation
+\[        H \mapsto \frac{1}{\sqrt{2}}         \begin{bmatrix}           1 & 1 \\ 1 & -1         \end{bmatrix}.
+      \]
+</li>
+</ol>
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9">2.3. The noncommutative torus <span class="mark">🖍💀</span></h2>
+<div class="outline-text-2" id="text-9">
+<p>
+Recall that a single unitary \(U\) generates functions on the circle
+\(\mathbb{S}^1\) (Exercise 1.3). We will explore the different
+spaces&#x2014;and states&#x2014;generated by two unitaries \(U\) and \(V\).
+</p>
+
+<ol class="org-ol">
+<li>Consider the algebra \(\mathcal{A}_{U,V}\) of commuting unitaries,
+\(UV = VU\). It acts on the Hilbert space of square-integrable
+functions \(\mathcal{H} = L^2(\mathbb{S}^1\times \mathbb{S}^1)\) via
+\[
+     U f(e^{i\alpha}, e^{i\beta}) = e^{i\alpha} f(e^{i\alpha},
+     e^{i\beta}), \quad V f(e^{i\alpha}, e^{i\beta}) = e^{i\beta}
+     f(e^{i\alpha}, e^{i\beta}).
+   \]
+<ol class="org-ol">
+<li>Verify that \(U\) and \(V\) are unitary and commute.
+</li>
+<li>By an argument (or two!) analogous to Exercise 1.3, show that
+\(\mathcal{A}_{U,V} \cong C^0(\mathbb{T}^2)\), where
+\(\mathbb{T}^2 = \mathbb{S}^1\times \mathbb{S}^1\) is the
+<i>torus</i>.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote">Also known as the donut.</span>
+</li>
+<li>For a square-integrable Fourier series
+\[
+        A = \sum_{m,n\in\mathbb{Z}} c_{m,n} U^m V^n,
+      \]
+argue that the coefficient projection \(\pi_{0}(A) = c_{0,0}\) is a
+state, i.e. linear, normalized, and positive.
+</li>
+<li>Show that no other coefficients \(c_{m,n}\) are states.
+</li>
+</ol>
+</li>
+<li>Now consider the algebra \(\mathcal{A}_\theta\) with two unitary
+generators \(U\) and \(V\) satisfying a braiding relation
+\(VU = e^{i\theta} UV\) for \(\theta \not\in 2\pi\mathbb{Z}\). For
+square-integrable functions on \(\mathbb{S}^1\), define
+\[
+     Uf (e^{i\alpha}) = e^{i\alpha} f(e^{i\alpha}), \quad V
+     f(e^{i\alpha}) = f(e^{i\alpha-\theta}).
+   \]
+This algebra is called the <i>noncommutative torus</i>.
+<ol class="org-ol">
+<li>Verify that \(U\) and \(V\) are unitary and braid appropriately.
+</li>
+<li>Argue that, for the Fourier series
+\[
+        A = \sum_{m,n\in\mathbb{Z}} c_{m,n} U^m V^n,
+      \]
+the coefficient projection \(\pi_{0}(A) = c_{0,0}\) is a state.
+</li>
+<li>If \(\theta\) is irrational, argue that no other coefficient
+projection is a state. Conversely, if \(\theta \in \mathbb{Q}\) is
+rational, argue that \(c_{m,n}\) is a state whenever
+\(\theta m, \theta n \in \mathbb{Z}\).
+</li>
+</ol>
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10">3.1. Hadamard? <span class="mark">💻</span></h2>
+<div class="outline-text-2" id="text-10">
+<p>
+<span class="stub">To be written.</span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-11" class="outline-2">
+<h2 id="sec-11">3.2. EPR <span class="mark">💻</span></h2>
+<div class="outline-text-2" id="text-11">
+<p>
+<span class="stub">Factorization, qudit version. To be
+written.</span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-12" class="outline-2">
+<h2 id="sec-12">3.3. Qudit depolarizer <span class="mark">💻</span></h2>
+<div class="outline-text-2" id="text-12">
+<p>
+<span class="stub">To be written.</span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-13" class="outline-2">
+<h2 id="sec-13">3.4. Many worlds (branching) <span class="mark">💻</span></h2>
+<div class="outline-text-2" id="text-13">
+<p>
+<span class="stub">To be written.</span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-14" class="outline-2">
+<h2 id="sec-14">4.1. Single-qudit unitaries <span class="mark">🖍</span></h2>
+<div class="outline-text-2" id="text-14">
+<p>
+<span class="stub">To be written.</span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-15" class="outline-2">
+<h2 id="sec-15">4.2. Variance and averages <span class="mark">💻</span></h2>
+<div class="outline-text-2" id="text-15">
+<p>
+<span class="stub">To be written.</span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-16" class="outline-2">
+<h2 id="sec-16">4.3. Operator mirroring <span class="mark">🖍</span></h2>
+<div class="outline-text-2" id="text-16">
+<p>
+<span class="stub">To be written.</span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-17" class="outline-2">
+<h2 id="sec-17">4.4. Gate teleportation <span class="mark">💻</span></h2>
+<div class="outline-text-2" id="text-17">
+<p>
+<span class="stub">To be written.</span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-18" class="outline-2">
+<h2 id="sec-18">4.5. Causality and encryption <span class="mark">🖍</span></h2>
+<div class="outline-text-2" id="text-18">
+<p>
+<span class="stub">To be written.</span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-19" class="outline-2">
+<h2 id="sec-19">5.1. A Hamiltonian <span class="mark">💻</span></h2>
+<div class="outline-text-2" id="text-19">
+<p>
+<span class="stub">To be written.</span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-20" class="outline-2">
+<h2 id="sec-20">5.2. Rabi uncertainty <span class="mark">💻</span></h2>
+<div class="outline-text-2" id="text-20">
+<p>
+<span class="stub">To be written.</span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-21" class="outline-2">
+<h2 id="sec-21">5.3. Trotter-Suzuki <span class="mark">💻</span></h2>
+<div class="outline-text-2" id="text-21">
+<p>
+<span class="stub">To be written.</span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-22" class="outline-2">
+<h2 id="sec-22">5.4. Multiple marked items <span class="mark">💻</span></h2>
+<div class="outline-text-2" id="text-22">
+<p>
+<span class="stub">To be written.</span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-23" class="outline-2">
+<h2 id="sec-23">5.5. Rotation geometry <span class="mark">💻</span></h2>
+<div class="outline-text-2" id="text-23">
+<p>
+<span class="stub">To be written.</span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-24" class="outline-2">
+<h2 id="sec-24">6.1. Check algorithm <span class="mark">💻</span></h2>
+<div class="outline-text-2" id="text-24">
+<p>
+<span class="stub">To be written.</span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-25" class="outline-2">
+<h2 id="sec-25">6.2. QFT parallelization in qudits <span class="mark">💻</span></h2>
+<div class="outline-text-2" id="text-25">
+<p>
+<span class="stub">To be written.</span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-26" class="outline-2">
+<h2 id="sec-26">6.3. Normal subgroups <span class="mark">💻</span></h2>
+<div class="outline-text-2" id="text-26">
+<p>
+<span class="stub">To be written.</span>
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>
