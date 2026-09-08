@@ -85,6 +85,14 @@ ENABLE_NUMERICAL_QUDITS = True
 # Lazy import of numerical backend (only loaded when needed)
 _qudit_backend_cache = {}
 
+# Guard against runaway recursion when an expectation walks a deeply nested
+# expression. This is a safety net, not a semantic limit: it must be far larger
+# than any legitimate nesting, or terms are silently dropped and expectations
+# come back wrong. Sums of tensor products over several subsystems reach a few
+# dozen levels routinely.
+_MAX_EXPECT_DEPTH = 200
+
+
 def _get_qudit_backend(d):
     """Get or create numerical backend instance for dimension d.
     
@@ -3743,17 +3751,28 @@ class Algebra:
             verbose: Print normalization steps
             force: Force normalization even if globally disabled
         """
-        # Check cache first (memoization for performance)
-        # Use object id + force flag as cache key (much faster than str())
+        # Check cache first (memoization for performance).
+        #
+        # The key is the expression's id, which is fast -- but ids are reused
+        # once an object is collected, so the entry also stores the expression
+        # itself and we confirm identity before trusting a hit. Without that
+        # check a temporary expression can be freed, its id handed to an
+        # unrelated one, and the cache then returns a normalisation belonging
+        # to a different operator. That failure is silent, intermittent, and
+        # depends on what was evaluated earlier.
         cache_key = (id(yaw_op._expr), force)
-        if cache_key in self._normalize_cache:
-            return self._normalize_cache[cache_key]
+        cached = self._normalize_cache.get(cache_key)
+        if cached is not None:
+            cached_expr, cached_result = cached
+            if cached_expr is yaw_op._expr:
+                return cached_result
         
         # Check global normalization flag for performance
         global _ENABLE_AUTO_NORMALIZATION
         if not force and not _ENABLE_AUTO_NORMALIZATION:
-            # Store in cache even when skipping
-            self._normalize_cache[cache_key] = yaw_op
+            # Store in cache even when skipping. Keeping the expression in
+            # the entry also pins it, so its id cannot be recycled.
+            self._normalize_cache[cache_key] = (yaw_op._expr, yaw_op)
             return yaw_op  # Skip normalization for speed
         
         expr = expand(yaw_op._expr)
@@ -3829,7 +3848,7 @@ class Algebra:
 
         # Cache the result before returning
         result = YawOperator(expr, self)
-        self._normalize_cache[cache_key] = result
+        self._normalize_cache[cache_key] = (yaw_op._expr, result)
         return result
     
     def get_all_elements_without_scalars(self) -> list:
@@ -4156,7 +4175,7 @@ class _SimpleState:
         
         Uses the fact that this is an eigenstate with eigenvalue +1.
         """
-        if _depth > 10:
+        if _depth > _MAX_EXPECT_DEPTH:
             return 0.0
         
         # Normalize operator (always, even if global normalization disabled)
@@ -4481,7 +4500,7 @@ class EigenState(State):
         - Products with coefficients
         - Off-diagonal terms (returns 0)
         """
-        if _depth > 10:
+        if _depth > _MAX_EXPECT_DEPTH:
             return _clean_number(0.0)
         
         # Handle TensorSum: ⟨ψ|(A + B)|ψ⟩ = ⟨ψ|A|ψ⟩ + ⟨ψ|B|ψ⟩
@@ -4675,7 +4694,7 @@ class TensorState(State):
     
     def expect(self, operator, _depth=0):
         """Compute expectation value on tensor product state."""
-        if _depth > 10:
+        if _depth > _MAX_EXPECT_DEPTH:
             return 0.0
         
         # Handle tensor sum: ⟨ψ|(A + B)|ψ⟩ = ⟨ψ|A|ψ⟩ + ⟨ψ|B|ψ⟩
@@ -4951,7 +4970,7 @@ class LeftMultipliedState(State):
     
     def expect(self, op, _depth=0):
         """Compute expectation: (A <<<) φ (B) = φ(AB)"""
-        if _depth > 10:
+        if _depth > _MAX_EXPECT_DEPTH:
             return 0.0
         
         # Special case: if op is a Projector, use its expect method
@@ -5065,7 +5084,7 @@ class RightMultipliedState(State):
     
     def expect(self, op, _depth=0):
         """Compute expectation: (>>> A) φ (B) = φ(BA)"""
-        if _depth > 10:
+        if _depth > _MAX_EXPECT_DEPTH:
             return 0.0
         
         # Right multiply: measure op*A in original state
@@ -5278,7 +5297,7 @@ class ConjugatedState(State):
     
     def expect(self, op, _depth=0):
         """Compute expectation: ⟨U|ψ⟩|A|U|ψ⟩⟩ = ⟨ψ|U†AU|ψ⟩"""
-        if _depth > 10:
+        if _depth > _MAX_EXPECT_DEPTH:
             return 0.0
         
         # Transform operator instead of state
@@ -6017,7 +6036,7 @@ class TransformedState(State):
         Returns:
             Expectation value
         """
-        if _depth > 10:
+        if _depth > _MAX_EXPECT_DEPTH:
             return 0.0
         
         # Apply channel to operator
@@ -6147,7 +6166,7 @@ class CollapsedState(State):
         Returns:
             Expectation value
         """
-        if _depth > 10:
+        if _depth > _MAX_EXPECT_DEPTH:
             return 0.0
 
         # Handle zero probability
