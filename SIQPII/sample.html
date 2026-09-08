@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>2.3. Sample </title>
+<!-- 2026-09-08 Tue 07:42 -->
+<meta  charset="utf-8">
+<meta  name="generator" content="Org-mode">
+<meta  name="author" content="David Wakeham">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+<script src="contents.js"></script>
+<script type="text/javascript" src="sidebar_darkmode.js"></script>
+<style>.smallcaps{font-variant:small-caps;letter-spacing:.04em}</style>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],tags:'ams',processEscapes:true}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+<script src="contents.js"></script>
+<script type="text/javascript" src="sidebar_darkmode.js"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>pre { padding-top: 25px !important; }</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/javascript" src="http://orgmode.org/mathjax/MathJax.js"></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
+
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">2.3. Sample </h1>
+<p>
+Why does quantum search work? Loosely, we found a simple two-dimensional
+system where we could rotate our initial guess into the target state.
+This took time \(\mathcal{O}(\sqrt{d})\) in the unstructured case. But
+suppose we could arrange a binary search tree that was classically
+invisible or inaccessible, so that only a quantum computer could use it.
+It would take time \(\mathcal{O}(\log_2 d)\) for the quantum computer and
+\(\mathcal{O}(d)\) for the classical computer, leading to a much more
+impressive <i>logarithmic</i> speedup in the size of the database.
+</p>
+
+<p>
+The question is how to engineer this classically inaccessible binary
+tree. Search gave us the hint that manipulating <i>amplitudes</i>, such as
+the transition amplitude in the Rabi relation of the previous section,
+were key to computational advantage, so we can seek <i>interference
+patterns</i> visible only in amplitudes, and that disappear once amplitudes
+are reduced to absolute values or squares. A deceptively simple pattern
+is given by the geometric series:
+\[
+  1 + \omega + \omega^2 + \cdots + \omega^{d-1} =
+  \sum_{k=0}^{d-1}\omega^k = \frac{1 - \omega^d}{1-\omega}.
+\]
+For phases \(\omega\), the absolute value (or its square) \(|\omega| = 1\),
+so the sum evaluates to \(d\). But for a root of unity \(\omega_d^d = 1\)
+(for \(d\neq 1\)), the sum vanishes! This looks like precisely the sort of
+structure that would be visible quantumly but classically hard to
+detect.
+</p>
+
+<p>
+Let's take a short detour, and explore how to do numerics in <code>yaw</code>. For
+a single unknown like \(\omega\), we introduce a single free generator:
+</p>
+
+<pre class="example">
+*&gt; $alg = &lt;w|&gt;
+*&gt; def geom(d): return sum(w**k for k in range(d))
+</pre>
+
+<p>
+If we want to evaluate for a specific choice of <code>w</code>, we can use the
+local context operator <code>expr!rels</code> (or equivalently <code>local(expr, rels)</code>)<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">Both work at the top level, but only <code>local()</code> works inside functions. This keeps things Pythonic! See Exercise 1.1 for more on local context.</span>
+to provide local context to evaluate in. For instance, the geometric sum
+of \(d\) powers of \(k\)-th roots of unity is
+</p>
+
+<pre class="example">
+*&gt; def partial(k, d): return local(geom(d), w=exp(1j*2*pi/k))
+*&gt; partial(10, 7)
+1 + exp(1.2j*pi) + exp(1j*pi) + exp(0.8j*pi)
+....   + exp(0.2j*pi) + exp(0.6j*pi) + exp(0.4j*pi)
+</pre>
+
+<p>
+To evaluate this numerically, we can use <code>N(expr)</code>:
+</p>
+
+<pre class="example">
+*&gt; N(partial(10, 7))
+(-0.8090169944+2.4898982849j)
+*&gt; [N(partial(d,d)) for d in range(10)]
+[0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+</pre>
+
+<p>
+The series sums to zero except at \(d=1\).
+</p>
+
+<p>
+To turn this into a concrete task, suppose we work over qudits
+\(\mathcal{A}_d\), and encode a phase (to be determined) by an oracle \(U\)
+such that
+\[
+  f(k) = \pi^{(Z)}_k (U) = \omega_d^{kq}.
+\]
+A simple choice is \(U = Z^q\), since \(\pi^{(Z)}_k (Z) = \omega_d^k\) and
+powers act diagonally. Our goal is to learn the index \(q\), or
+equivalently the <i>period</i> \(p = d/q\) of the function \(f\), since
+\[
+  f(k+p) = \pi^{(Z)}_{k+p} (U) = \omega_d^{(k + p)q} =
+  \omega_d^{kq}\omega_d^{pq} = \omega_d^{kq} = f(k).
+\]
+We can check this in code (you choose \(d = pq\)):
+</p>
+
+<pre class="example">
+*&gt; $alg = qudit(d)
+*&gt; def f(k): return Z**q | char(Z, k)
+*&gt; [isclose(f(k), f(k+p)) for k in range(d-p)]
+[np.True_, np.True_, np.True_, ...]
+</pre>
+
+<p>
+Note that we use <code>isclose()</code> for numerical comparisons rather than
+strict equality <code>==</code>, which is too sensitive to numerical noise.
+</p>
+
+<p>
+Our &amp;ldquo;trick&amp;rdquo; of coherently summing phases is a simple version
+of the <i>Fourier transform</i>. This can be performed by both classical and
+quantum computers, but as we will show below, the quantum Fourier
+transform (QFT) has a special advantage. First, let's see how the QFT
+reveals the period \(p\). Recall that when we conjugate an expression by
+the matrix \(W\) (described in more detail in Exercise 0.2), we swap \(Z\)
+for \(X\) and \(X\) for \(Z^*\). Thus,
+\[
+  W Z^qW^* = X^q.
+\]
+Since the \(X\) matrix shifts in the \(Z\) basis, acting on the initial
+state \(\pi^{(Z)}_0\) gives \(\pi^{(Z)}_q\), and measurement immediately
+reveals $q$! We can check this works as expected:
+</p>
+
+<pre class="example">
+*&gt; measure(Z, (qft(X, Z) » U) « char(Z, 0))()[1]
+d - q
+</pre>
+
+<p>
+The shift comes out as \(-q\) rather than \(+q\) because <code>braid(w)</code> in the
+implementation reads \(XZ = \omega ZX\), so \(X\) lowers the \(Z\) index
+rather than raising it. Since \(-q\) determines \(q\), nothing downstream
+changes; period-finding below reads off \(q\) either way.
+</p>
+
+<p>
+Great! The question is, can we take this trick further?
+</p>
+
+<p>
+It turns out we can. A basic result of Fourier analysis tells us that a function<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">Here, \([d] = \{0, 1, 2, \ldots, d-1\}\) is the first \(d\) integers. Alternatively, we can view them as the <em>additive group</em> of integers \(\mathbb{Z}_d\) modulo \(d\).</span>
+\(f: [d] \to \mathbb{C}\) with period \(p\) (for \(d = pq\)) can be expanded
+as a series in the \(p\)-th roots of unity:
+\[
+  f(k) = \sum_{i=0}^{p-1} c_i \omega_p^{i} = \sum_{i=0}^{p-1} c_i
+  \omega_d^{qi},
+\]
+using \(\omega_p = \omega^{q}_d\) for the last equality. In the quantum
+setting, this corresponds to an oracle
+\[
+  \pi^{(Z)}_k (U) = f(k), \quad f(k+p) = f(k)
+\]
+being expanded as
+\[
+  U = \sum_{i=0}^{p-1} c_i Z^{qi} \quad \Longrightarrow \quad
+  \tilde{U} = WUW^* = \sum_{i=0}^{p-1} c_i X^{qi}.
+\]
+To ensure \(U\) is unitary, we must scale coefficients \(c_i\) so that
+\(\sum_i |c_i|^2 = 1\). Then evolving \(\pi^{(Z)}_0\) with \(\tilde{U}\) and
+measuring in the \(Z\) basis gives
+</p>
+\begin{equation}
+  \label{eq:sample-prob}
+  \mathbb{P}\left[ Z \overset{\tilde{U}\triangleleft
+      \pi^{(Z)}_0}{\longleftarrow} qk\right] = |c_k|^2,
+\end{equation}
+<p>
+as you can show in Exercise 6.1. In other words, measurement yields \(qk\)
+with probability proportional to \(|c_k|^2\). An important consequence is
+that, if the \(c_k = e^{i\theta_k}/\sqrt{d}\) have a common, normalized
+amplitude, each \(qk\) appears with equal probability. Let's see how this
+works in <code>yaw</code>, using random<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote">We use Python's builtin <code>random</code> module.</span>
+phases for the \(c_k\):
+</p>
+
+<pre class="example">
+*&gt; phase = [random.uniform(0,1) for _ in range(p)]
+*&gt; c = [exp(1j*phase[k]*2*pi)/sqrt(d) for k in range(p)]
+*&gt; U = sum(c[k]*Z**(k*q) for k in range(p))
+*&gt; shot = measure(Z, (qft(X, Z) » U) « char(Z, 0))
+*&gt; [shot()[1] for _ in range(10)]
+[0, 9, 3, ...]   # multiples of q, mod d
+</pre>
+
+<p>
+We end up with uniformly distributed multiples of \(q\), as expected.
+</p>
+
+<p>
+What is the shortcut here? Both classical and quantum computers can
+perform the Fourier transform. The difference is that a quantum computer
+can perform different parts of the QFT in parallel, taking
+\(\mathcal{O}(\log d)\) steps<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote">This assumes \(d\) is a highly composite number, which is the interesting case for period-finding; you can explore this in Exercise 6.2.</span>
+as opposed to the \(\mathcal{O}(d\log d)\) steps needed on a classical
+computer. The catch is that with a classical Fourier transform we have
+the \(c_k\) explicitly in hand, whereas the QFT only lets us randomly
+sample \(qk\). We need to check this doesn't kill the speedup from the
+QFT! Given that the \(k_i\) are random in the samples
+\(k_1 q, k_2 q, \ldots, k_\ell q\), we expect there is a good chance there
+is a coprime pair, and hence, the overall set \(k_1, k_2, \ldots, k_\ell\)
+is coprime.
+</p>
+
+<p>
+The chance that two integers picked at random are coprime is
+\(\xi = 6/\pi^2 \approx 0.608\), a claim we can easily check:
+</p>
+
+<pre class="example">
+*&gt; def coprimeProb(N, hi=100):
+...    total = 0
+...    nums = [random.choice(range(hi)) for _ in range(N)]
+...    for m in nums:
+...        for n in nums:
+...            if gcd([m,n]) == 1:
+...                total += 1
+...    return total/(N*(N - 1)) # divide by total pairs
+*&gt; coprimeProb(5000,5000)
+0.6050744949
+</pre>
+
+<p>
+The probability a set of \(\ell\) random integers is not jointly coprime
+is
+\[
+  \epsilon = (1-\xi)^{\ell(\ell-1)/2},
+\]
+which quickly approaches \(0\).<label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote">Reference for \(\xi\). Since they are jointly coprime if any pair is coprime, and the number of pairs is \(\ell(\ell-1)/2\).</span>
+For instance, if we want the probability of nontrivial common factor
+\(\epsilon = 10^{-3}\), we set
+\[
+  \frac{1}{2}\ell(\ell - 1) = \frac{\log\epsilon}{\log(1-\xi)} \approx
+  7.37,
+\]
+which is satisfied by \(\ell = 5\). Whatever this threshold probability,
+the total number of steps is
+</p>
+\begin{equation}
+  \label{eq:13}
+  \mathcal{O}(\sqrt{\log\epsilon}\log d),
+\end{equation}
+<p>
+with the prefactor depending only on failure tolerance \(\epsilon\), not
+\(d\). So this method remains vastly more efficient! Let's put it all
+together for the random phase case:
+</p>
+
+<pre class="example">
+*&gt; def periodFinder(d, p, ell):
+...    $alg = qudit(d)
+...    phase = [random.uniform(0,2*pi) for _ in range(p)]
+...    c = [exp(1j*phase[k])/sqrt(d) for k in range(p)]
+...    U = sum(c[k]*Z**(k*d//p) for k in range(p))
+...    shot = measure(Z, (qft(X, Z) » U) « char(Z, 0))
+...    shots = [shot()[1] for _ in range(ell)]
+...    return d/gcd(shots)
+</pre>
+</div>
+</body>
+</html>

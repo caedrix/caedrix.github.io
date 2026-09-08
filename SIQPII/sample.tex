@@ -1,0 +1,288 @@
+Why does quantum search work? Loosely, we found a simple two-dimensional
+system where we could rotate our initial guess into the target
+state. This took time $\mathcal{O}(\sqrt{d})$ in the unstructured
+case. But suppose we could arrange a binary search tree that was
+classically invisible or inaccessible, so that only a quantum computer could use
+it. It would take time $\mathcal{O}(\log_2 d)$ for the quantum
+computer and $\mathcal{O}(d)$ for the classical computer, leading to
+a much more impressive \emph{logarithmic} speedup in the size of the
+database.
+
+The question is how to engineer this classically inaccessible binary tree.
+Search gave us the hint that manipulating \emph{amplitudes}, such as the transition
+amplitude in (\ref{eq:rabi}), were key to computational advantage, so
+we can seek \emph{interference patterns} visible only in amplitudes,
+and that disappear once amplitudes are reduced to absolute values or
+squares. A deceptively simple pattern is given by the geometric series:
+\[
+  1 + \omega + \omega^2 + \cdots + \omega^{d-1} = \sum_{k=0}^{d-1}\omega^k =
+  \frac{1 - \omega^d}{1-\omega}.
+\]
+For phases $\omega$, the absolute value (or its square) $|\omega| =
+1$, so the sum evaluates to $d$. But for a root of unity $\omega_d^d =
+1$ (for $d\neq 1$), the sum vanishes! This looks like precisely the sort of structure
+that would be visible quantumly but classically hard to detect.
+
+Let's take a short detour, and explore how to do numerics in
+\texttt{yaw}. For a single unknown like $\omega$, we introduce a single free generator:
+  \begin{minted}
+     [
+frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor=AliceBlue,
+fontsize=\footnotesize,
+linenos
+]{slurm}
+    *> $alg = <w|>
+    *> def geom(d): return sum(w**k for k in range(d))
+\end{minted}
+If we want to evaluate for a specific choice of \texttt{w}, we can
+use the local context operator \texttt{expr!rels} (or equivalently
+\texttt{local(expr, rels)})\sidenote{Both work at the top level, but
+  only \texttt{local()} works inside functions. This keeps things
+  \texttt{Pythonic}! See Exercise 1.1 for more on local context.} to provide local context to evaluate
+in. For instance, the geometric sum of $d$ powers of $k$-th roots of
+unity is
+  \begin{minted}
+     [
+frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor=AliceBlue,
+fontsize=\footnotesize,
+linenos
+]{slurm}
+    *> def partial(k, d): return local(geom(d), w=exp(1j*2*pi/k))
+    *> partial(10, 7)
+    1 + exp(1.2j*pi) + exp(1j*pi) + exp(0.8j*pi) 
+    ....   + exp(0.2j*pi) + exp(0.6j*pi) + exp(0.4j*pi)
+\end{minted}
+To evaluate this numerically, we can use \texttt{N(expr)}:
+  \begin{minted}
+     [
+frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor=AliceBlue,
+fontsize=\footnotesize,
+linenos
+]{slurm}
+    *> N(partial(10, 7))
+    (-0.8090169944+2.4898982849j)
+    *> [N(partial(d,d)) for d in range(10)]
+    [0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+\end{minted}
+The series sums to zero except at $d=1$.
+
+To turn this into a concrete task, suppose we work over qudits
+$\mathcal{A}_d$, and encode a phase (to be determined) by an oracle
+$U$ such that
+\[
+f(k) =  \pi^{(Z)}_k (U) = \omega_d^{kq}.
+\]
+A simple choice is $U = Z^q$, since $\pi^{(Z)}_k (Z) = \omega_d^k$
+and powers act diagonally.
+Our goal is to learn the index $q$, or equivalently the \emph{period}
+$p = d/q$ of the function $f$, since
+\[
+ f(k+p) = \pi^{(Z)}_{k+p} (U) = \omega_d^{(k + p)q} =
+  \omega_d^{kq}\omega_d^{pq} = \omega_d^{kq} =  f(k).
+\]
+We can check this in code (you choose $d = pq$):
+%, or equivalently, the smallest value of $k$ such that $\pi^{(Z)}_k
+%(U) = 1$.
+  \begin{minted}
+     [
+frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor=AliceBlue,
+fontsize=\footnotesize,
+linenos
+]{slurm}
+    *> $alg = qudit(d)
+    *> def f(k): return Z**q | char(Z, k)
+    *> [isclose(f(k), f(k+p)) for k in range(d-p)]
+    [np.True_, np.True_, np.True_, ...]
+\end{minted}
+Note that we use \texttt{isclose()} for numerical comparisons rather
+than strict equality \texttt{==}, which is too sensitive to numerical noise.
+
+Our ``trick" of coherently summing phases is a simple version of the
+\emph{Fourier transform}. This can be performed by both classical and
+quantum computers, but as we will show below, the quantum Fourier
+transform (QFT) has a special advantage.
+% Summing these phases over $k$ gives something that automatically vanishes, so this
+% isn't quite right.
+% Instead, we can use a shift of perspective we encountered above: the
+% quantum Fourier transform.
+First, let's see how the QFT reveals the period $p$.
+Recall that when we conjugation an expression by the matrix $W$
+(described in more detail in Exercise 0.2), we swap $Z$ for $X$ and
+$X$ for $Z^*$. Thus, % $Z^q$ by $W$ yields $X^q$,
+\[
+  W Z^qW^* = X^q.
+\]
+Since the $X$ matrix shifts in the $Z$ basis, acting on the initial state $\pi^{(Z)}_0$ gives
+$\pi^{(Z)}_q$, and measurement immediately reveals $q$!
+We can check this works as expected:
+  \begin{minted}
+     [
+frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor=AliceBlue,
+fontsize=\footnotesize,
+linenos
+]{slurm}
+    *> measure(Z, (qft(X, Z) » U) « char(Z, 0))()[1]
+    q
+\end{minted}
+Great! The questionan we take this trick further?
+
+It turns out we can.
+A basic result of Fourier analysis tells us that a
+function\sidenote{Here, $[d] = \{0, 1, 2, \ldots, d-1\}$ is the first
+  $d$ integers. Alternatively, we can view them as the \emph{additive
+    group} of integers $\mathbb{Z}_d$ modulo $d$.} $f: [d]
+\to \mathbb{C}$ with period $p$ (for $d = pq$) can be expanded as a
+series in the $p$-th roots of unity:
+\[
+  f(k) = \sum_{i=0}^{p-1} c_i \omega_p^{i} = \sum_{i=0}^{p-1} c_i \omega_d^{qi},
+\]
+using $\omega_p = \omega^{q}_d$ for the last equality.
+In the quantum setting, this corresponds to an oracle
+% More generally, we could use an oracle to encode a phase function $f:
+% [d] \to \mathbb{S}^1$, where $[d] = \{0, 1, \ldots, d- 1\}$, such that $f$ has period
+% $p$:
+\[
+  \pi^{(Z)}_k (U) = f(k), \quad f(k+p) = f(k)
+\]
+% You can show in Exercise 6.1 that any such function can be written
+being expanded as
+\[
+  U = \sum_{i=0}^{p-1} c_i Z^{qi} \quad \Longrightarrow \quad \tilde{U} = WUW^* = \sum_{i=0}^{p-1} c_i X^{qi}.
+\]
+%for some coefficients $c_k$.
+% Then the QFT gives
+% \[
+%   \tilde{U} = WUW^* = \sum_{i=0}^{p-1} c_i X^{qi}.
+% \]
+To ensure $U$ is unitary, we must scale coefficients $c_i$
+so that $\sum_i |c_i|^2 = 1$.
+Then evolving $\pi^{(Z)}_0$ with $\tilde{U}$ and measuring in the $Z$
+basis gives
+\begin{equation}
+ \mathbb{P}\left[ Z \overset{\tilde{U}\triangleleft
+     \pi^{(Z)}_0}{\longleftarrow} qk\right] = |c_k|^2,
+% \frac{|c_k|^2}{\sum_k |c_k|^2}.\label{eq:12}
+\end{equation}
+as you can show in Exercise 6.1.
+In other words, meaurement yields $qk$ with probability proportional
+to $|c_k|^2$. An important consquence is that, if the $c_k =
+e^{i\theta_k}/\sqrt{d}$ have a common, normalized amplitude,
+each $qk$ appears with equal probability.
+Let's see how this works in \texttt{yaw}, using random\sidenote{We use
+\texttt{Python}'s builtin \texttt{random} module.} phases for the $c_k$:
+  \begin{minted}
+     [
+frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor=AliceBlue,
+fontsize=\footnotesize,
+linenos
+]{slurm}
+    *> phase = [random.uniform(0,1) for _ in range(p)]
+    *> c = [exp(1j*phase[k]*2*pi)/sqrt(d) for k in range(p)]
+    *> U = sum(c[k]*Z**(k*q) for k in range(p))
+    *> shot = measure(Z, (qft(X, Z) » U) « char(Z, 0))
+    *> [shot()[1] for _ in range(10)]
+    [0, 3*q, q, ...]
+\end{minted}
+We end up with uniformly distributed multiples of $q$, as expected.
+
+What is the shortcut here? Both classical and quantum computers can
+perform the Fourier transform.
+The difference is that a quantum computer can perform different parts of
+the QFT in parallel, taking $\mathcal{O}(\log d)$ steps\sidenote{This
+  assumes $d$ is a highly composite number, which is the interesting
+  case for period-finding; you can explore this in Exercise 6.2.} as
+opposed to the
+$\mathcal{O}(d\log d)$ steps needed on a classical computer.
+The difference is that, if with a classical Fourier transform, we have the $c_k$
+explicitly in our command, whereas the QFT only lets us randomly
+sample $qk$.
+We need to check this doesn't kill the speedup from the QFT!
+Given that the $k_i$ are random in the samples $k_1 q, k_2 q, \ldots,
+k_\ell q$, we expect there is a good chance there is a coprime pair,
+and hence, the overall set $k_1, k_2, \ldots, k_\ell$ is coprime.
+
+The chance that two integers picked at random are coprime is $\xi =
+6/\pi^2 \approx 0.608$, a claim we can easily check:
+  \begin{minted}
+     [
+frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor=AliceBlue,
+fontsize=\footnotesize,
+linenos
+]{slurm}
+    *> def coprimeProb(N, max=100):
+    ...    total = 0
+    ...    nums = [random.choice(range(max)) for _ in range(N)]
+    ...    for m in nums:
+    ...        for n in nums:
+    ...            if gcd([m,n]) == 1:
+    ...                total += 1
+    ...    return total/(N*(N - 1)) # divide by total pairs
+    *> coprimeProb(5000,5000)
+    0.6050744949
+\end{minted}
+The probability a set of $\ell$ random integers is not jointly coprime is
+\[
+  \epsilon = (1-\xi)^{\ell(\ell-1)/2},
+\]
+which quickly approaches $0$.\sidenote{Reference for $\xi$. Since they are jointly coprime
+  if any pair is coprime, and the number of pairs is $n(n-1)/2$.} For
+instance, if we want the probability of nontrivial common factor
+$\epsilon = 10^{-3}$, we set
+\[
+  \frac{1}{2}\ell(\ell - 1) = \frac{\log\epsilon}{\log(1-\xi)} \approx 7.37,
+\]
+which is satisfied by $\ell = 5$.
+% Since this probability does not depend on $d$, the number of samples
+% depends only our desired precision, and does not affect the
+% running time of $\mathcal{O}(\log d)$.
+Whatever this threshold probability, the total number of steps is
+\begin{equation}
+  \label{eq:13}
+  \mathcal{O}(\sqrt{\log\epsilon}\log d),
+\end{equation}
+with the prefactor depending only on failure tolerance $\epsilon$, not
+$d$.
+So this method remains vastly more efficient!
+% despite the fact we
+% have to post-process samples!
+Let's put it all together for the random
+phase case:
+  \begin{minted}
+     [
+frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor=AliceBlue,
+fontsize=\footnotesize,
+linenos
+]{slurm}
+    *> def periodFinder(d, p, ell):
+    ...    $alg = qudit(d)
+    ...    phase = [random.uniform(0,2*pi) for _ in range(k)]
+    ...    c = [exp(1j*phase[k])/sqrt(d) for k in range(p)]
+    ...    U = sum(c[k]*Z**(k*d//p) for k in range(p))
+    ...    shot = measure(Z, (qft(X, Z) » U) « char(Z, 0))
+    ...    shots = [shot()[1] for _ in range(ell)]
+    ...    return d/gcd(shots)
+\end{minted}
