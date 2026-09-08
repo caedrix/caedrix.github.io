@@ -1,0 +1,14 @@
+* COMMENT html export
+#+TITLE:
+#+HTML_CONTAINER: div
+#+HTML_DOCTYPE: xhtml-strict
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="enhanced_tufte.css">
+#+HTML_HEAD: <script src="contents.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="sidebar_darkmode.js"></script>
+#+HTML_HEAD: <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+#+HTML_LINK_UP:
+#+HTML_MATHJAX: 
+#+INFOJS_OPT:
+#+LATEX_HEADER:
+#+OPTIONS: html-postamble:nil toc:nil 
+#+HTML_HEAD_EXTRA: <style>pre { padding-top: 25px !important; }</style>
