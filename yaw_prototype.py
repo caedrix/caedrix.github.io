@@ -4597,10 +4597,64 @@ class EigenState(State):
     def __repr__(self):
         return f"char({obs_str}, {self.index})"
     
+    def to_vector(self, backend=None):
+        """Numerical eigenvector of the observable, for the stored index.
+
+        Needed whenever an expectation has to fall back to matrices --- e.g.
+        a tensor factor that is itself entangled, where the symbolic route
+        cannot factorise. Eigenvectors are ordered to match spec().
+        """
+        if backend is None:
+            d = getattr(self.algebra, 'power_mod', None)
+            if not d:
+                raise ValueError("EigenState.to_vector needs a backend")
+            backend = _get_qudit_backend(d)
+
+        matrix = _yaw_to_numerical(self.observable, backend)._matrix
+        evals, evecs = np.linalg.eig(matrix)
+
+        # match spec()'s ordering: descending by real part, then imaginary
+        order = sorted(range(len(evals)),
+                       key=lambda i: (-np.real(evals[i]), -np.imag(evals[i])))
+        col = order[self.index % len(order)]
+        vec = evecs[:, col]
+        norm = np.linalg.norm(vec)
+        return vec / norm if norm > 1e-12 else vec
+
     def flatten(self):
         """EigenStates are already atomic - return self."""
         return self
     
+def _peel_wrappers(state):
+    """Strip Left/Right multiplication wrappers, outermost first.
+
+    Returns (layers, base) where layers is a list of (kind, operator) with
+    kind in {'L', 'R'}, and base is the unwrapped state.
+    """
+    layers, cur = [], state
+    while isinstance(cur, (LeftMultipliedState, RightMultipliedState)):
+        kind = 'L' if isinstance(cur, LeftMultipliedState) else 'R'
+        layers.append((kind, cur.operator))
+        cur = cur.state
+    return layers, cur
+
+
+def _identity_for(state):
+    """Identity operator of the algebra a state belongs to."""
+    alg = getattr(state, 'algebra', None)
+    return alg.I if alg is not None else None
+
+
+def _tensor_all(factors):
+    """Tensor a list of operators together, left to right."""
+    if not factors or any(f is None for f in factors):
+        return None
+    total = factors[0]
+    for f in factors[1:]:
+        total = total @ f
+    return total
+
+
 class TensorState(State):
     """Tensor product of states: |ψ⟩ ⊗ |φ⟩"""
     
@@ -4632,6 +4686,16 @@ class TensorState(State):
         # Handle tensor product operators
         if isinstance(operator, TensorProduct):
             if len(operator.factors) != len(self.states):
+                # A factor wraps several subsystems (an entangled pair, say).
+                # Flattening lifts the wrapper operators out and leaves one
+                # atomic state per subsystem, which the symbolic path handles
+                # exactly -- no numerical fallback needed.
+                flat = self.flatten()
+                if flat is not self and not (
+                        isinstance(flat, TensorState)
+                        and len(flat.states) == len(self.states)):
+                    return flat.expect(operator, _depth=_depth+1)
+
                 # Factor count mismatch - try numerical computation
                 # This handles cases where one state wraps multiple subsystems
                 # (e.g., an entangled 2-qudit state counted as 1 factor)
@@ -4664,7 +4728,26 @@ class TensorState(State):
                                             return b
                                 return None
                             backend = find_backend(self)
-                        
+
+                        if backend is None:
+                            # Last resort: build one from the algebra's own
+                            # dimension. Entangled factors (e.g. an EPR state
+                            # wrapped in a LeftMultipliedState) carry no
+                            # backend of their own, so without this the
+                            # numerical path is skipped and a perfectly
+                            # well-defined expectation raises.
+                            alg = None
+                            for factor in operator.factors:
+                                alg = getattr(factor, 'algebra', None)
+                                if alg is not None:
+                                    break
+                            d = getattr(alg, 'power_mod', None) if alg else None
+                            if d:
+                                try:
+                                    backend = _get_qudit_backend(d)
+                                except Exception:
+                                    backend = None
+
                         if backend is not None:
                             state_vec = self.to_vector(backend)
                             op_mat = operator.to_matrix(backend)
@@ -4734,17 +4817,68 @@ class TensorState(State):
             >>> nested = state1 @ state2  # 2 factors: [state1, state2]
             >>> flat = nested.flatten()    # 3 factors: [char(Z,0), char(Z,0), char(Z,1)]
         """
-        flat_states = []
+        # Peel any Left/Right multiplication wrappers off each factor, flatten
+        # the atomic states underneath, then rebuild the wrappers across the
+        # whole system. This matters because an entangled factor (an EPR pair,
+        # say) cannot be split into independent states -- but its operator can
+        # be lifted out, since (A |s1>) @ (B |s2>) equals (A @ B) |s1 @ s2>.
+        blocks = []       # (layers, [atomic states])
+        hoisted = False
+
         for state in self.states:
-            if isinstance(state, TensorState):
-                # Recursively flatten nested tensor states
-                nested_flat = state.flatten()
-                flat_states.extend(nested_flat.states)
-            else:
-                flat_states.append(state)
-        
-        return TensorState(flat_states)
-    
+            layers, base = _peel_wrappers(state)
+            if layers:
+                hoisted = True
+
+            if isinstance(base, TensorState):
+                inner = TensorState.flatten(base)
+                inner_layers, inner_base = _peel_wrappers(inner)
+                if inner_layers:
+                    hoisted = True
+                layers = layers + inner_layers
+                base = inner_base
+            block = list(base.states) if isinstance(base, TensorState) else [base]
+            blocks.append((layers, block))
+
+        flat_states = [st for _, block in blocks for st in block]
+        flat = TensorState(flat_states)
+        if not hoisted:
+            return flat
+
+        # Rebuild, innermost layer first. Layers are padded with identities for
+        # factors that have fewer of them.
+        stacks = [list(reversed(layers)) for layers, _ in blocks]
+        widths = [len(block) for _, block in blocks]
+        depth = max(len(st) for st in stacks)
+
+        result = flat
+        pos_of = []
+        p = 0
+        for w in widths:
+            pos_of.append(p); p += w
+
+        for level in range(depth):
+            kinds = {st[level][0] for st in stacks if level < len(st)}
+            if len(kinds) != 1:
+                return flat          # mixed layer kinds: don't guess
+            kind = kinds.pop()
+
+            factors = []
+            for i, st in enumerate(stacks):
+                if level < len(st):
+                    factors.append(st[level][1])
+                else:
+                    for k in range(widths[i]):
+                        factors.append(_identity_for(flat_states[pos_of[i] + k]))
+
+            total = _tensor_all(factors)
+            if total is None:
+                return flat
+            result = (LeftMultipliedState(total, result) if kind == 'L'
+                      else RightMultipliedState(total, result))
+
+        return result
+
     def num_subsystems(self):
         """Count the total number of quantum subsystems in this state.
         
@@ -8442,7 +8576,16 @@ def _yaw_to_numerical(op, backend):
         else:
             raise ValueError(f"Cannot convert expression to matrix: {expr} (type: {type(expr).__name__})")
     
-    result._matrix = expr_to_matrix(op._expr)
+    try:
+        result._matrix = expr_to_matrix(op._expr)
+    except ValueError:
+        # Unevaluated shorthands such as proj(Z, 0) are not symbols the
+        # matrix builder knows. Expand them into their polynomial form and
+        # try once more before giving up.
+        expanded = op.expand() if hasattr(op, 'expand') else None
+        if expanded is None or expanded._expr == op._expr:
+            raise
+        result._matrix = expr_to_matrix(expanded._expr)
     return result
 
 
