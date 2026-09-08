@@ -962,6 +962,7 @@ class YawREPL:
             Encoding, rep, comm, acomm, gnsVec, gnsMat, spec, minimal_poly,
             VecState, ite, embed, cycle, prod, scalar,
             weyl, WeylState, weylState, five_qubit_code, StabilizerCode,
+            wire, embed,
             op_exp,
             MixedState, mixed,
             is_projector, is_unitary, is_hermitian  # Operator property checks
@@ -1116,6 +1117,8 @@ class YawREPL:
         namespace['WeylState'] = WeylState
         namespace['weylState'] = weylState
         namespace['five_qubit_code'] = five_qubit_code
+        namespace['wire'] = wire
+        namespace['embed'] = embed
         namespace['StabilizerCode'] = StabilizerCode
         namespace['is_projector'] = is_projector
         namespace['is_unitary'] = is_unitary
@@ -1918,6 +1921,7 @@ class YawREPL:
             'TensorState', 'link', 'unlink', 'verbose', 'on', 'off',
             'vars', 'links', 'algebra', 'I', 'qudit', 'qubit', 'weyl',
             'WeylState', 'weylState', 'five_qubit_code', 'StabilizerCode',
+            'wire', 'embed',
             'OpChannel', 'opChannel', 'StChannel', 'stChannel',
             'opUpdate', 'stUpdate', 'TransformedState',
             'OpMeasurement', 'opMeasure', 'StMeasurement', 'stMeasure',
@@ -2211,16 +2215,54 @@ class YawREPL:
       A = GenFam('A')    # Create family, then use A[(i,j)] → 'A_{i,j}'
       [A[(i,j)] for i in range(2) for j in range(2)]  # Create A_{0,0}, A_{0,1}, etc.
 
+    CONTINUOUS VARIABLES (GKP):
+      weyl(omega)        Lattice Weyl algebra <X, Z | unit, braid(omega)>
+      weylState(f)       State given by f(a, b) = <X**a Z**b>
+
+      This is the qubit algebra with the power relation removed, so the
+      squares are stabilizers rather than the identity: in units of the
+      logical shift sqrt(pi), X and Z are the logical Paulis, and X**2,
+      Z**2 shift by a full lattice period.
+
+        *> $alg = <X, Z | unit, braid(-1)>
+        *> gkp = weylState(lambda a, b: 1 if a % 2 == 0 else 0)
+        *> gkp | X**2, gkp | Z**2      # stabilizers
+        (1, 1)
+        *> gkp | X, gkp | Z            # logical Xbar, Zbar
+        (0, 1)
+
+      A state here is a function on the lattice and nothing more, so no
+      state vector is needed -- which matters, because the ideal GKP
+      state has no vector in L^2(R) at all. Other logical states are
+      other lambdas:
+
+        (-1)**b if a % 2 == 0 else 0   |1bar>
+        1 if b % 2 == 0 else 0         |+bar>
+
+      Positivity is not checked. f must come from a genuine state; the
+      supported cases are functions on the stabilizer sublattice.
+
     KEY FUNCTIONS:
       States:
         char(A, k)                 k-th eigenstate of A
         psi @ phi                  Tensor product of states
+        weylState(f)               State on a Weyl algebra from
+                                   f(a, b) = <X**a Z**b>
 
       Operators:
         proj(A, k)                 Projector onto k-th eigenspace
         qft(X, Z)                  Quantum Fourier Transform
         ctrl(Z, [I, X])            Controlled operation
         A @ B                      Tensor product of operators
+        exp(A)                     Exponential; matrix exponential
+                                   for numerical operators, so
+                                   exp(-1j*t*H) evolves by H
+
+      Algebras:
+        qudit(d), qudit(d, n=k)    Qudit algebra, optionally k sites
+        qubit()                    The d = 2 case
+        weyl(omega=-1)             Lattice Weyl algebra (see below)
+        five_qubit_code()          The [[5,1,3]] stabilizer code
 
       Channels:
         opChannel([K0, K1])        Operator channel (Heisenberg)
