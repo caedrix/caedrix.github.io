@@ -53,7 +53,7 @@ $M \in \mathcal{A}_d$,
 \pi^{(\text{EPR})}.     \label{eq:mirror2} \end{align}
 \]
 In words, we can apply $M$ to one end, or its transpose $M^\top$ to the
-other. We won't define the transpose,@@html:<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">If you are really curious, define \(Z^\top = Z\), \(X^\top = X^*\), and \((AB)^\top = B^\top A^\top\).</span>@@
+other. We won't define the transpose,@@html:<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">If you are really curious, define \(Z^\top = Z,\) \(X^\top = X^*\), and \((AB)^\top = B^\top A^\top\).</span>@@
 since all we need is that it is /involutive/,
 $M^{\top\top} = M$. The goal will be to use properties
 $\eqref{eq:mirror1}$ and $\eqref{eq:mirror2}$ on $U$, but that requires

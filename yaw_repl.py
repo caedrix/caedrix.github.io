@@ -2160,6 +2160,48 @@ class YawREPL:
       State conjugation: A << psi (apply A† ... A to state)
       Measurement:       A | psi (expectation value)
 
+    SITE INDEXING (operators on a lattice):
+      Set the system size once, then index operators by the sites they act
+      on. Everything else is filled with identities.
+
+        $alg = qudit(2, n=5)     Five qubits
+        alg.n = 5                 Same thing, set after the fact
+
+      A[i]               A at site i
+      A[i, j]            A[i] * A[j]  --  A on both sites
+      A[i, j, k, ...]    A on every listed site
+      A[i:j]             A on sites i to j-1  (Python's exclusive end)
+      A[i:j:s]           A on range(i, j, s)
+      A[-1]              Last site; negative indices count from the end
+
+      Sites, not wire counts: A[0, 3] is A on sites 0 and 3, not "site 0
+      of 3". The width comes from alg.n, so it never appears in the term.
+
+      Examples, with n = 5:
+        Z[0]                       Z @ I @ I @ I @ I
+        X[0, 3]                    X @ I @ I @ X @ I
+        X[0, 3] * Z[1, 2]          XZZXI, the five-qubit stabilizer
+        Z[0:3]                     Z @ Z @ Z @ I @ I
+        Z[0:5:2]                   Z @ I @ Z @ I @ Z
+        X[-1]                      I @ I @ I @ I @ X
+
+      Terms print in unnormalized form, so identities and phases may be
+      spelled out; call .normalize() for a readable expression.
+
+    CYCLIC SHIFTS:
+      cycle(k, A)        Shift every factor k sites right, with wraparound
+
+      One term plus its rotations gives a whole ring's worth of stabilizers:
+
+        S = X[0, 3] * Z[1, 2]              XZZXI
+        cycle(1, S)                        IXZZX
+        [cycle(k, S) for k in range(4)]    the four five-qubit stabilizers
+
+    EXPLICIT PLACEMENT (when alg.n is not the right frame):
+      wire(A, k, n)      A at site k of exactly n sites, ignoring alg.n
+      embed(A, k, T)     A at site k of a TensorAlgebra T, for systems
+                         whose factors are not all the same algebra
+
     SUBSCRIPT NOTATION:
       P_{k}              Subscripted variables (k evaluated)
       [P_{k} = expr for k in range(3)]   # Create P_0, P_1, P_2
