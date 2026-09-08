@@ -67,7 +67,11 @@ $\mathcal{B}(\mathcal{H})$, and in fact to avoid relying on Hilbert
 space we define /abstract/ operator algebras $\mathcal{A}$ called
 /C${}^*$-algebras/ which carry a linear structure, allow multiplication
 $A, B \mapsto A \cdot B$, taking of adjoints $A \mapsto A^*$, and
-finally have a notion of size $A \mapsto \Vert A \Vert$. @@html:<label for="mn-1" class="margin-toggle">&#8853;</label><input type="checkbox" id="mn-1" class="margin-toggle"/><span class="marginnote"><img src="./img/oracle2.png" alt="An edifice built of oracles" style="width:100%"/><br/><em>An edifice built of oracles.</em></span>@@
+finally have a notion of size $A \mapsto \Vert A \Vert$. @@html:<label
+for="mn-1" class="margin-toggle">&#8853;</label><input type="checkbox"
+id="mn-1" class="margin-toggle"/><span class="marginnote"><img
+src="./img/oracle2.png" alt="Built out of oracles"
+style="width:100%"/><br/><em>A house of many oracles.</em></span>@@
 These can always be realized on a specific, concrete Hilbert space, and
 indeed, this is what allows us to compile our programs on conventional
 quantum computers. Although we touch on the issue of compilation below,
