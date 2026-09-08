@@ -18,7 +18,7 @@ window.YAW_CONTENTS = {
     {
       name: 'Introduction',
 	items: [
-        { n: '1.0', label: 'Preview',             href: 'SIQPII/intro.html',    status: 'live' },
+        { n: '1.0', label: 'Preview',             href: 'SIQPII/preview.html',    status: 'live' },
         { n: '1.1', label: 'Algebras',             href: 'SIQPII/algebras.html',    status: 'live' },
         { n: '1.2', label: 'Operators and states', href: 'SIQPII/operators.html',   status: 'live' },
         { n: '1.3', label: 'Laws of composition',  href: 'SIQPII/composition.html', status: 'live' }

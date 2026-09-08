@@ -18,7 +18,7 @@ window.YAW_CONTENTS = {
     {
       name: 'Introduction',
 	items: [
-        { n: '1.0', label: 'Preview',             href: 'intro.html',    status: 'live' },
+        { n: '1.0', label: 'Preview',             href: 'preview.html',    status: 'live' },
         { n: '1.1', label: 'Algebras',             href: 'algebras.html',    status: 'live' },
         { n: '1.2', label: 'Operators and states', href: 'operators.html',   status: 'live' },
         { n: '1.3', label: 'Laws of composition',  href: 'composition.html', status: 'live' }

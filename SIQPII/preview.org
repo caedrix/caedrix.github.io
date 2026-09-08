@@ -248,14 +248,14 @@ $p_\lambda = \pi(\Pi_\lambda)$, and the post-measurement state is $p_\lambda^{-1
 
 From these primitives, we can build everything else. As a simple example
 of how this works, we can start by defining the /generalized Clifford/
-or simply /qudit algebra/@@html:<label for="sn-6" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-6" class="margin-toggle"/><span class="sidenote">Known by many other names, including the generalized Pauli, Weyl-Heisenberg, or Sylvester matrices.</span>@@
-\begin{equation}
+or simply /qudit algebra/ @@html:<label for="sn-6" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-6" class="margin-toggle"/><span class="sidenote">Known by many other names, including the generalized Pauli, Weyl-Heisenberg, or Sylvester matrices.</span>@@
+\[
   \mathcal{A}_d = \langle X, Z \,|\, XX^* = X^d = ZZ^* = Z^d = I, \,
   ZX = \omega_d XZ\rangle,
   \label{eq:pres-qudit}
-\end{equation}
-where $X$ and $Z$ are /unipotent/ unitaries whose $d$th power is the
-identity, and /braid/, i.e. commute up to a $d$th root of unity
+\]
+where $X$ and $Z$ are /unipotent/ unitaries whose $d$-th power is the
+identity, and /braid/, i.e. commute up to a $d$-th root of unity
 $\omega_d = e^{2\pi i /d}$. We can factorize the unipotence relation of
 $Z$ to obtain its eigenvalues,
 \[
@@ -269,7 +269,7 @@ and build the projector onto $\omega_d^k$ explicitly as
 Using projectors and working on the tensor product
 $\mathcal{A}_d^{\otimes 2}$, we can define a controlled-$X$ operation:
 \[
-  \text{CX} = \sum_{k=0}^{d-1} \Pi_{k}^{(Z)} \otimes X^k,
+  \text{C}X = \sum_{k=0}^{d-1} \Pi_{k}^{(Z)} \otimes X^k,
 \]
 which applies $X^k$ in the second slot when it encounters $\pi^{(Z)}_k$,
 the $\omega_d^k$-eigenfunctional of $Z$, in the first. You can show that $X \triangleleft \pi^{(Z)}_k = \pi^{(Z)}_{k+1}$,@@html:<label for="sn-7" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-7" class="margin-toggle"/><span class="sidenote">This is easy to derive from the braiding relation: \[ZX |\omega_d^k\rangle = \omega_d X Z |\omega_d^k\rangle = \omega_d^{k+1} X |\omega_d^k\rangle.\]</span>@@
@@ -304,10 +304,7 @@ recognizably algorithmic fell out. In what follows, we apply the same
 philosophy to five canonical protocols---teleportation, Grover search,
 Fourier sampling, simulation, and error correction---which not only
 demonstrate different aspects of algebraic quantum programming, but in
-turn, are illuminated by the algebraic perspective. We may draw fewer
-circuits, and fall out of touch with compilation-level details, but we
-trade "how" for "why", with intuition and unifying themes emerging
-elegantly from the algebra. It's a good trade.
+turn, are illuminated by the algebraic perspective.
 * COMMENT html export
 #+TITLE:
 #+HTML_CONTAINER: div
