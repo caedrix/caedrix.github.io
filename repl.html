@@ -34,13 +34,28 @@
 .repl-footer { width:55%; padding:.9rem 0 2rem; font-size:1rem; color:var(--text-color); }
 .repl-footer kbd { font-family:'JetBrains Mono',monospace; font-size:.78rem; border:1px solid var(--border-color); border-radius:3px; padding:0 .3rem; background:var(--sidebar-bg); }
 @media (max-width:1024px) { #term,.tools,.repl-footer { width:90%; } }
-@media (max-width:760px) { #term,.tools,.repl-footer { width:100%; } .yawmark { font-size:clamp(34px,12vw,52px); } }
+@media (max-width:760px) { #term,.tools,.repl-footer { width:100%; }
+.yawmark { font-size:clamp(34px,12vw,52px); } }
+.yawmark-caret{
+  display:inline-block;width:.5em;height:.86em;
+  background:#5B3496;vertical-align:-.05em;margin-left:.14em;
+  animation:yawmark-blink 1.15s steps(1,end) infinite;
+}
+@keyframes yawmark-blink{0%,50%{opacity:1}50.01%,100%{opacity:0}}
+[data-theme="dark"] .yawmark-prompt,
+[data-theme="dark"] .yawmark-caret{color:#B49BE8}
+[data-theme="dark"] .yawmark-caret{background:#B49BE8}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .yawmark-prompt{color:#B49BE8}
+  :root:not([data-theme="light"]) .yawmark-caret{background:#B49BE8}
+}
+@media (prefers-reduced-motion:reduce){.yawmark-caret{animation:none;opacity:.45}}
 </style>
 </head>
 <body>
 <div id="content">
 
-<h1 class="yawmark"><span class="yawmark-prompt">*&gt;</span>yaw</h1>
+<h1 class="yawmark"><span class="yawmark-prompt">*&gt;</span>yaw<span class="yawmark-caret"></span></h1>
 
 <div id="status" class="repl-status">Idle. Press Run, or type below, to start the interpreter.</div>
 
