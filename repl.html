@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>yaw — REPL</title>
+<meta name="description" content="Run yaw in the browser. An algebraic quantum programming language.">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#D3DFE1;
+  --raised:#E8F0F0;
+  --ink:#152029;
+  --soft:#4C6067;
+  --rule:#A9BEC2;
+  --phase:#5B3496;
+  --err:#9B2C3A;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:Spectral,Georgia,serif;font-size:1.05rem;line-height:1.6;
+  display:flex;flex-direction:column;
+}
+.wrap{max-width:60rem;margin:0 auto;padding:0 1.25rem;width:100%;
+      flex:1;display:flex;flex-direction:column;min-height:0}
+a{color:var(--phase);text-decoration:none;border-bottom:1px solid rgba(91,52,150,.34)}
+a:hover{border-bottom-color:var(--phase)}
+code,pre,.mono,#log,#line{font-family:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace}
+
+header{padding:2rem 0 1rem;display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap}
+.mark{font-family:'JetBrains Mono',monospace;font-size:1.9rem;font-weight:700;
+      letter-spacing:-.045em;margin:0;line-height:1}
+.mark .p{color:var(--phase);font-weight:400}
+.sub{color:var(--soft);font-style:italic;font-size:1rem}
+header .spacer{flex:1}
+header a.home{font-size:.9rem}
+
+#status{
+  font-size:.82rem;color:var(--soft);padding:.4rem 0 .7rem;
+  font-family:'JetBrains Mono',monospace;min-height:1.6rem;
+}
+#status .bar{display:inline-block;width:9rem;height:.42rem;background:var(--rule);
+  border-radius:2px;vertical-align:middle;margin-left:.5rem;overflow:hidden}
+#status .bar i{display:block;height:100%;width:0;background:var(--phase);transition:width .3s ease}
+
+#term{
+  flex:1;min-height:14rem;
+  background:var(--raised);border:1px solid var(--rule);border-radius:4px;
+  padding:.9rem 1rem;overflow-y:auto;font-size:.82rem;line-height:1.65;
+}
+#log{white-space:pre-wrap;word-break:break-word;margin:0}
+#log .in{color:var(--ink)}
+#log .in .p{color:var(--phase)}
+#log .out{color:var(--soft)}
+#log .err{color:var(--err)}
+
+#entry{display:flex;align-items:baseline;gap:.5rem;margin-top:.15rem}
+#prompt{color:var(--phase);font-family:'JetBrains Mono',monospace;font-size:.82rem;
+        flex:0 0 auto;white-space:pre}
+#line{
+  flex:1;border:none;background:transparent;color:var(--ink);
+  font-size:.82rem;line-height:1.65;padding:0;outline:none;
+}
+#line:disabled{opacity:.4}
+
+.tools{display:flex;flex-wrap:wrap;gap:.45rem;padding:.85rem 0 .3rem}
+.tools button{
+  font-family:Spectral,Georgia,serif;font-size:.86rem;
+  background:var(--raised);color:var(--ink);
+  border:1px solid var(--rule);border-radius:3px;
+  padding:.28rem .7rem;cursor:pointer;
+}
+.tools button:hover:not(:disabled){border-color:var(--phase);color:var(--phase)}
+.tools button:disabled{opacity:.45;cursor:default}
+.tools .gap{flex:1}
+
+footer{padding:.9rem 0 2rem;font-size:.86rem;color:var(--soft)}
+footer kbd{
+  font-family:'JetBrains Mono',monospace;font-size:.78rem;
+  border:1px solid var(--rule);border-radius:3px;padding:0 .3rem;background:var(--raised);
+}
+@media (max-width:640px){
+  body{font-size:1rem}
+  #term,#line,#prompt,#log{font-size:.76rem}
+  .mark{font-size:1.5rem}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1 class="mark"><span class="p">*&gt;</span> yaw</h1>
+  <span class="sub">a REPL in your browser</span>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">back to the book</a>
+</header>
+
+<div id="status">Idle. Press Run, or type below, to start the interpreter.</div>
+
+<div id="term"><div id="log"></div>
+  <div id="entry">
+    <span id="prompt">*&gt;</span>
+    <input id="line" type="text" spellcheck="false" autocomplete="off"
+           autocapitalize="off" aria-label="yaw input" disabled>
+  </div>
+</div>
+
+<div class="tools">
+  <button id="boot">Run</button>
+  <button class="ex" data-ex="bell" disabled>Bell state</button>
+  <button class="ex" data-ex="grover" disabled>Grover</button>
+  <button class="ex" data-ex="gkp" disabled>GKP</button>
+  <button class="ex" data-ex="code" disabled>Five-qubit code</button>
+  <span class="gap"></span>
+  <button id="clear">Clear</button>
+</div>
+
+<footer>
+  First run downloads the Python interpreter and libraries (about 25&nbsp;MB);
+  it is cached afterwards. <kbd>↑</kbd> and <kbd>↓</kbd> walk history,
+  <kbd>Enter</kbd> on a blank continuation line ends a block. Type
+  <code>help</code> for commands. Use <code>&gt;&gt;</code> and
+  <code>&lt;&lt;</code> in place of <code>»</code> and <code>«</code>.
+</footer>
+
+</div>
+
+<script>
+// ---------------------------------------------------------------- config
+// Where the yaw sources live, relative to this page.
+const YAW_FILES = ['yaw_prototype.py', 'qudit_backend.py', 'yaw_repl.py'];
+// Pin a known-good Pyodide; bump when you test a newer one.
+const PYODIDE = 'https://cdn.jsdelivr.net/pyodide/v0.27.2/full/';
+
+const EXAMPLES = {
+  bell: [
+    '$alg = qubit()',
+    'CNOT = sum(proj(Z,k) @ X**k for k in range(2))',
+    'EPR = CNOT << (char(X, 0) @ char(Z, 0))',
+    '[op | EPR for op in [X @ X, Z @ Z]]',
+    '[op | EPR for op in [X @ I, Z @ I]]'
+  ],
+  grover: [
+    'def grover(d, marked):',
+    '    $alg = qudit(d)',
+    '    def reflect(P): return I - 2*P',
+    '    G = reflect(proj(Z, marked)) * (-reflect(proj(X, 0)))',
+    '    r = int((pi/4)*sqrt(d)) + 1',
+    '    return measure(Z, (G**r) << char(X, 0))()[1]',
+    '',
+    'd, marked, trials = 5, 3, 100',
+    'sum(grover(d, marked) == marked for _ in range(trials))/trials'
+  ],
+  gkp: [
+    '$alg = <X, Z | unit, braid(-1)>',
+    'gkp = weylState(lambda a, b: 1 if a % 2 == 0 else 0)',
+    'gkp | X**2, gkp | Z**2',
+    'gkp | X, gkp | Z',
+    '(X*Z + Z*X).normalize()'
+  ],
+  code: [
+    '$alg = qubit()',
+    'code = five_qubit_code()',
+    'len(code.stabilizers)',
+    'code.stabilizers[0]'
+  ]
+};
+
+// ---------------------------------------------------------------- worker
+const workerSource = `
+let pyodide = null;
+
+function post(type, payload) { self.postMessage(Object.assign({type}, payload)); }
+
+async function boot(cfg) {
+  post('status', {text: 'Fetching the Python interpreter…', pct: 5});
+  importScripts(cfg.pyodide + 'pyodide.js');
+  pyodide = await loadPyodide({indexURL: cfg.pyodide});
+
+  post('status', {text: 'Loading numpy and sympy…', pct: 30});
+  await pyodide.loadPackage(['numpy', 'sympy', 'micropip']);
+
+  post('status', {text: 'Loading networkx…', pct: 60});
+  // networkx is used in exactly two lines (stabiliser clique finding). If the
+  // wheel is unavailable, stub it so the import still succeeds.
+  try {
+    const micropip = pyodide.pyimport('micropip');
+    await micropip.install('networkx');
+  } catch (e) {
+    pyodide.FS.writeFile('/home/pyodide/networkx.py',
+      'def Graph(*a, **k):\\n    raise NotImplementedError("networkx unavailable in this build")\\n' +
+      'def find_cliques(*a, **k):\\n    raise NotImplementedError("networkx unavailable in this build")\\n');
+  }
+
+  post('status', {text: 'Loading yaw…', pct: 80});
+  for (const name of cfg.files) {
+    const res = await fetch(cfg.base + name);
+    if (!res.ok) throw new Error('could not fetch ' + name + ' (' + res.status + ')');
+    pyodide.FS.writeFile('/home/pyodide/' + name, await res.text());
+  }
+
+  await pyodide.runPythonAsync(\`
+import sys, io, json, contextlib, traceback
+sys.path.insert(0, '/home/pyodide')
+from yaw_repl import YawREPL
+
+_repl = YawREPL()
+
+def yaw_reset():
+    global _repl
+    _repl = YawREPL()
+
+def yaw_eval(line):
+    out = io.StringIO()
+    err = False
+    try:
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(out):
+            result = _repl.eval_line(line)
+            if result is not None:
+                _repl._display(result)
+    except Exception as e:
+        out.write('Error: %s' % e)
+        err = True
+    return json.dumps({
+        'out': out.getvalue(),
+        'cont': bool(getattr(_repl, 'in_statement', False)),
+        'err': err,
+    })
+\`);
+
+  post('status', {text: 'Ready.', pct: 100});
+  post('ready', {});
+}
+
+self.onmessage = async (e) => {
+  const msg = e.data;
+  try {
+    if (msg.type === 'boot')  { await boot(msg.cfg); }
+    else if (msg.type === 'eval') {
+      const raw = pyodide.globals.get('yaw_eval')(msg.line);
+      post('result', Object.assign({id: msg.id}, JSON.parse(raw)));
+    }
+    else if (msg.type === 'reset') {
+      pyodide.globals.get('yaw_reset')();
+      post('reset-done', {});
+    }
+  } catch (err) {
+    post('fatal', {text: String(err && err.message || err)});
+  }
+};
+`;
+
+// ---------------------------------------------------------------- ui
+const logEl    = document.getElementById('log');
+const termEl   = document.getElementById('term');
+const lineEl   = document.getElementById('line');
+const promptEl = document.getElementById('prompt');
+const statusEl = document.getElementById('status');
+const bootBtn  = document.getElementById('boot');
+const clearBtn = document.getElementById('clear');
+const exBtns   = Array.from(document.querySelectorAll('.ex'));
+
+let worker = null, ready = false, busy = false, cont = false;
+let history = [], hIndex = 0, queue = [];
+
+function scroll() { termEl.scrollTop = termEl.scrollHeight; }
+
+function write(text, cls) {
+  if (!text) return;
+  const span = document.createElement('span');
+  span.className = cls || 'out';
+  span.textContent = text.replace(/\n+$/, '') + '\n';
+  logEl.appendChild(span);
+  scroll();
+}
+
+function echo(line) {
+  const span = document.createElement('span');
+  span.className = 'in';
+  const p = document.createElement('span');
+  p.className = 'p';
+  p.textContent = (cont ? '... ' : '*> ');
+  span.appendChild(p);
+  span.appendChild(document.createTextNode(line + '\n'));
+  logEl.appendChild(span);
+  scroll();
+}
+
+function setStatus(text, pct) {
+  statusEl.innerHTML = '';
+  statusEl.appendChild(document.createTextNode(text));
+  if (typeof pct === 'number') {
+    const bar = document.createElement('span');
+    bar.className = 'bar';
+    const fill = document.createElement('i');
+    fill.style.width = pct + '%';
+    bar.appendChild(fill);
+    statusEl.appendChild(bar);
+  }
+}
+
+function setPrompt() { promptEl.textContent = cont ? '...' : '*>'; }
+
+function startWorker() {
+  if (worker) return;
+  bootBtn.disabled = true;
+  const blob = new Blob([workerSource], {type: 'application/javascript'});
+  worker = new Worker(URL.createObjectURL(blob));
+
+  worker.onmessage = (e) => {
+    const m = e.data;
+    if (m.type === 'status') setStatus(m.text, m.pct);
+    else if (m.type === 'ready') {
+      ready = true;
+      setStatus('Ready. yaw 0.1.1 — type help for commands.');
+      lineEl.disabled = false;
+      exBtns.forEach(b => b.disabled = false);
+      lineEl.focus();
+      drain();
+    }
+    else if (m.type === 'result') {
+      busy = false;
+      cont = m.cont;
+      setPrompt();
+      write(m.out, m.err ? 'err' : 'out');
+      drain();
+    }
+    else if (m.type === 'reset-done') {
+      busy = false; cont = false; setPrompt();
+      write('— session reset —');
+      drain();
+    }
+    else if (m.type === 'fatal') {
+      busy = false;
+      setStatus('Failed to start.');
+      write(m.text, 'err');
+      bootBtn.disabled = false;
+    }
+  };
+
+  worker.postMessage({
+    type: 'boot',
+    cfg: {
+      pyodide: PYODIDE,
+      base: new URL('.', location.href).href,
+      files: YAW_FILES
+    }
+  });
+}
+
+function send(line) {
+  queue.push(line);
+  if (!ready) startWorker();
+  drain();
+}
+
+function drain() {
+  if (!ready || busy || !queue.length) return;
+  const line = queue.shift();
+  echo(line);
+  busy = true;
+  worker.postMessage({type: 'eval', line, id: Date.now()});
+}
+
+lineEl.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const value = lineEl.value;
+    lineEl.value = '';
+    if (value.trim()) { history.push(value); }
+    hIndex = history.length;
+    send(value);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (hIndex > 0) { hIndex--; lineEl.value = history[hIndex]; }
+  } else if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    if (hIndex < history.length - 1) { hIndex++; lineEl.value = history[hIndex]; }
+    else { hIndex = history.length; lineEl.value = ''; }
+  }
+});
+
+// paste of several lines: feed them one at a time
+lineEl.addEventListener('paste', (e) => {
+  const text = (e.clipboardData || window.clipboardData).getData('text');
+  if (!text.includes('\n')) return;
+  e.preventDefault();
+  text.split('\n').forEach(l => {
+    const clean = l.replace(/^\s*(\*>|\.\.\.)\s?/, '');
+    history.push(clean);
+    send(clean);
+  });
+  hIndex = history.length;
+});
+
+bootBtn.addEventListener('click', () => { startWorker(); lineEl.focus(); });
+
+clearBtn.addEventListener('click', () => {
+  logEl.innerHTML = '';
+  if (ready) { busy = true; worker.postMessage({type: 'reset'}); }
+});
+
+exBtns.forEach(btn => btn.addEventListener('click', () => {
+  EXAMPLES[btn.dataset.ex].forEach(l => { history.push(l); send(l); });
+  hIndex = history.length;
+  lineEl.focus();
+}));
+
+termEl.addEventListener('click', () => { if (!lineEl.disabled) lineEl.focus(); });
+</script>
+</body>
+</html>
