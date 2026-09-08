@@ -182,10 +182,15 @@
         outer.className = 'book-outer';
         outer.open = state.book !== false;
 
-        const title = document.createElement('summary');
-        title.className = 'book-title';
-        title.textContent = book.title || 'Contents';
-        outer.appendChild(title);
+	const title = document.createElement('summary');
+	title.className = 'book-title';
+
+	const titleLink = document.createElement('a');
+	titleLink.href = book.href || 'index.html';
+	titleLink.textContent = book.title || 'Contents';
+
+	title.appendChild(titleLink);
+	outer.appendChild(title);
 
         outer.addEventListener('toggle', function() {
             const s = navState(); s.book = outer.open; saveNavState(s);

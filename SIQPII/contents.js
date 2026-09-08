@@ -12,7 +12,7 @@
 
 window.YAW_CONTENTS = {
   title: 'Structure and Interpretation of Quantum Programs II',
-  href: 'index.html',
+  href: '../index.html',
 
   parts: [
     {
