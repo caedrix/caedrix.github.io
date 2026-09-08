@@ -1742,6 +1742,7 @@ class YawREPL:
     
     def _eval_expr(self, expr):
         """Evaluate expression with current context."""
+        import re
         try:
             # FEATURE 1: Preprocess subscript notation
             expr_preprocessed = self._parse_subscripts(expr)
@@ -1803,6 +1804,21 @@ class YawREPL:
                 for name in self.variables.list_vars():
                     if not name.startswith('$') and not name.startswith('_'):
                         defined_names.add(name)
+
+                # Names bound locally by a comprehension or lambda are not
+                # undefined operators -- they only exist while the expression
+                # runs. Without this, prod([f(S) for S in stabs]) reports S
+                # as an undefined operator.
+                for m in re.finditer(r'\bfor\s+([\w\s,]+?)\s+in\b', expr):
+                    for nm in m.group(1).split(','):
+                        nm = nm.strip()
+                        if nm.isidentifier():
+                            defined_names.add(nm)
+                for m in re.finditer(r'\blambda\s+([\w\s,]*?)\s*:', expr):
+                    for nm in m.group(1).split(','):
+                        nm = nm.strip()
+                        if nm.isidentifier():
+                            defined_names.add(nm)
 
                 # Check which parsed generators are undefined
                 undefined = parsed_gens - defined_names
